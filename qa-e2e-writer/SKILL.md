@@ -1,6 +1,6 @@
 ---
 name: qa-e2e-writer
-description: Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests (Page Object Model, semantic locators, web-first assertions) for Auto (browser) cases, recording only real results in execution notes. Use when the user says 'run the tests', 'write Playwright tests', 'E2E test', 'browser automation', 'exploratory testing', 'manual test script', 'try to break the app', 'viết test Playwright', 'chạy test', 'kịch bản test tay', 'test thăm dò', 'phá app', 'tự động hoá test giao diện'. Do NOT use for designing the test plan or test case table (use qa-test-plan-writer or qa-test-matrix-writer), writing bug reports (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit and integration tests (use test-case-writer).
+description: Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests (Page Object Model, semantic locators, web-first assertions) for Auto (browser) cases, recording only real results in execution notes. Use when the user says 'run the tests', 'write Playwright tests', 'E2E test', 'browser automation', 'exploratory testing', 'manual test script', 'try to break the app', 'viết test Playwright', 'chạy test', 'kịch bản test tay', 'test thăm dò', 'phá app', 'tự động hoá test giao diện'. Do NOT use for designing the test plan or test case table (use qa-test-plan-writer or qa-test-matrix-writer), writing bug reports (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit and integration tests.
 ---
 
 # QA E2E Writer — Bước 3: Chạy test & Automation
@@ -30,7 +30,7 @@ Biến test case đã duyệt thành kịch bản chạy thật. Khi chạy tron
    3. Viết Page Object và spec, mỗi test gắn TC ID trong tiêu đề (`TC-LOGIN-001: ...`).
    4. Chạy test, thu output thật. Fail → xác định là lỗi test (locator, dữ liệu, chờ) hay lỗi sản phẩm; chỉ lỗi sản phẩm mới chuyển sang Pha 4. Sửa lỗi test tối đa vài vòng hợp lý, đừng "vá" để pass bằng cách nới assertion.
 4. **Auto (API)** → dùng công cụ API test đã có trong repo (hoặc hỏi). Cùng quy tắc: output thật, dữ liệu độc lập.
-5. **Ghi `qa-artifacts/03-execution-notes.md`** theo template ở `qa-lifecycle/references/phase-templates.md`: thông tin lần chạy (build/commit và môi trường nếu biết, nếu không `[Cần bổ sung]`), bảng kết quả từng TC, lệnh chạy, output thô, phát hiện thăm dò, case Blocked.
+5. **Ghi `qa-artifacts/03-execution-notes.md`** gồm: thông tin lần chạy (build/commit và môi trường nếu biết, nếu không `[Cần bổ sung]`), bảng kết quả từng TC, lệnh chạy, output thô, phát hiện thăm dò, case Blocked.
 6. **Trình bày:** số case Pass/Fail/Blocked/Not Run đếm từ bảng thật, danh sách lỗi sản phẩm nghi ngờ, và câu hỏi tiếp theo (chuyển Pha 4 ghi defect?).
 
 ## Phân loại lỗi test vs lỗi sản phẩm
@@ -46,6 +46,10 @@ Biến test case đã duyệt thành kịch bản chạy thật. Khi chạy tron
 ## Khối Cố vấn QA (cuối phản hồi)
 
 Giải thích ngắn vì sao các case P0 được chạy trước; góc khuất chưa phủ (phân quyền, rớt mạng, bấm đúp, dữ liệu biên); phương án mặc định (ví dụ "chạy P0→P1 trước, P2/P3 nếu còn thời gian").
+
+## Ví dụ minh hoạ
+
+Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
 
 ## Checklist hoàn thành
 
