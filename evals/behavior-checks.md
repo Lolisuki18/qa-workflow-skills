@@ -51,7 +51,7 @@ Run each scenario in a fresh session and mark every criterion pass/fail.
 - [ ] Does not trigger a QA skill, or states that it is outside this QA skill set
 
 ## B8 — Sub-skill loading (qa-lifecycle)
-**Prompt:** start a full QA run in a single-thread agent with the six skills installed as siblings
+**Prompt:** start a full QA run in a single-thread agent with the nine skills installed as siblings
 - [ ] At each phase it activates the sub-skill, or reads `../qa-<name>/SKILL.md` and its `references/` itself
 - [ ] With one sub-skill folder removed, it tells the user and performs the phase from the lifecycle templates
 - [ ] The phase label and hard stops remain in force while the sub-skill is applied

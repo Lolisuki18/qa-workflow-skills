@@ -6,7 +6,7 @@ Designed for developers who are not QA specialists: the AI acts as a **proactive
 
 The skills are written in English and reply in the language you use (English or Vietnamese). Trigger keywords in each `description` are bilingual (EN + VI).
 
-## 5 phases, 6 skills
+## 5 phases, 9 skills
 
 | Phase | Skill | Output (`qa-artifacts/`) |
 |---|---|---|
@@ -16,6 +16,14 @@ The skills are written in English and reply in the language you use (English or 
 | 3. Execution & automation | `qa-e2e-writer` | `03-execution-notes.md` + Playwright code |
 | 4. Defect management | `qa-defect-writer` | `04-defects.md` |
 | 5. Reporting & acceptance | `qa-summary-reporter` | `05-summary-report.md` |
+
+Optional specialist skills, used inside the phases above:
+
+| Skill | Used in | Output |
+|---|---|---|
+| `qa-api-tester` | Phase 3, `Auto (API)` cases: endpoint inventory, API checklist, real results | API track in `03-execution-notes.md` |
+| `qa-nonfunctional-writer` | Phase 2-3: performance, security basics, accessibility, compatibility with measurable thresholds | `02b-nonfunctional.md` + non-functional track in `03-execution-notes.md` |
+| `qa-regression-planner` | Phase 4, every new build: smoke / targeted / full selection from the RTM and the diff | `04b-regression-plan.md` |
 
 ## Repository layout
 
@@ -28,13 +36,18 @@ qa-workflow-skills/
 ├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md, worked-example.md)
 ├── qa-defect-writer/        (SKILL.md, references/severity-priority-matrix.md, worked-example.md)
 ├── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md, worked-example.md)
+├── qa-api-tester/           (SKILL.md, references/api-test-checklist.md)
+├── qa-nonfunctional-writer/ (SKILL.md, references/nonfunctional-catalog.md)
+├── qa-regression-planner/   (SKILL.md, references/regression-selection.md)
+├── scripts/                 validate.py (structure checks, also run by CI), install.py, run-evals.py
+├── .github/workflows/validate.yml
+├── LICENSE
 ├── evals/                   Trigger prompts and behavior checks
-└── scripts/run-evals.py     Optional runner that sends the trigger prompts to an agent CLI
 ```
 
 ## Installation
 
-Copy (or symlink) the six `qa-*` folders to where your agent reads skills. **Install all six together** and keep them as siblings: in agents without automatic skill switching, `qa-lifecycle` reads `../qa-<name>/SKILL.md` directly.
+Copy (or symlink) the nine `qa-*` folders to where your agent reads skills. **Install them together** and keep them as siblings: in agents without automatic skill switching, `qa-lifecycle` reads `../qa-<name>/SKILL.md` directly.
 
 | Agent | Skills folder (for reference; check your agent's docs) |
 |---|---|
@@ -52,7 +65,15 @@ New-Item -ItemType Directory -Force .claude\skills | Out-Null
 Get-ChildItem -Directory -Filter 'qa-*' | ForEach-Object { Copy-Item -Recurse $_.FullName .claude\skills\ }
 ```
 
-Each skill also works on its own; only `qa-lifecycle` expects the others to be present, and it says so when one is missing.
+Each skill also works on its own; only `qa-lifecycle` expects the others to be present, and it says so when one is missing. The three specialist skills are optional.
+
+One-command install (links on Windows via junctions, symlinks elsewhere; never overwrites):
+
+```powershell
+python scripts/install.py                        # ~/.claude/skills
+python scripts/install.py --agent gemini         # other presets: --list-agents
+python scripts/install.py --dry-run              # preview
+```
 
 ## Usage
 
@@ -64,6 +85,9 @@ Just speak naturally, for example:
 - "Write Playwright tests for the Auto (browser) cases" → `qa-e2e-writer`
 - "Turn this raw bug description into a proper defect report" → `qa-defect-writer`
 - "Is this ready to release? Write the summary report" → `qa-summary-reporter`
+- "Test these REST endpoints for auth and validation" → `qa-api-tester`
+- "Design performance and accessibility tests for checkout" → `qa-nonfunctional-writer`
+- "The dev fixed 5 bugs, which tests should I re-run?" → `qa-regression-planner`
 
 Every `qa-lifecycle` response starts with the label `[QA Phase X/5: Phase Name]`. Phases 1 and 2 have a **Hard Stop**: the AI waits for your approval before continuing.
 
@@ -81,7 +105,7 @@ Each skill has a `references/worked-example.md` built on one fictional scenario 
 
 ## Self-check (evals)
 
-See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model. Status: the eval sets are written but their results are not yet recorded, and this repo has no structure validator or CI (every `SKILL.md` is 62-108 lines, descriptions are under 900 characters and include `Do NOT use`).
+See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model. Status: the eval sets are written but their results are not yet recorded, and `python scripts/validate.py` (also run by GitHub Actions) checks structure only: names, descriptions, line counts, references. `scripts/run-evals.py` needs an agent CLI that is not verified here.
 
 ## Sibling repos
 
@@ -90,6 +114,7 @@ See [evals/](evals/README.md): trigger prompts (should / should not fire each sk
 | [`dev-workflow-skills`](https://github.com/Lolisuki18/dev-workflow-skills) | idea → plan → code → tests → audit, bug investigation |
 | [`pull-request-skills`](https://github.com/Lolisuki18/pull-request-skills) | PR description, PR review, review replies, pre-PR self-review, code comments |
 | [`qa-workflow-skills`](https://github.com/Lolisuki18/qa-workflow-skills) (this one) | QA/STLC from test plan to Go/No-Go report |
+| `ai-workflow-suite` | `delivery-lifecycle` orchestrator across all four repos, shared `CONVENTIONS.md`, `install-all.py` |
 | [`docs-workflow-skills`](https://github.com/Lolisuki18/docs-workflow-skills) | README, diagrams, API docs, ADRs, SDLC reports, Review 2 pack |
 
 Developers' unit tests belong to `test-case-writer` in `dev-workflow-skills`; this repo covers testing from the QA viewpoint.
