@@ -1,45 +1,45 @@
-# Ví dụ chạy thật — qa-defect-writer
+# Worked Example — qa-defect-writer
 
-> ⚠️ Dữ liệu **hư cấu** ("DemoShop") để minh hoạ định dạng.
+> ⚠️ **Fictional** data ("DemoShop") to illustrate the format.
 
-**Mô tả thô của người dùng:** "user thường gõ /admin vẫn vào được trang quản trị, chắc lỗi phân quyền."
+**Raw user description:** "a regular user can still open /admin by typing it, probably a permission bug."
 
-## Câu hỏi gom lại (không hỏi lắt nhắt)
+## Consolidated questions (not piecemeal)
 
-1. Môi trường/build và browser đã gặp lỗi? 2. Thử mấy lần, mấy lần lặp lại? 3. Có ảnh/log không?
+1. Environment/build and browser where you saw it? 2. How many attempts, how many reproduced? 3. Any screenshot/log?
 
-Người dùng trả lời: "thử 3 lần, lần nào cũng vậy; có ảnh; môi trường staging, build chưa nhớ."
+User replies: "tried 3 times, every time; I have a screenshot; staging, I don't remember the build."
 
 ## Defect Report
 
 ```markdown
-### DEF-001 — [Authz] User thường truy cập được trang /admin khi gõ trực tiếp URL
-| Trường | Nội dung |
+### DEF-001 — [Authz] Regular user can open the /admin page by typing the URL directly
+| Field | Content |
 |---|---|
-| TC liên quan | TC-LOGIN-006 |
-| Environment | Staging; build [Cần bổ sung]; browser [Cần bổ sung] |
-| Severity / Priority | Critical / P0 (đề xuất) |
-| Lý do | Vượt quyền truy cập khu quản trị, không có workaround; cần PO xác nhận Priority |
+| Related TC | TC-LOGIN-006 |
+| Environment | Staging; build [Needs input]; browser [Needs input] |
+| Severity / Priority | Critical / P0 (proposed) |
+| Reason | Unauthorized access to the admin area, no workaround; PO to confirm Priority |
 | Status | New |
 | Reproducibility | Always (3/3) |
-| Pre-conditions | Đã đăng nhập bằng tài khoản vai trò User |
-| Steps to Reproduce | 1. Đăng nhập bằng user thường 2. Gõ thẳng `/admin` vào thanh địa chỉ |
-| Actual Result | Hiển thị trang quản trị |
-| Expected Result | Bị chuyển về `/dashboard` kèm thông báo (nguồn: REQ-04, mặc định Pha 1) |
-| Evidence | Screenshot do người dùng cung cấp; log: Chưa có |
-| Ghi chú / Giả thuyết (chưa xác nhận) | Có thể mới chặn ở UI chứ chưa chặn ở server — cần dev kiểm tra, QA chưa xác minh |
+| Pre-conditions | Logged in with a User-role account |
+| Steps to Reproduce | 1. Log in as a regular user 2. Type `/admin` directly in the address bar |
+| Actual Result | The admin page is displayed |
+| Expected Result | Redirected to `/dashboard` with a message (source: REQ-04, Phase 1 default) |
+| Evidence | Screenshot provided by the user; log: none yet |
+| Notes / Hypothesis (unconfirmed) | Possibly blocked only in the UI and not on the server — developers to check; QA has not verified |
 ```
 
-## Re-test & Regression sau khi dev báo "đã sửa"
+## Re-test & Regression after the developer says "fixed"
 
 ```markdown
-Build chứa bản sửa: [Cần bổ sung]
-1. Re-test lỗi gốc: chạy lại Steps của DEF-001 bằng user thường; thêm biến thể: gọi trực tiếp API quản trị bằng token của user thường.
-2. Regression liên quan (theo RTM cùng REQ-04): TC-LOGIN-009 (Admin vẫn vào được), TC-LOGIN-001.
-3. Đã từng lỗi cùng module: [Chưa có defect Closed nào]
-Chạy lại bằng Playwright: TC-LOGIN-006, 009. Manual: biến thể gọi API.
+Build containing the fix: [Needs input]
+1. Re-test the original bug: rerun DEF-001's Steps as a regular user; add a variant: call the admin API directly with the regular user's token.
+2. Related regression (RTM, same REQ-04): TC-LOGIN-009 (Admin can still enter), TC-LOGIN-001.
+3. Previously failed in this module: [no Closed defects yet]
+Re-run in Playwright: TC-LOGIN-006, 009. Manual: the API variant.
 ```
 
-Chỉ khi người dùng báo kết quả thật mới đổi Status sang `Closed` (hoặc `Reopened`) và ghi vào "Lịch sử Re-test".
+Only when the user reports real results change Status to `Closed` (or `Reopened`) and add to "Re-test history".
 
-**Điểm cần học:** Severity tách Priority và có lý do; môi trường thiếu thì `[Cần bổ sung]`; giả thuyết tách riêng, nói rõ chưa xác nhận.
+**Takeaways:** Severity separate from Priority with a reason; missing environment as `[Needs input]`; hypothesis separated and flagged as unconfirmed.

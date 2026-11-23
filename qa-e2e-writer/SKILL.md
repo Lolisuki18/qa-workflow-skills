@@ -1,60 +1,62 @@
 ---
 name: qa-e2e-writer
-description: Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests (Page Object Model, semantic locators, web-first assertions) for Auto (browser) cases, recording only real results in execution notes. Use when the user says 'run the tests', 'write Playwright tests', 'E2E test', 'browser automation', 'exploratory testing', 'manual test script', 'try to break the app', 'viết test Playwright', 'chạy test', 'kịch bản test tay', 'test thăm dò', 'phá app', 'tự động hoá test giao diện'. Do NOT use for designing the test plan or test case table (use qa-test-plan-writer or qa-test-matrix-writer), writing bug reports (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit and integration tests.
+description: Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests (Page Object Model, semantic locators, web-first assertions) for Auto (browser) cases, recording only real results in execution notes. Use when the user says 'run the tests', 'write Playwright tests', 'E2E test', 'browser automation', 'exploratory testing', 'manual test script', 'try to break the app', 'viết test Playwright', 'chạy test', 'kịch bản test tay', 'test thăm dò', 'phá app'. Do NOT use for designing the test plan or test case table (use qa-test-plan-writer or qa-test-matrix-writer), writing bug reports (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit and integration tests.
 ---
 
-# QA E2E Writer — Bước 3: Chạy test & Automation
+# QA E2E Writer — Step 3: Test Execution & Automation
 
-Biến test case đã duyệt thành kịch bản chạy thật. Khi chạy trong `qa-lifecycle`, đây là Pha 3/5 (nhãn `[QA Phase 3/5: Execution]` ở dòng đầu).
+Turns approved test cases into scripts that actually run. Inside `qa-lifecycle` this is Phase 3/5 (label `[QA Phase 3/5: Execution]` on the first line).
 
-## Quy tắc
+## Rules
 
-- **Đầu vào:** `qa-artifacts/02-test-matrix.md` (hoặc CSV) đã duyệt. Chưa có → đề xuất chạy `qa-test-matrix-writer`; nếu người dùng vẫn muốn, hỏi danh sách case cần test.
-- **Chống ảo giác:**
-  - Không ghi Pass/Fail cho case chưa thực sự chạy. Case Manual người dùng chưa chạy = `Not Run`.
-  - Không bịa môi trường, URL, phiên bản browser, tài khoản. Thiếu → `[Cần bổ sung: ...]` hoặc hỏi.
-  - Khi dán kết quả automation, dán output thật của lệnh; không tóm tắt từ trí nhớ. Không chạy được (thiếu môi trường, app chưa lên) → ghi `Blocked` kèm nguyên nhân thật.
-- **Kiểm tra code thực tế trước khi đặt locator:** đọc component/template/HTML hoặc mở app để xem cấu trúc DOM, label, role, `data-testid` có sẵn. Không đoán selector. Thiếu thuộc tính để định vị ổn định → đề xuất thêm `data-testid` cho dev, đừng viết CSS/XPath giòn.
-- Agent-agnostic: dùng công cụ chạy lệnh/đọc file của môi trường hiện tại; không giả định IDE cụ thể.
+- **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
+- **Input:** `qa-artifacts/02-test-matrix.md` (or CSV), approved. Missing → suggest running `qa-test-matrix-writer`; if the user insists, ask for the list of cases to test.
+- **Anti-hallucination:**
+  - Never record Pass/Fail for a case that was not actually run. A Manual case the user has not run = `Not Run`.
+  - Never invent environments, URLs, browser versions, accounts. Missing → `[Needs input: ...]` or ask.
+  - When pasting automation results, paste the real command output; never summarize from memory. If you cannot run (no environment, app not up) → record `Blocked` with the real cause.
+- **Inspect real code before choosing locators:** read the component/template/HTML or open the app to see the real DOM, labels, roles and existing `data-testid`. Never guess selectors. If stable hooks are missing → propose adding `data-testid` for the developers rather than writing brittle CSS/XPath.
+- Agent-agnostic: use whatever command-running/file-reading capability the current environment has; assume no specific IDE.
 
-## Quy trình
+## Process
 
-1. **Phân loại case** theo `Execution Type`: `Manual`, `Auto (browser)`, `Auto (API)`. Báo số lượng từng nhóm.
-2. **Manual** → đọc `references/exploratory-charters.md`. Xuất:
-   - Kịch bản bấm test nhanh, gom theo module/luồng để ít phải đổi ngữ cảnh (mỗi dòng: TC ID · bước · dữ liệu · kết quả mong đợi · ô để người dùng điền Pass/Fail/Blocked).
-   - Các charter thăm dò theo tính năng: double-click, Back, reload giữa chừng, mất mạng, file nặng/sai định dạng...
-   - Chờ người dùng báo kết quả; chỉ ghi những gì họ báo.
-3. **Auto (browser)** → đọc `references/playwright-standards.md`, rồi:
-   1. Kiểm tra repo: đã có Playwright chưa (`playwright.config.*`, `package.json`), cấu trúc thư mục test, baseURL, cách chạy app. Chưa có → hỏi trước khi cài đặt hay thêm dependency.
-   2. Khảo sát DOM/code của trang liên quan để chọn locator.
-   3. Viết Page Object và spec, mỗi test gắn TC ID trong tiêu đề (`TC-LOGIN-001: ...`).
-   4. Chạy test, thu output thật. Fail → xác định là lỗi test (locator, dữ liệu, chờ) hay lỗi sản phẩm; chỉ lỗi sản phẩm mới chuyển sang Pha 4. Sửa lỗi test tối đa vài vòng hợp lý, đừng "vá" để pass bằng cách nới assertion.
-4. **Auto (API)** → dùng công cụ API test đã có trong repo (hoặc hỏi). Cùng quy tắc: output thật, dữ liệu độc lập.
-5. **Ghi `qa-artifacts/03-execution-notes.md`** gồm: thông tin lần chạy (build/commit và môi trường nếu biết, nếu không `[Cần bổ sung]`), bảng kết quả từng TC, lệnh chạy, output thô, phát hiện thăm dò, case Blocked.
-6. **Trình bày:** số case Pass/Fail/Blocked/Not Run đếm từ bảng thật, danh sách lỗi sản phẩm nghi ngờ, và câu hỏi tiếp theo (chuyển Pha 4 ghi defect?).
+1. **Classify cases** by `Execution Type`: `Manual`, `Auto (browser)`, `Auto (API)`. Report the count per group.
+2. **Manual** → read `references/exploratory-charters.md`. Produce:
+   - A quick manual run script grouped by module/flow to minimize context switching (each row: TC ID · steps · data · expected result · a cell for the user to mark Pass/Fail/Blocked).
+   - Exploratory charters per feature: double-click, Back, reload mid-flow, network loss, heavy/wrong-format files...
+   - Wait for the user's results; record only what they report.
+3. **Auto (browser)** → read `references/playwright-standards.md`, then:
+   1. Inspect the repo: is Playwright already present (`playwright.config.*`, `package.json`), test folder layout, baseURL, how to start the app. Not present → ask before installing anything or adding dependencies.
+   2. Inspect the DOM/code of the relevant pages to choose locators.
+   3. Write the Page Objects and specs; put the TC ID in each test title (`TC-LOGIN-001: ...`).
+   4. Run the tests and capture real output. On failure, decide whether it is a test defect (locator, data, waiting) or a product defect; only product defects go to Phase 4. Fix test defects within a reasonable number of rounds; never "patch" a test to pass by loosening assertions.
+4. **Auto (API)** → use the API test tooling already in the repo (Postman/Newman, pytest, supertest...). If the repo has none and Playwright is in use or acceptable, propose Playwright's `APIRequestContext` (see `references/playwright-standards.md`, section "API testing"); ask before adding dependencies. Same rules: real output, independent data, endpoints and payloads taken from the spec/code, never guessed.
+5. **Prefer machine-readable results:** when the runner supports it, run with a JSON or JUnit reporter (for Playwright see "Machine-readable results" in `references/playwright-standards.md`) and build the results table by reading that file, so no result is lost or mistyped from terminal text. Keep the report file path in the notes. If the reporter output is unavailable, fall back to the verbatim terminal output and say so.
+6. **Write `qa-artifacts/03-execution-notes.md`** containing: run info (build/commit and environment if known, otherwise `[Needs input]`), per-TC results table, commands, raw output, exploratory findings, Blocked cases.
+7. **Present:** counts of Pass/Fail/Blocked/Not Run taken from the real table, suspected product defects, and the next question (move to Phase 4 to log defects?).
 
-## Phân loại lỗi test vs lỗi sản phẩm
+## Test defect vs product defect
 
-| Dấu hiệu | Khả năng |
+| Sign | Likely cause |
 |---|---|
-| Locator không tìm thấy nhưng UI hiển thị đúng khi xem tay | Lỗi test (locator/chờ) |
-| Chạy riêng pass, chạy chung fail | Test phụ thuộc dữ liệu/thứ tự → sửa test |
-| Kết quả thực tế khác Expected Result trong matrix, tái hiện được bằng tay | Lỗi sản phẩm → Pha 4 |
-| Expected Result trong matrix mâu thuẫn đặc tả/code | Lỗi test case → hỏi người dùng, cập nhật matrix |
-| Lúc pass lúc fail không rõ lý do | Flaky — điều tra, không tự đánh dấu Pass |
+| Locator not found but the UI looks right when checked by hand | Test defect (locator/waiting) |
+| Passes alone, fails together | Test depends on data/order → fix the test |
+| Actual differs from the matrix Expected Result and reproduces by hand | Product defect → Phase 4 |
+| Matrix Expected Result contradicts spec/code | Test case defect → ask the user, update the matrix |
+| Passes sometimes, fails sometimes for no clear reason | Flaky — investigate; never mark Pass on faith |
 
-## Khối Cố vấn QA (cuối phản hồi)
+## QA Advisor block (end of response)
 
-Giải thích ngắn vì sao các case P0 được chạy trước; góc khuất chưa phủ (phân quyền, rớt mạng, bấm đúp, dữ liệu biên); phương án mặc định (ví dụ "chạy P0→P1 trước, P2/P3 nếu còn thời gian").
+Briefly explain why P0 cases run first; which blind spots remain uncovered (permissions, network drop, double-click, boundary data); the default plan (e.g. "run P0→P1 first, P2/P3 if time allows").
 
-## Ví dụ minh hoạ
+## Worked example
 
-Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
+See `references/worked-example.md` for a sample output format (fictional data; read only when needed; never copy the example's numbers into a real project).
 
-## Checklist hoàn thành
+## Completion checklist
 
-- [ ] Mọi case trong matrix có trạng thái thật (hoặc `Not Run`/`Blocked` kèm lý do)
-- [ ] Locator dựa trên DOM/code đã đọc; không CSS/XPath giòn, không `waitForTimeout`
-- [ ] Test độc lập dữ liệu, tiêu đề có TC ID
-- [ ] Output chạy test là output thật
-- [ ] `03-execution-notes.md` đã cập nhật; lỗi sản phẩm được chuyển sang Pha 4
+- [ ] Every case in the matrix has a real status (or `Not Run`/`Blocked` with a reason)
+- [ ] Locators based on the DOM/code you read; no brittle CSS/XPath, no `waitForTimeout`
+- [ ] Tests are data-independent; titles contain the TC ID
+- [ ] Test run output is real output
+- [ ] `03-execution-notes.md` updated; product defects handed to Phase 4

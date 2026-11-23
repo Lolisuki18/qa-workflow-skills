@@ -1,103 +1,104 @@
 ---
 name: qa-test-matrix-writer
-description: Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3, Execution Type) using test design techniques, plus a Requirement Traceability Matrix (RTM) proving every requirement has happy-path, negative and permission coverage, exportable as Markdown or clean CSV for Excel, Google Sheets or TestRail. Use when the user says 'write test cases', 'test matrix', 'traceability matrix', 'RTM', 'test case table', 'boundary value analysis', 'cover all requirements', 'viết test case', 'thiết kế test case', 'bảng test case', 'ma trận truy vết yêu cầu', 'xuất test case ra CSV/Excel', 'import TestRail'. Do NOT use for the test plan or requirement audit (use qa-test-plan-writer), writing Playwright code or manual run scripts (use qa-e2e-writer), logging defects (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit tests.
+description: Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3, Execution Type) using test design techniques, plus a Requirement Traceability Matrix (RTM) proving every requirement has happy-path, negative and permission coverage, exportable as Markdown or clean CSV for Excel, Google Sheets or TestRail. Use when the user says 'write test cases', 'test matrix', 'traceability matrix', 'RTM', 'test case table', 'boundary value analysis', 'cover all requirements', 'viết test case', 'thiết kế test case', 'bảng test case', 'ma trận truy vết yêu cầu', 'xuất test case ra CSV'. Do NOT use for the test plan or requirement audit (use qa-test-plan-writer), writing Playwright code or manual run scripts (use qa-e2e-writer), logging defects (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit tests.
 ---
 
-# QA Test Matrix Writer — Bước 2: Thiết kế Test Case
+# QA Test Matrix Writer — Step 2: Test Case Design
 
-Sinh bảng test case có hệ thống và RTM chứng minh phủ yêu cầu. Khi chạy trong `qa-lifecycle`, đây là Pha 2/5, kết thúc bằng Hard Stop (nhãn `[QA Phase 2/5: Test Matrix]` ở dòng đầu).
+Generates a systematic test case table and an RTM proving requirement coverage. Inside `qa-lifecycle` this is Phase 2/5 and ends with a Hard Stop (label `[QA Phase 2/5: Test Matrix]` on the first line).
 
-## Quy tắc
+## Rules
 
-- **Đọc trước:** `references/test-design-techniques.md` (6 kỹ thuật). Áp dụng kỹ thuật phù hợp từng yêu cầu thay vì viết case theo cảm tính.
-- **Đầu vào:** `qa-artifacts/01-test-plan.md` đã duyệt (ID yêu cầu, scope, rủi ro, chiến lược). Chưa có plan → cảnh báo, đề xuất chạy `qa-test-plan-writer` trước; nếu người dùng vẫn muốn đi tiếp, lập danh sách yêu cầu + ID tối thiểu và ghi chú rủi ro.
-- **Chống ảo giác:** không bịa quy tắc nghiệp vụ, giới hạn, thông báo lỗi, tên field. Nếu đặc tả không nêu giá trị biên/thông báo chính xác → Expected Result ghi mô tả hành vi + `[Cần bổ sung: thông báo lỗi chính xác]`. Dữ liệu test dùng giá trị minh hoạ rõ ràng (ví dụ `user_a@example.test`), không dùng dữ liệu cá nhân thật.
-- Nếu đang test codebase có sẵn: đối chiếu validate/phân quyền thực tế trong code để Expected Result đúng, nhưng nếu code mâu thuẫn đặc tả → ghi vào mục "Mâu thuẫn" và hỏi, không tự chọn.
-- Mỗi test case **kiểm một ý chính**, độc lập, chạy được không phụ thuộc case khác.
+- **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
+- **Read first:** `references/test-design-techniques.md` (6 techniques). Apply the technique that fits each requirement instead of writing cases by gut feeling.
+- **Input:** the approved `qa-artifacts/01-test-plan.md` (requirement IDs, scope, risks, strategy). No plan yet → warn and suggest running `qa-test-plan-writer` first; if the user still wants to go on, build a minimal requirement list with IDs and note the risk.
+- **Anti-hallucination:** never invent business rules, limits, error messages or field names. If the spec gives no exact boundary/message → write the expected behavior plus `[Needs input: exact error message]`. Use clearly fake sample data (e.g. `user_a@example.test`), never real personal data.
+- When testing an existing codebase: cross-check real validation/permission rules in code so Expected Results are correct, but if code contradicts the spec, record it under "Contradictions" and ask — never silently pick one.
+- Each test case checks **one main idea**, is independent, and can run without other cases.
 
-## Quy trình
+## Process
 
-1. **Nạp yêu cầu:** liệt kê mọi Req/UC ID in-scope từ test plan.
-2. **Chọn kỹ thuật** cho từng yêu cầu (bảng gợi ý ở file reference), tối thiểu: có happy path, ≥ 1 negative, và nếu có phân quyền thì ≥ 1 permission case.
-3. **Sinh test case** theo cột chuẩn (bên dưới). Gom theo Module, đánh `TC ID` ổn định: `TC-<MODULE>-<số 3 chữ số>` (ví dụ `TC-LOGIN-001`).
-4. **Gán Priority** từ Risk Analysis của plan (xem bảng dưới).
-5. **Gán Execution Type** theo chiến lược của plan; nếu plan không nói, dùng gợi ý ở mục dưới và đánh dấu "đề xuất".
-6. **Dựng RTM** và tự kiểm: yêu cầu nào thiếu cột Negative/Permission thì hoặc bổ sung case hoặc ghi lý do "không áp dụng".
-7. **Lưu & trình bày** (mục cuối).
+1. **Load requirements:** list every in-scope Req/UC ID from the test plan.
+2. **Pick techniques** per requirement (guide table in the reference file). At minimum: a happy path, ≥ 1 negative, and if permissions apply ≥ 1 permission case.
+3. **Generate test cases** with the standard columns (below). Group by Module; assign stable IDs `TC-<MODULE>-<3-digit number>` (e.g. `TC-LOGIN-001`).
+4. **Assign Priority** from the plan's Risk Analysis (table below).
+5. **Assign Execution Type** from the plan's strategy; if the plan is silent, use the hints below and mark as "proposed".
+6. **Build the RTM** and self-check: any requirement missing Negative/Permission → add cases or record why "not applicable".
+7. **Save and present** (last section).
 
-## Các cột bắt buộc
+## Required columns
 
-| Cột | Quy tắc |
+| Column | Rule |
 |---|---|
-| `TC ID` | Duy nhất, ổn định, không đánh lại số khi xoá case |
-| `Req/UC ID` | ≥ 1 ID; case không truy được về yêu cầu → hỏi lại hoặc gắn `[Cần bổ sung: yêu cầu nguồn]` |
-| `Module` | Khớp với module trong plan |
-| `Title` | Động từ + điều kiện + kết quả mong đợi, ngắn gọn |
-| `Pre-condition` | Trạng thái hệ thống/tài khoản/dữ liệu cần có trước khi chạy |
-| `Test Steps` | Đánh số 1., 2., 3.; mỗi bước một hành động; người chưa biết hệ thống vẫn làm theo được |
-| `Test Data` | Giá trị cụ thể cho từng input (kể cả giá trị biên); không để "dữ liệu hợp lệ" chung chung |
-| `Expected Result` | Quan sát được, kiểm chứng được (hiển thị gì, lưu gì, mã trạng thái gì); không viết "hoạt động đúng" |
+| `TC ID` | Unique, stable; do not renumber when a case is deleted |
+| `Req/UC ID` | ≥ 1 ID; a case not traceable to a requirement → ask or tag `[Needs input: source requirement]` |
+| `Module` | Matches the plan's modules |
+| `Title` | Verb + condition + expected outcome, concise |
+| `Pre-condition` | System/account/data state required before running |
+| `Test Steps` | Numbered 1., 2., 3.; one action per step; followable by someone new to the system |
+| `Test Data` | Concrete value per input (including boundary values); never a vague "valid data" |
+| `Expected Result` | Observable and verifiable (what is shown, saved, which status code); never "works correctly" |
 | `Priority` | `P0`–`P3` |
 | `Execution Type` | `Manual` / `Auto (browser)` / `Auto (API)` |
 
 ## Priority P0–P3
 
-| Mức | Ý nghĩa | Ví dụ |
+| Level | Meaning | Example |
 |---|---|---|
-| P0 | Nếu hỏng thì không thể release; luồng cốt lõi, tiền, bảo mật, mất dữ liệu | Đăng nhập, thanh toán, user A xem được dữ liệu user B |
-| P1 | Chức năng chính, rủi ro cao | CRUD chính, validate quan trọng, chuyển trạng thái nghiệp vụ |
-| P2 | Chức năng phụ, rủi ro vừa | Lọc/sắp xếp, thông báo lỗi chi tiết, biên ít gặp |
-| P3 | Trình bày, tiện ích, rủi ro thấp | Căn lề, văn bản gợi ý, thứ tự hiển thị |
+| P0 | Release cannot ship if broken; core flow, money, security, data loss | Login, payment, user A can see user B's data |
+| P1 | Main functionality, high risk | Main CRUD, important validation, business state transitions |
+| P2 | Secondary functionality, medium risk | Filter/sort, detailed error messages, rare boundaries |
+| P3 | Presentation, convenience, low risk | Alignment, hint text, display order |
 
-Cách suy ra: Rủi ro H×H → P0; H×M hoặc M×H → P1; M×M hoặc L×H → P2; còn lại P3. Dữ liệu rủi ro lấy từ `01-test-plan.md`; nếu người dùng điều chỉnh, theo người dùng.
+How to derive: Risk H×H → P0; H×M or M×H → P1; M×M or L×H → P2; otherwise P3. Risk data comes from `01-test-plan.md`; if the user adjusts it, follow the user.
 
-## Gợi ý Execution Type (khi plan chưa chỉ định)
+## Execution Type hints (when the plan has not specified)
 
-- `Auto (browser)`: luồng người dùng chính ổn định, cần regression lặp lại.
-- `Auto (API)`: validate/nghiệp vụ/phân quyền tầng API, nhiều tổ hợp dữ liệu.
-- `Manual`: UX, giao diện, tính năng chưa ổn định, thăm dò, case tốn công tự động hoá (CAPTCHA, email thật, thiết bị phần cứng).
+- `Auto (browser)`: stable main user flows needing repeated regression.
+- `Auto (API)`: validation/business/permission at API level, many data combinations.
+- `Manual`: UX, visuals, unstable features, exploratory, cases expensive to automate (CAPTCHA, real email, hardware).
 
 ## RTM — Requirement Traceability Matrix
 
-Đối chiếu 1–1 từng yêu cầu với test case:
+Map each requirement 1–1 to test cases:
 
-| Req/UC ID | Mô tả yêu cầu | Happy path (TC) | Negative (TC) | Permission (TC) | Phủ |
+| Req/UC ID | Requirement | Happy path (TC) | Negative (TC) | Permission (TC) | Coverage |
 |---|---|---|---|---|---|
-| REQ-01 | ... | TC-X-001 | TC-X-002, TC-X-003 | TC-X-004 | Đủ |
-| REQ-02 | ... | TC-Y-001 | — | N/A (không có phân quyền) | Thiếu Negative |
+| REQ-01 | ... | TC-X-001 | TC-X-002, TC-X-003 | TC-X-004 | Full |
+| REQ-02 | ... | TC-Y-001 | — | N/A (no permissions) | Missing Negative |
 
-Quy tắc:
-- Cột Phủ: `Đủ` / `Thiếu <loại>` / `Chưa có`. Mục "N/A" phải có lý do.
-- Cuối RTM in: tổng yêu cầu, số yêu cầu `Đủ`, % phủ = Đủ / tổng. Chỉ tính từ bảng thật vừa dựng.
-- Chiều ngược: liệt kê case "mồ côi" (không map về yêu cầu nào) để người dùng quyết định giữ/bỏ.
+Rules:
+- Coverage column: `Full` / `Missing <type>` / `None`. Every "N/A" needs a reason.
+- At the end of the RTM print: total requirements, number `Full`, coverage % = Full / total. Compute only from the table you just built.
+- Reverse direction: list "orphan" cases (not mapped to any requirement) so the user can keep or drop them.
 
-## Định dạng đầu ra
+## Output format
 
-Mặc định: bảng Markdown trong `qa-artifacts/02-test-matrix.md` (các mục: tổng quan số lượng, bảng test case 10 cột, RTM, yêu cầu chưa phủ/mâu thuẫn). Nếu người dùng muốn CSV (hoặc import TestRail/Excel/Sheets):
+Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts overview, 10-column test case table, RTM, uncovered requirements/contradictions). If the user wants CSV (or TestRail/Excel/Sheets import):
 
-- Ghi `qa-artifacts/02-test-matrix.csv`, mã hoá UTF-8 **có BOM** để Excel đọc đúng tiếng Việt, dấu phân cách `,`.
-- Hàng tiêu đề đúng 10 cột ở trên, một hàng/test case, không gộp ô.
-- Ô chứa dấu phẩy, nháy kép hoặc xuống dòng phải bọc trong `"..."`, nháy kép trong ô nhân đôi `""`.
-- Nhiều bước trong một ô: ngăn bằng ký tự xuống dòng thật trong ô đã bọc nháy, hoặc ` | ` nếu người dùng muốn một dòng; hỏi nếu không rõ.
-- Hỏi nếu cần cột phụ cho TestRail (Section, Type, Estimate) — không tự thêm.
-- Sau khi ghi, đọc lại để kiểm số cột mỗi hàng đều bằng nhau.
+- Write `qa-artifacts/02-test-matrix.csv`, UTF-8 **with BOM** so Excel reads accents correctly, `,` as delimiter.
+- Header row with exactly the 10 columns above, one row per test case, no merged cells.
+- A cell containing a comma, double quote or newline must be wrapped in `"..."`, with inner double quotes doubled `""`.
+- Multiple steps in one cell: separate by a real newline inside the quoted cell, or ` | ` if the user wants a single line; ask if unclear.
+- Ask whether extra TestRail columns (Section, Type, Estimate) are needed — do not add them on your own.
+- After writing, re-read the file and verify every row has the same number of columns.
 
-## Trình bày & Hard Stop
+## Present & Hard Stop
 
-1. Tóm tắt: tổng số case; phân bố theo Priority và Execution Type (đếm từ bảng thật); % phủ RTM; yêu cầu thiếu loại case nào.
-2. Mâu thuẫn/điểm cần làm rõ phát sinh khi thiết kế, kèm mặc định đề xuất.
-3. Khối **Cố vấn QA**: vì sao cần các nhóm case này, góc khuất (phân quyền, rớt mạng, bấm đúp, dữ liệu biên) đã/chưa phủ, mặc định sẽ chọn.
-4. **HARD STOP:** chờ duyệt. Không sang chạy test (Pha 3) khi chưa duyệt.
+1. Summary: total cases; distribution by Priority and Execution Type (counted from the real table); RTM coverage %; requirements missing which case types.
+2. Contradictions/clarifications found during design, each with a suggested default.
+3. **QA Advisor** block: why these case groups, which blind spots (permissions, network drop, double-click, boundary data) are covered or not, the default you will choose.
+4. **HARD STOP:** wait for approval. Do not start execution (Phase 3) before approval.
 
-## Ví dụ minh hoạ
+## Worked example
 
-Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
+See `references/worked-example.md` for a sample output format (fictional data; read only when needed; never copy the example's numbers into a real project).
 
-## Checklist hoàn thành
+## Completion checklist
 
-- [ ] Đã đọc `references/test-design-techniques.md` và dùng kỹ thuật phù hợp
-- [ ] Đủ 10 cột; Steps đánh số; Test Data cụ thể; Expected Result kiểm chứng được
-- [ ] Mỗi yêu cầu có happy + negative (+ permission nếu liên quan) hoặc có lý do N/A
-- [ ] RTM tính % từ dữ liệu thật; có danh sách case mồ côi (nếu có)
-- [ ] Không bịa thông báo lỗi/giá trị giới hạn; chỗ thiếu có `[Cần bổ sung: ...]`
-- [ ] Đã lưu file và dừng chờ duyệt
+- [ ] Read `references/test-design-techniques.md` and used fitting techniques
+- [ ] All 10 columns; numbered Steps; concrete Test Data; verifiable Expected Result
+- [ ] Each requirement has happy + negative (+ permission if relevant) or a reason for N/A
+- [ ] RTM percentage computed from real data; orphan cases listed (if any)
+- [ ] No invented error messages/limits; gaps marked `[Needs input: ...]`
+- [ ] File saved and stopped awaiting approval

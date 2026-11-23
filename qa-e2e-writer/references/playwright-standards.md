@@ -1,25 +1,25 @@
 # Playwright Standards
 
-Chuẩn viết test Playwright (TypeScript làm ví dụ; nếu repo dùng JS/Python thì giữ cùng nguyên tắc). **Luôn theo cấu hình và quy ước sẵn có của repo** nếu đã có Playwright.
+Standards for writing Playwright tests (TypeScript in examples; if the repo uses JS/Python keep the same principles). **Always follow the repo's existing configuration and conventions** if Playwright is already set up.
 
-## Luật bắt buộc
+## Mandatory rules
 
-1. **Page Object Model (POM):** mỗi trang/khu vực UI = một class; spec không chứa locator trực tiếp, chỉ gọi hành động của page object.
-2. **Semantic locators theo thứ tự ưu tiên:**
+1. **Page Object Model (POM):** one class per page/UI area; specs contain no locators, only calls to page-object actions.
+2. **Semantic locators in priority order:**
    1. `getByRole('button', { name: '...' })`
    2. `getByLabel('...')`
    3. `getByPlaceholder('...')`
-   4. `getByText('...')` (cho nội dung tĩnh, ổn định)
-   5. `getByTestId('...')` — khi 1–4 không đủ; nếu app chưa có `data-testid`, đề xuất dev thêm.
-3. **Cấm** CSS dài/phụ thuộc cấu trúc (`div > div:nth-child(3) .btn`), XPath, class tự sinh (`.css-1x2y3z`), index vị trí (trừ khi test chính danh sách có thứ tự). Nếu bắt buộc dùng CSS, giải thích ngắn bằng comment.
-4. **Cấm tuyệt đối `waitForTimeout(...)`** và `sleep`. Chờ bằng web-first assertions hoặc điều kiện cụ thể (`waitForResponse`, `waitForURL`).
-5. **Web-first assertions:** `await expect(locator).toBeVisible()`, `toHaveText`, `toHaveValue`, `toBeEnabled`, `toHaveURL`. Không dùng `expect(await locator.isVisible()).toBe(true)` (không tự retry).
-6. **Độc lập:** mỗi test tự tạo/dọn dữ liệu, không dựa vào test khác hay thứ tự chạy; chạy song song được. Không dùng biến toàn cục chia sẻ trạng thái.
-7. **Một test = một TC ID**, tiêu đề bắt đầu bằng TC ID; assertion kiểm đúng Expected Result của case.
-8. **Không hard-code bí mật:** tài khoản/mật khẩu lấy từ biến môi trường hoặc fixture của repo; không đưa thông tin thật vào mã nguồn.
-9. **Kiểm tra DOM thật trước khi viết locator** (đọc template/component hoặc mở trang). Không đoán label/role.
+   4. `getByText('...')` (for static, stable content)
+   5. `getByTestId('...')` — when 1–4 are not enough; if the app has no `data-testid`, propose that developers add it.
+3. **Forbidden:** long/structure-dependent CSS (`div > div:nth-child(3) .btn`), XPath, auto-generated classes (`.css-1x2y3z`), positional indexes (unless testing an ordered list itself). If CSS is unavoidable, explain in a short comment.
+4. **`waitForTimeout(...)` and `sleep` are strictly forbidden.** Wait with web-first assertions or concrete conditions (`waitForResponse`, `waitForURL`).
+5. **Web-first assertions:** `await expect(locator).toBeVisible()`, `toHaveText`, `toHaveValue`, `toBeEnabled`, `toHaveURL`. Do not use `expect(await locator.isVisible()).toBe(true)` (no auto-retry).
+6. **Independence:** each test creates/cleans its own data, never relies on another test or run order; must be runnable in parallel. No shared global state.
+7. **One test = one TC ID**; the title starts with the TC ID; assertions verify exactly the case's Expected Result.
+8. **No hard-coded secrets:** take credentials from environment variables or the repo's fixtures; never put real information in source.
+9. **Inspect the real DOM before writing locators** (read templates/components or open the page). Never guess labels/roles.
 
-## Cấu trúc gợi ý (theo repo nếu đã khác)
+## Suggested structure (follow the repo if it differs)
 
 ```text
 tests/
@@ -31,7 +31,7 @@ tests/
 │   └── test-data.ts
 ```
 
-## Page Object mẫu
+## Sample Page Object
 
 ```ts
 import { type Locator, type Page, expect } from '@playwright/test';
@@ -45,10 +45,10 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    // Tên label/role dưới đây là minh hoạ — thay bằng giá trị đọc từ DOM thật của app.
+    // Label/role names below are illustrative — replace with values read from the app's real DOM.
     this.email = page.getByLabel('Email');
-    this.password = page.getByLabel('Mật khẩu');
-    this.submit = page.getByRole('button', { name: 'Đăng nhập' });
+    this.password = page.getByLabel('Password');
+    this.submit = page.getByRole('button', { name: 'Log in' });
     this.errorAlert = page.getByRole('alert');
   }
 
@@ -68,57 +68,91 @@ export class LoginPage {
 }
 ```
 
-## Spec mẫu
+## Sample spec
 
 ```ts
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 
 test.describe('Login', () => {
-  test('TC-LOGIN-002: từ chối đăng nhập khi sai mật khẩu', async ({ page }) => {
+  test('TC-LOGIN-002: rejects login with a wrong password', async ({ page }) => {
     const login = new LoginPage(page);
     await login.goto();
     await login.login(process.env.TEST_USER_EMAIL!, 'wrong-password');
-    await login.expectError(/.+/); // thay bằng thông báo chính xác từ đặc tả khi đã có
+    await login.expectError(/.+/); // replace with the exact message once the spec provides it
     await expect(page).toHaveURL(/\/login/);
   });
 });
 ```
 
-## Dữ liệu & độc lập
+## Data & independence
 
-- Dùng API/fixture để tạo dữ liệu trước test và dọn sau test (`beforeEach`/`afterEach`, hoặc fixture của Playwright).
-- Tên/email duy nhất theo test (ví dụ thêm hậu tố ngẫu nhiên) khi test tạo bản ghi.
-- Đăng nhập bằng `storageState` cho test không nhằm kiểm đăng nhập, để nhanh và ổn định; case đăng nhập thì đi qua UI.
-- Phân quyền: dùng context riêng cho từng vai trò; một test không đổi vai trò của context khác.
+- Use APIs/fixtures to create data before a test and clean it after (`beforeEach`/`afterEach`, or Playwright fixtures).
+- Unique names/emails per test (e.g. random suffix) when a test creates records.
+- Log in via `storageState` for tests that are not about login, for speed and stability; login cases go through the UI.
+- Permissions: use a separate context per role; a test never changes another context's role.
 
-## Chờ và đồng bộ
+## Waiting & synchronization
 
-| Nhu cầu | Cách đúng |
+| Need | Correct approach |
 |---|---|
-| Chờ phần tử xuất hiện | `await expect(loc).toBeVisible()` |
-| Chờ điều hướng | `await expect(page).toHaveURL(...)` |
-| Chờ API xong | `const resp = page.waitForResponse(...)` đặt **trước** hành động kích hoạt, rồi `await resp` |
-| Chờ loading biến mất | `await expect(spinner).toBeHidden()` |
-| Mạng chậm/rớt mạng (case Error Guessing) | `page.route()` để chặn/làm chậm có kiểm soát, `context.setOffline(true)` |
+| Wait for an element to appear | `await expect(loc).toBeVisible()` |
+| Wait for navigation | `await expect(page).toHaveURL(...)` |
+| Wait for an API call | `const resp = page.waitForResponse(...)` placed **before** the triggering action, then `await resp` |
+| Wait for a loader to disappear | `await expect(spinner).toBeHidden()` |
+| Slow/lost network (Error Guessing cases) | `page.route()` to block/delay in a controlled way, `context.setOffline(true)` |
 
-## Cấu hình khuyến nghị (nếu repo chưa có và người dùng đồng ý)
+## API testing (`Auto (API)` cases)
 
-- `retries` thấp ở CI (0–2); không dùng retry để che flaky.
-- `trace: 'on-first-retry'`, `screenshot: 'only-on-failure'` để có bằng chứng cho defect.
-- `baseURL` từ biến môi trường; `webServer` nếu app chạy được bằng một lệnh. **Lệnh và cổng phải lấy từ repo**, không đoán.
+If the repo has no API test tooling (Postman/Newman, pytest, supertest...), Playwright's built-in `request` fixture (`APIRequestContext`) can call REST endpoints directly with no browser — a good fit for repetitive cases such as lockout tests. Endpoints, payloads and status codes must come from the spec/code; never guess them. Ask before adding Playwright to a repo that lacks it.
 
-## Chạy và báo cáo
+```ts
+import { test, expect } from '@playwright/test';
 
-- Chạy: lệnh của repo (thường `npx playwright test`); có thể giới hạn theo file/tiêu đề (`-g "TC-LOGIN"`).
-- Dán **output thật** (số passed/failed, tên test fail, thông báo lỗi) vào `03-execution-notes.md`. Không tự cộng/trừ số liệu.
-- Test fail: đính kèm đường dẫn trace/screenshot nếu có; không có thì ghi "không có".
+test('TC-LOGIN-004: 5th failed login locks the account', async ({ request }) => {
+  const email = process.env.TEST_LOCKOUT_EMAIL!; // dedicated account reserved for this test
+  for (let i = 0; i < 5; i++) {
+    const r = await request.post('/api/login', { data: { email, password: 'wrong-pass' } }); // endpoint is illustrative
+    expect(r.ok()).toBeFalsy();
+  }
+  const locked = await request.post('/api/login', { data: { email, password: process.env.TEST_LOCKOUT_PASSWORD! } });
+  expect(locked.status()).toBe(423); // replace with the status code the spec defines
+});
+```
 
-## Tự kiểm trước khi bàn giao
+Rules: same independence rules as UI tests (dedicated data per test, cleanup/reset afterwards); assert status code **and** key body fields; use `baseURL` from config; keep credentials in environment variables; permission cases also test the API directly (not only the hidden UI button).
 
-- [ ] Không có `waitForTimeout`, `page.$`/`$$`, XPath, `nth-child`
-- [ ] Mọi locator đối chiếu DOM/code thật
-- [ ] Spec không chứa locator trực tiếp (nằm trong page object)
-- [ ] Test chạy độc lập từng cái (`-g` một test vẫn pass)
-- [ ] Assertion dùng web-first, kiểm đúng Expected Result của TC
-- [ ] Không có credential/dữ liệu thật trong mã nguồn
+## Machine-readable results
+
+Prefer a structured report so the results table in `03-execution-notes.md` is built from data instead of terminal text:
+
+```text
+PLAYWRIGHT_JSON_OUTPUT_NAME=test-results.json npx playwright test --reporter=json
+npx playwright test --reporter=junit      # JUnit XML; set the output file via PLAYWRIGHT_JUNIT_OUTPUT_NAME or reporter options in config
+```
+
+- Check your Playwright version's docs for the exact reporter options; the commands above are the common forms. Run the repo's own test command if it already defines reporters, and add the flag rather than replacing the command.
+- Read the JSON/XML file to get per-test status (`passed`/`failed`/`skipped`/`timedOut`), title (which carries the TC ID), duration and error message; map them to `Pass`/`Fail`/`Not Run`. Tests that never appear in the report are `Not Run`, not `Pass`.
+- Count totals from the parsed data, not from memory; keep both the file path and the verbatim error text of failures in the notes.
+- Do not commit large report files unless the user wants them; `test-results.json` and `playwright-report/` usually belong in `.gitignore`.
+
+## Recommended configuration (if the repo has none and the user agrees)
+
+- Low `retries` in CI (0–2); never use retries to hide flakiness.
+- `trace: 'on-first-retry'`, `screenshot: 'only-on-failure'` to produce evidence for defects.
+- `baseURL` from an environment variable; `webServer` if the app starts with one command. **The command and port must come from the repo**, never guessed.
+
+## Running & reporting
+
+- Run with the repo's command (usually `npx playwright test`); narrow by file/title (`-g "TC-LOGIN"`).
+- Paste the **real output** (passed/failed counts, failing test names, error messages) into `03-execution-notes.md`. Never add up or adjust numbers yourself.
+- Failing test: attach the trace/screenshot path if any; otherwise write "none".
+
+## Self-check before handing over
+
+- [ ] No `waitForTimeout`, `page.$`/`$$`, XPath, `nth-child`
+- [ ] Every locator cross-checked against the real DOM/code
+- [ ] Specs contain no direct locators (they live in page objects)
+- [ ] Each test passes when run alone (`-g` a single test)
+- [ ] Assertions are web-first and check the TC's Expected Result
+- [ ] No credentials/real data in source

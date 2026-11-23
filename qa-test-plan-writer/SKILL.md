@@ -1,84 +1,87 @@
 ---
 name: qa-test-plan-writer
-description: Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis, test strategy split (Manual / Auto browser / Auto API), test environment and data needs, and entry/exit criteria. Use when the user says 'write a test plan', 'review these requirements for testability', 'find gaps in the spec', 'test strategy', 'what should we test', 'viết test plan', 'lập kế hoạch kiểm thử', 'soi yêu cầu', 'phân tích đặc tả trước khi test', 'rà soát SRS', 'chiến lược test'. Do NOT use for writing individual test cases or RTM (use qa-test-matrix-writer), writing Playwright or manual test scripts (use qa-e2e-writer), logging bugs (use qa-defect-writer), final reports (use qa-summary-reporter), development implementation plans, or developer unit tests.
+description: Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis, test strategy split (Manual / Auto browser / Auto API), test environment and data needs, and entry/exit criteria. Use when the user says 'write a test plan', 'review these requirements for testability', 'find gaps in the spec', 'test strategy', 'what should we test', 'viết test plan', 'lập kế hoạch kiểm thử', 'soi yêu cầu', 'rà soát SRS', 'chiến lược test'. Do NOT use for writing individual test cases or RTM (use qa-test-matrix-writer), writing Playwright or manual test scripts (use qa-e2e-writer), logging bugs (use qa-defect-writer), final reports (use qa-summary-reporter), development implementation plans, or developer unit tests.
 ---
 
-# QA Test Plan Writer — Bước 1: Soi yêu cầu & Chiến lược
+# QA Test Plan Writer — Step 1: Requirement Audit & Strategy
 
-Biến đặc tả thô thành Test Plan có thể duyệt, **và** chỉ ra những chỗ đặc tả chưa đủ để test. Khi chạy trong `qa-lifecycle`, đây là Pha 1/5 và kết thúc bằng Hard Stop (nhãn `[QA Phase 1/5: Test Plan]` ở dòng đầu).
+Turns a raw specification into an approvable Test Plan, **and** points out where the spec is not yet good enough to test. Inside `qa-lifecycle` this is Phase 1/5 and ends with a Hard Stop (label `[QA Phase 1/5: Test Plan]` on the first line).
 
-## Quy tắc
+## Rules
 
-- Chỉ dựa trên đầu vào thật (SRS, Use Case, ticket, codebase). Không bịa yêu cầu, endpoint, vai trò, môi trường. Thiếu → `[Cần bổ sung: ...]` hoặc đưa vào câu hỏi mở kèm mặc định đề xuất.
-- Suy luận từ code/UI mà không có đặc tả → gắn `[Suy luận từ code — cần xác nhận]`.
-- Giải thích bằng ngôn ngữ developer; mỗi phát hiện kèm lý do "vì sao dễ sinh bug".
-- Chỉ viết kế hoạch, không viết test case chi tiết (việc của `qa-test-matrix-writer`).
+- **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
+- Rely only on real input (SRS, Use Case, ticket, codebase). Never invent requirements, endpoints, roles or environments. Missing → `[Needs input: ...]` or an open question with a suggested default.
+- Inferred from code/UI with no spec → label `[Inferred from code — needs confirmation]`.
+- Explain in developer language; attach to each finding the reason "why this tends to cause bugs".
+- Write the plan only, not detailed test cases (that is `qa-test-matrix-writer`'s job).
 
-## Quy trình
+## Process
 
-### Bước 1 — Thu thập đầu vào
-1. Xác định nguồn yêu cầu; đọc hết. Nếu là codebase: xem routes/controllers/models/UI chính, file cấu hình phân quyền, validate rules, README/docs, test hiện có (để biết framework test đã dùng).
-2. Gán **ID cho từng yêu cầu** nếu đặc tả chưa có (`REQ-01`, `REQ-02`... hoặc giữ ID gốc `UC-xx`/ticket). ID này sẽ dùng cho RTM ở Pha 2, nên phải ổn định.
-3. Hỏi tối đa 3 câu nếu thiếu: mục tiêu release, đối tượng người dùng/vai trò, môi trường test sẽ dùng.
+### Step 1 — Collect input
+1. Identify the requirement source and read it fully. For a codebase: check routes/controllers/models/main UI, permission configs, validation rules, README/docs, and existing tests (to learn the test framework already in use).
+2. **Assign an ID to each requirement** if the spec has none (`REQ-01`, `REQ-02`... or keep the original `UC-xx`/ticket ID). These IDs feed the Phase 2 RTM, so they must be stable.
+3. Ask at most 3 questions if needed: release goal, user types/roles, test environment to be used.
 
-### Bước 2 — Requirement Audit (làm TRƯỚC khi lập plan)
-Duyệt từng yêu cầu theo checklist:
+### Step 2 — Requirement Audit (BEFORE drafting the plan)
+Walk each requirement through this checklist:
 
-| Nhóm | Câu hỏi soi |
+| Group | Probing questions |
 |---|---|
-| Mơ hồ | Có từ không đo được ("nhanh", "thân thiện", "phù hợp", "một số")? Có số/ngưỡng cụ thể chưa? |
-| Thiếu luồng lỗi | Input sai/rỗng/quá dài thì sao? Server lỗi, timeout, mất mạng thì sao? Gửi trùng/bấm đúp? |
-| Thiếu phân quyền | Vai trò nào được làm gì? User A truy cập tài nguyên user B? Chưa đăng nhập/hết phiên? |
-| Mâu thuẫn | Hai yêu cầu nói trái nhau? Yêu cầu trái với hành vi code hiện tại? |
-| Thiếu trạng thái | Vòng đời đối tượng (nháp/đã gửi/huỷ)? Chuyển trạng thái nào hợp lệ? |
-| Dữ liệu | Định dạng, độ dài, ký tự đặc biệt/Unicode, múi giờ, làm tròn tiền? |
-| Phi chức năng | Hiệu năng, bảo mật, tương thích trình duyệt/thiết bị, i18n có được nêu không? |
-| Phụ thuộc | Dịch vụ ngoài (email, thanh toán, SMS)? Có môi trường giả lập không? |
+| Ambiguity | Any unmeasurable words ("fast", "friendly", "suitable", "some")? Concrete numbers/thresholds? |
+| Missing error flows | Wrong/empty/oversized input? Server error, timeout, network loss? Duplicate submit/double-click? |
+| Missing permissions | Which role can do what? Can user A reach user B's resource? Logged-out/expired session? |
+| Contradictions | Two requirements that disagree? A requirement that conflicts with current code behavior? |
+| Missing states | Object lifecycle (draft/submitted/cancelled)? Which transitions are valid? |
+| Data | Formats, lengths, special characters/Unicode, time zones, money rounding? |
+| Non-functional | Performance, security, browser/device compatibility, i18n mentioned? |
+| Dependencies | External services (email, payment, SMS)? Is a sandbox available? |
+| Abuse protection | Rate limiting per IP/account/endpoint? Brute-force and enumeration protection (login, OTP, password reset)? |
+| Observability | Are sensitive actions (permission change, deletion, account lock, login failures) written to an audit log/telemetry so they can be traced? |
 
-Mỗi phát hiện ghi dòng: ID yêu cầu · vấn đề · loại · câu hỏi làm rõ · **mặc định đề xuất** (để người dùng trả lời "ok"). Xếp hạng theo mức ảnh hưởng tới khả năng test. Nếu có phát hiện loại "chặn" (không thể viết test nếu không làm rõ) → nêu đầu danh sách.
+For each finding write one row: requirement ID · issue · type · clarifying question · **suggested default** (so the user can answer "ok"). Rank by impact on testability. If a finding is a "blocker" (tests cannot be written without clarification), list it first.
 
-### Bước 3 — Soạn Test Plan
-Cấu trúc file `01-test-plan.md`: header (pha, ngày, phiên bản, trạng thái Draft/Approved, nguồn yêu cầu) → 1. Requirement Audit → 2. Scope → 3. Risk Analysis → 4. Chiến lược → 5. Môi trường & dữ liệu → 6. Entry/Exit → 7. Câu hỏi mở & giả định. Nội dung từng mục theo các điểm dưới.
+### Step 3 — Draft the Test Plan
+File structure `01-test-plan.md`: header (phase, date, version, status Draft/Approved, requirement source) → 1. Requirement Audit → 2. Scope → 3. Risk Analysis → 4. Strategy → 5. Environment & data → 6. Entry/Exit → 7. Open questions & assumptions. Fill each section per the points below.
 
 1. **Scope**
-   - In-scope: liệt kê module/luồng/vai trò/nền tảng, gắn ID yêu cầu.
-   - Out-of-scope: nêu rõ + lý do (ví dụ "hạ tầng thanh toán bên thứ 3 — chỉ test tích hợp ở mức mock").
-2. **Risk Analysis** — chấm Khả năng × Tác động (H/M/L) cho từng khu vực. Ưu tiên cao: tiền/thanh toán, phân quyền, dữ liệu cá nhân, luồng chính doanh thu, tính năng mới/đang thay đổi nhiều, tích hợp bên ngoài. Kết quả quyết định độ sâu test và Priority P0–P3 ở Pha 2.
-3. **Phân bổ chiến lược** — bảng khu vực × `Manual` / `Auto (browser)` / `Auto (API)`:
-   - `Auto (browser)`: luồng quan trọng, ổn định, lặp lại nhiều lần (đăng nhập, checkout, CRUD chính) — dùng cho regression.
-   - `Auto (API)`: logic nghiệp vụ, validate, phân quyền ở tầng API, tổ hợp dữ liệu lớn.
-   - `Manual`: UX/trực quan, tính năng mới chưa ổn định, test thăm dò, case khó/đắt để tự động hoá, kịch bản "phá app".
-   - Nêu lý do mỗi lựa chọn; mặc định đề xuất nếu repo đã có công cụ (ví dụ phát hiện sẵn Playwright → dùng).
-4. **Môi trường & dữ liệu test** — URL/build, DB seed, tài khoản theo vai trò, dữ liệu biên cần tạo, dịch vụ giả lập, browser/thiết bị. Mục nào chưa biết → `[Cần bổ sung: ...]`; **không** tự điền "Chrome 120" hay tương tự.
+   - In-scope: modules/flows/roles/platforms, tagged with requirement IDs.
+   - Out-of-scope: state it explicitly with a reason (e.g. "third-party payment infrastructure — integration tested with mocks only").
+2. **Risk Analysis** — rate Likelihood × Impact (H/M/L) per area. High-priority: money/payment, permissions, personal data, revenue flows, new/frequently changed features, external integrations. The result drives test depth and the P0–P3 Priority in Phase 2.
+3. **Strategy split** — table of area × `Manual` / `Auto (browser)` / `Auto (API)`:
+   - `Auto (browser)`: important, stable, frequently repeated flows (login, checkout, main CRUD) — for regression.
+   - `Auto (API)`: business logic, validation, API-level permissions, large data combinations.
+   - `Manual`: UX/visual checks, new unstable features, exploratory testing, cases that are hard/expensive to automate, "break the app" scenarios.
+   - Give a reason for each choice; propose a default if the repo already has tooling (e.g. Playwright detected → use it).
+4. **Environment & test data** — URL/build, DB seed, accounts per role, boundary data to create, simulated services, browsers/devices. Unknown → `[Needs input: ...]`; **never** fill in something like "Chrome 120" yourself.
 5. **Entry / Exit Criteria**
-   - Entry: build triển khai được lên môi trường test, smoke pass, dữ liệu sẵn sàng, yêu cầu blocker đã làm rõ.
-   - Exit: nêu ngưỡng đề xuất (ví dụ 100% P0 pass, không còn Blocker/Critical mở, RTM phủ 100% yêu cầu in-scope). Ngưỡng cuối cùng chốt cùng `qa-summary-reporter`; ghi `Đề xuất — cần người dùng xác nhận`.
-6. **Câu hỏi mở & giả định** — danh sách đánh số, mỗi câu kèm mặc định.
+   - Entry: build deployable to the test environment, smoke test passes, data ready, blocker requirements clarified.
+   - Exit: propose thresholds (e.g. 100% P0 pass, no open Blocker/Critical, RTM covers 100% of in-scope requirements). Final thresholds are settled with `qa-summary-reporter`; mark `Proposed — user to confirm`.
+6. **Open questions & assumptions** — numbered list, each with a default.
 
-### Bước 4 — Lưu & trình bày
-- Ghi `qa-artifacts/01-test-plan.md` (tạo thư mục nếu chưa có; vấn đề `.gitignore` do `qa-lifecycle` hỏi — nếu chạy độc lập, hỏi một lần).
-- Trong chat: tóm tắt ≤ 15 dòng — top 5 phát hiện từ Audit, rủi ro cao nhất, chiến lược tổng, câu hỏi mở.
-- Thêm khối **Cố vấn QA**: vì sao cần các điểm này, 2–3 góc khuất đặc thù tính năng (phân quyền, rớt mạng, bấm đúp, dữ liệu biên), mặc định sẽ chọn.
-- **HARD STOP:** chờ người dùng duyệt hoặc trả lời câu hỏi mở. Không sang test case khi chưa duyệt.
+### Step 4 — Save and present
+- Write `qa-artifacts/01-test-plan.md` (create the folder if missing; the `.gitignore` question belongs to `qa-lifecycle` — when running standalone, ask once).
+- In chat: summary of ≤ 15 lines — top 5 audit findings, highest risks, overall strategy, open questions.
+- Add a **QA Advisor** block: why these points matter, 2–3 feature-specific blind spots (permissions, network drop, double-click, boundary data), the default you will choose.
+- **HARD STOP:** wait for approval or answers to the open questions. Do not move to test cases before approval.
 
-## Ví dụ phát hiện Audit (minh hoạ cách viết)
+## Sample audit findings (to illustrate style)
 
-| Yêu cầu | Vấn đề | Loại | Câu hỏi | Mặc định |
+| Requirement | Issue | Type | Question | Default |
 |---|---|---|---|---|
-| REQ-03 "Mật khẩu phải đủ mạnh" | Không có tiêu chí đo được | Mơ hồ | Quy tắc độ dài/ký tự cụ thể? | ≥ 8 ký tự, có chữ và số |
-| REQ-07 "Admin xoá được bài viết" | Không nói tác giả có xoá bài mình không; xoá mềm hay cứng? | Thiếu phân quyền/trạng thái | Ma trận quyền xoá? | Tác giả + Admin; xoá mềm |
+| REQ-03 "Password must be strong enough" | No measurable criterion | Ambiguity | Exact length/character rules? | ≥ 8 chars, letters and digits |
+| REQ-07 "Admin can delete posts" | Unclear whether authors may delete their own; soft or hard delete? | Missing permission/state | Delete-permission matrix? | Author + Admin; soft delete |
 
-(Đây là ví dụ định dạng, không phải dữ liệu của dự án thật.)
+(These illustrate the format only; they are not data from a real project.)
 
-## Ví dụ minh hoạ
+## Worked example
 
-Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
+See `references/worked-example.md` for a sample output format (fictional data; read only when needed; never copy the example's numbers into a real project).
 
-## Checklist hoàn thành
+## Completion checklist
 
-- [ ] Mọi yêu cầu có ID; Audit đã duyệt đủ 8 nhóm
-- [ ] Mỗi phát hiện có câu hỏi + mặc định đề xuất
-- [ ] Scope có cả Out-of-scope kèm lý do
-- [ ] Mỗi khu vực có Execution Type và lý do
-- [ ] Không có thông tin môi trường/số liệu bịa
-- [ ] Đã lưu file và dừng chờ duyệt
+- [ ] Every requirement has an ID; the audit covered all 10 groups
+- [ ] Every finding has a question + suggested default
+- [ ] Scope includes Out-of-scope with reasons
+- [ ] Every area has an Execution Type and a reason
+- [ ] No invented environment info or figures
+- [ ] File saved and stopped awaiting approval

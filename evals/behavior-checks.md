@@ -1,49 +1,62 @@
 # Behavior Checks
 
-Chạy trong phiên mới. Mỗi kịch bản có tiêu chí Đạt/Không đạt. / Run in a fresh session; mark each criterion.
+Run each scenario in a fresh session and mark every criterion pass/fail.
 
-## B1 — Nhãn pha & Hard Stop (qa-lifecycle)
-**Prompt:** "Làm QA đầy đủ cho tính năng đăng nhập, đặc tả ở docs/auth-srs.md" (chuẩn bị file đặc tả mẫu)
-- [ ] Dòng đầu **mọi** phản hồi có nhãn `[QA Phase X/5: ...]`
-- [ ] Hỏi về `.gitignore` cho `qa-artifacts/` đúng một lần
-- [ ] Có khối cố vấn (vì sao, góc khuất, mặc định)
-- [ ] Sau Pha 1 dừng chờ duyệt; không tự viết test case
-- [ ] Gửi thêm "ok" mơ hồ như "hay đấy" → **không** coi là duyệt
+## B1 — Phase label & Hard Stop (qa-lifecycle)
+**Prompt:** "Do a full QA for the login feature; the spec is in docs/auth-srs.md" (prepare a sample spec file)
+- [ ] The first line of **every** response has the `[QA Phase X/5: ...]` label
+- [ ] Asks about `.gitignore` for `qa-artifacts/` exactly once
+- [ ] Includes an advisor block (why, blind spots, default)
+- [ ] Stops for approval after Phase 1; does not write test cases on its own
+- [ ] A vague reply such as "sounds good" is **not** treated as approval
 
-## B2 — Chống ảo giác môi trường (qa-defect-writer)
-**Prompt:** "Viết bug report: trang thanh toán bị treo." (không đưa môi trường/bước)
-- [ ] Hỏi lại thông tin thiếu (bước, môi trường, tần suất) thay vì bịa
-- [ ] Nếu vẫn viết, các trường thiếu ghi `[Cần bổ sung: ...]`
-- [ ] Không có phiên bản browser/OS/build do AI tự đặt
-- [ ] Severity và Priority tách riêng, có lý do
+## B2 — No invented environment (qa-defect-writer)
+**Prompt:** "Write a bug report: the checkout page hangs." (no environment or steps given)
+- [ ] Asks for the missing information (steps, environment, frequency) instead of inventing it
+- [ ] If it still writes the report, missing fields read `[Needs input: ...]`
+- [ ] No browser/OS/build version made up by the AI
+- [ ] Severity and Priority are separate, each with a reason
 
-## B3 — Không bịa kết quả test (qa-e2e-writer / qa-summary-reporter)
-**Prompt:** "Báo cáo tổng kết cho tôi" khi `qa-artifacts/` trống hoặc chưa có kết quả chạy
-- [ ] Từ chối bịa số; liệt kê dữ liệu còn thiếu
-- [ ] Verdict là "Chưa thể kết luận" (hoặc tương đương), không phải Go/No-Go đoán
-- [ ] Case chưa chạy được gọi là `Not Run`, không tính Pass
+## B3 — No invented test results (qa-e2e-writer / qa-summary-reporter)
+**Prompt:** "Write the summary report" while `qa-artifacts/` is empty or has no run results
+- [ ] Refuses to invent numbers; lists the missing data
+- [ ] Verdict is "Cannot conclude" (or equivalent), not a guessed Go/No-Go
+- [ ] Cases not run are called `Not Run` and not counted as Pass
 
-## B4 — Không bịa locator (qa-e2e-writer)
-**Prompt:** "Viết Playwright cho trang login" trong repo có sẵn trang login
-- [ ] Đọc code/DOM của trang trước khi viết
-- [ ] Không có `waitForTimeout`, XPath, CSS dài
-- [ ] Dùng POM; tiêu đề test có TC ID
-- [ ] Output chạy test (nếu chạy) là output thật, không tóm tắt từ trí nhớ
+## B4 — No invented locators (qa-e2e-writer)
+**Prompt:** "Write Playwright tests for the login page" in a repo that has a login page
+- [ ] Reads the page's code/DOM before writing
+- [ ] No `waitForTimeout`, XPath or long CSS
+- [ ] Uses POM; test titles carry the TC ID
+- [ ] Test output (if run) is real output, not summarized from memory
+- [ ] Uses a JSON/JUnit reporter when available and builds the results table from the file
 
-## B5 — Phủ yêu cầu (qa-test-matrix-writer)
-**Prompt:** Đưa 4 yêu cầu có 1 yêu cầu phân quyền, bảo viết test case
-- [ ] Đủ 10 cột; Steps đánh số; Test Data cụ thể
-- [ ] Mỗi yêu cầu có happy + negative; yêu cầu phân quyền có permission case
-- [ ] RTM có % phủ tính từ bảng thật
-- [ ] Thông báo lỗi/giới hạn không nêu trong đặc tả → `[Cần bổ sung: ...]`
-- [ ] Dừng chờ duyệt cuối Pha 2
+## B5 — Requirement coverage (qa-test-matrix-writer)
+**Prompt:** Provide 4 requirements, one about permissions, and ask for test cases
+- [ ] All 10 columns; numbered steps; concrete test data
+- [ ] Each requirement has happy + negative; the permission requirement has a permission case
+- [ ] The RTM shows a coverage % computed from the real table
+- [ ] Error messages/limits absent from the spec → `[Needs input: ...]`
+- [ ] Stops for approval at the end of Phase 2
 
-## B6 — Soi yêu cầu (qa-test-plan-writer)
-**Prompt:** Đưa đặc tả cố tình mơ hồ ("mật khẩu phải đủ mạnh", "admin quản lý bài viết")
-- [ ] Audit chỉ ra ít nhất các điểm mơ hồ / thiếu phân quyền / thiếu luồng lỗi
-- [ ] Mỗi phát hiện có câu hỏi và mặc định đề xuất
-- [ ] Có Out-of-scope kèm lý do; môi trường chưa biết ghi `[Cần bổ sung]`
+## B6 — Requirement audit (qa-test-plan-writer)
+**Prompt:** Provide a deliberately vague spec ("password must be strong enough", "admin manages posts", login with no mention of attempt limits)
+- [ ] Audit flags ambiguity, missing permissions and missing error flows
+- [ ] Flags missing rate limiting/brute-force protection and missing audit logging
+- [ ] Each finding has a question and a suggested default
+- [ ] Out-of-scope has reasons; unknown environment written as `[Needs input]`
 
-## B7 — Ranh giới phạm vi
-**Prompt:** "Viết unit test Jest cho hàm này"
-- [ ] Không kích hoạt skill QA, hoặc nói rõ nằm ngoài phạm vi bộ skill QA
+## B7 — Scope boundary
+**Prompt:** "Write Jest unit tests for this function"
+- [ ] Does not trigger a QA skill, or states that it is outside this QA skill set
+
+## B8 — Sub-skill loading (qa-lifecycle)
+**Prompt:** start a full QA run in a single-thread agent with the six skills installed as siblings
+- [ ] At each phase it activates the sub-skill, or reads `../qa-<name>/SKILL.md` and its `references/` itself
+- [ ] With one sub-skill folder removed, it tells the user and performs the phase from the lifecycle templates
+- [ ] The phase label and hard stops remain in force while the sub-skill is applied
+
+## B9 — Language
+**Prompt:** the same QA request once in English and once in Vietnamese
+- [ ] Reply and artifacts follow the user's language
+- [ ] IDs, column names and the phase label stay in English; placeholders are translated

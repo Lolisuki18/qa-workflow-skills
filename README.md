@@ -1,72 +1,72 @@
 # qa-workflow-skills
 
-🌐 **Tiếng Việt** · [English](README.en.md)
+A standalone set of **Agent Skills** covering the whole software testing life cycle (STLC), following the open Anthropic Agent Skills specification. Works with Claude Code, Cursor, Gemini CLI, Codex and any other AI coding agent that reads `SKILL.md`.
 
-Bộ **Agent Skills** độc lập cho toàn bộ vòng đời kiểm thử phần mềm (STLC), theo đặc tả chuẩn mở Anthropic Agent Skills. Dùng được với Claude Code, Cursor, Gemini CLI, Codex và các AI coding agent khác đọc `SKILL.md`.
+Designed for developers who are not QA specialists: the AI acts as a **proactive QA advisor** — explaining why each check matters, warning about blind spots, and proposing defaults you can accept quickly.
 
-Thiết kế cho cả developer không chuyên QA: AI đóng vai **cố vấn QA chủ động** — giải thích vì sao cần test điểm này, cảnh báo góc khuất, đề xuất phương án mặc định để chọn nhanh.
+The skills are written in English and reply in the language you use (English or Vietnamese). Trigger keywords in each `description` are bilingual (EN + VI).
 
-## 5 pha, 6 skill
+## 5 phases, 6 skills
 
-| Pha | Skill | Đầu ra (`qa-artifacts/`) |
+| Phase | Skill | Output (`qa-artifacts/`) |
 |---|---|---|
-| Điều phối | `qa-lifecycle` | Điều khiển 5 pha, hard stop duyệt |
-| 1. Soi yêu cầu & chiến lược | `qa-test-plan-writer` | `01-test-plan.md` |
-| 2. Thiết kế test case | `qa-test-matrix-writer` | `02-test-matrix.md` (+ RTM) |
-| 3. Chạy test & automation | `qa-e2e-writer` | `03-execution-notes.md` + code Playwright |
-| 4. Quản lý lỗi | `qa-defect-writer` | `04-defects.md` |
-| 5. Báo cáo & nghiệm thu | `qa-summary-reporter` | `05-summary-report.md` |
+| Orchestration | `qa-lifecycle` | Drives the 5 phases with approval hard stops |
+| 1. Requirement audit & strategy | `qa-test-plan-writer` | `01-test-plan.md` |
+| 2. Test case design | `qa-test-matrix-writer` | `02-test-matrix.md` (+ RTM) |
+| 3. Execution & automation | `qa-e2e-writer` | `03-execution-notes.md` + Playwright code |
+| 4. Defect management | `qa-defect-writer` | `04-defects.md` |
+| 5. Reporting & acceptance | `qa-summary-reporter` | `05-summary-report.md` |
 
-> **Trạng thái:** cả 6 skill đã hoàn tất (Đợt 1 và Đợt 2).
-
-## Cấu trúc
+## Repository layout
 
 ```text
 qa-workflow-skills/
-├── README.md                (tiếng Việt)
-├── README.en.md             (English)
+├── README.md
 ├── qa-lifecycle/            (SKILL.md, references/phase-templates.md, worked-example.md)
 ├── qa-test-plan-writer/     (SKILL.md, references/worked-example.md)
 ├── qa-test-matrix-writer/   (SKILL.md, references/test-design-techniques.md, worked-example.md)
 ├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md, worked-example.md)
 ├── qa-defect-writer/        (SKILL.md, references/severity-priority-matrix.md, worked-example.md)
 ├── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md, worked-example.md)
-├── en/                      Bản tiếng Anh của 6 skill (cùng tên thư mục)
-└── evals/                   Prompt kích hoạt và kiểm hành vi (VI + EN)
+└── evals/                   Trigger prompts and behavior checks
 ```
 
-> **Chỉ cài MỘT bộ ngôn ngữ.** Bản tiếng Việt (`qa-*` ở root) và bản tiếng Anh (`en/qa-*`) dùng cùng tên skill (`name` phải khớp tên thư mục) nên cài cả hai sẽ trùng tên.
+## Installation
 
-## Cài đặt
+Copy (or symlink) the six `qa-*` folders to where your agent reads skills. **Install all six together** and keep them as siblings: in agents without automatic skill switching, `qa-lifecycle` reads `../qa-<name>/SKILL.md` directly.
 
-Copy (hoặc symlink) các thư mục `qa-*` ở root repo vào nơi agent của bạn đọc skill:
-
-| Agent | Thư mục skill (tham khảo, kiểm tra tài liệu agent của bạn) |
+| Agent | Skills folder (for reference; check your agent's docs) |
 |---|---|
-| Claude Code | `~/.claude/skills/` hoặc `<project>/.claude/skills/` |
-| Cursor / Gemini CLI / Codex | theo cơ chế skill/rules của từng agent; có thể trỏ agent tới file `SKILL.md` |
+| Claude Code | `~/.claude/skills/` or `<project>/.claude/skills/` |
+| Cursor / Gemini CLI / Codex | per each agent's skill/rules mechanism; you can also point the agent at the `SKILL.md` files |
 
-## Cách dùng
+Each skill also works on its own; only `qa-lifecycle` expects the others to be present, and it says so when one is missing.
 
-Chỉ cần nói tự nhiên, ví dụ:
+## Usage
 
-- "Lập quy trình QA đầy đủ cho tính năng đăng nhập" → `qa-lifecycle`
-- "Viết test plan từ SRS này" → `qa-test-plan-writer`
-- "Sinh test case và RTM cho module giỏ hàng" → `qa-test-matrix-writer`
+Just speak naturally, for example:
 
-Mỗi phản hồi của `qa-lifecycle` bắt đầu bằng nhãn `[QA Phase X/5: Tên pha]`. Pha 1 và 2 có **Hard Stop**: AI dừng chờ bạn duyệt rồi mới đi tiếp.
+- "Run a full QA process for the login feature" → `qa-lifecycle`
+- "Write a test plan from this SRS" → `qa-test-plan-writer`
+- "Generate test cases and an RTM for the shopping cart module" → `qa-test-matrix-writer`
+- "Write Playwright tests for the Auto (browser) cases" → `qa-e2e-writer`
+- "Turn this raw bug description into a proper defect report" → `qa-defect-writer`
+- "Is this ready to release? Write the summary report" → `qa-summary-reporter`
 
-## Nguyên tắc chung
+Every `qa-lifecycle` response starts with the label `[QA Phase X/5: Phase Name]`. Phases 1 and 2 have a **Hard Stop**: the AI waits for your approval before continuing.
 
-- **Chống ảo giác:** không bịa số liệu Pass/Fail, môi trường, browser hay bước tái hiện; thiếu thì ghi `[Cần bổ sung: ...]` hoặc hỏi lại.
-- **Không lẫn unit test:** bộ skill này lo kiểm thử ở góc nhìn QA (chức năng, E2E, API, thăm dò), không viết unit test của dev.
-- **Progressive disclosure:** `SKILL.md` gọn (<250 dòng), nội dung dài nằm ở `references/`.
-- **Độc lập:** mỗi skill chạy riêng được, không phụ thuộc skill ngoài bộ này.
+## Core principles
 
-## Ví dụ chạy thật
+- **Anti-hallucination:** never invents Pass/Fail numbers, environments, browser versions or reproduction steps; missing data is written as `[Needs input: ...]` or asked about.
+- **No unit-test confusion:** these skills cover testing from the QA viewpoint (functional, E2E, API, exploratory), not developers' unit tests.
+- **Progressive disclosure:** each `SKILL.md` stays short (<250 lines); long material lives in `references/`, one level deep.
+- **Self-contained:** no dependency on skills outside this set.
+- **Evidence over narrative:** Playwright results are read from a JSON/JUnit report when available, not retyped from terminal text.
 
-Mỗi skill có `references/worked-example.md` dựng trên cùng một kịch bản hư cấu ("DemoShop" — đăng nhập), nên ID và số liệu nhất quán từ test plan tới báo cáo Go/No-Go. Dữ liệu là hư cấu — không sao chép vào dự án thật.
+## Worked examples
 
-## Tự kiểm (evals)
+Each skill has a `references/worked-example.md` built on one fictional scenario ("DemoShop" login) so IDs and figures stay consistent from test plan to Go/No-Go report. The data is fictional — never copy it into a real project.
 
-Xem [evals/](evals/README.md): prompt nên/không nên kích hoạt từng skill và các kịch bản kiểm hành vi (nhãn pha, Hard Stop, chống ảo giác). Kết quả phụ thuộc agent và mô hình.
+## Self-check (evals)
+
+See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). Results vary by agent and model.

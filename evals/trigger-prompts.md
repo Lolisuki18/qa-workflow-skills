@@ -1,6 +1,6 @@
 # Trigger Prompts
 
-Mỗi skill có prompt **nên kích hoạt** (✅) và **không nên** (❌, ghi skill/việc đúng hơn nếu có). / ✅ should trigger, ❌ should not.
+✅ should trigger, ❌ should not (the better skill is noted where one exists). Vietnamese prompts are kept on purpose: descriptions carry bilingual trigger keywords.
 
 ## qa-lifecycle
 | | Prompt |
@@ -56,8 +56,8 @@ Mỗi skill có prompt **nên kích hoạt** (✅) và **không nên** (❌, ghi
 | ❌ | Viết bug report cho lỗi mới → `qa-defect-writer` |
 | ❌ | Viết mô tả pull request |
 
-## Prompt nhập nhằng — kỳ vọng hỏi lại / Ambiguous — expect a clarifying question
-| Prompt | Kỳ vọng |
+## Ambiguous prompts — expect a clarifying question
+| Prompt | Expected |
 |---|---|
-| "Test giúp tôi cái này" | Hỏi rõ: cần QA (plan/case/chạy test) hay unit test của dev; đối tượng nào |
-| "Viết test" (repo có cả Playwright lẫn Jest) | Hỏi: test QA E2E hay unit test |
+| "Test giúp tôi cái này" ("Test this for me") | Asks which kind of testing is meant (QA plan/cases/execution vs developer unit tests) and the target |
+| "Write tests" (repo has both Playwright and Jest) | Asks whether QA E2E tests or unit tests are wanted |

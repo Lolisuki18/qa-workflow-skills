@@ -1,98 +1,108 @@
 ---
 name: qa-lifecycle
-description: Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation, defect management, and summary report with Go/No-Go verdict — with hard stops for user approval and artifacts saved in qa-artifacts/. Use when the user says 'run a full QA process', 'test this feature end to end', 'QA workflow', 'quality assurance for this project', 'is this ready to release', 'chạy quy trình QA', 'kiểm thử toàn bộ tính năng', 'lập quy trình test bài bản', 'quy trình kiểm thử từ đầu đến cuối', 'nghiệm thu phần mềm'. Do NOT use for a single QA step on its own (use qa-test-plan-writer, qa-test-matrix-writer, qa-e2e-writer, qa-defect-writer or qa-summary-reporter directly), for developer unit tests or TDD, for debugging a code bug, or for code review.
+description: Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation, defect management, and summary report with Go/No-Go verdict — with hard stops for user approval and artifacts saved in qa-artifacts/. Use when the user says 'run a full QA process', 'test this feature end to end', 'QA workflow', 'quality assurance for this project', 'is this ready to release', 'software acceptance testing', 'chạy quy trình QA', 'kiểm thử toàn bộ tính năng', 'lập quy trình test bài bản', 'nghiệm thu phần mềm'. Do NOT use for a single QA step on its own (use qa-test-plan-writer, qa-test-matrix-writer, qa-e2e-writer, qa-defect-writer or qa-summary-reporter directly), for developer unit tests or TDD, for debugging a code bug, or for code review.
 ---
 
-# QA Lifecycle — Nhạc trưởng 5 pha STLC
+# QA Lifecycle — Conductor of the 5 STLC Phases
 
-Điều phối 5 pha kiểm thử bằng cách gọi đúng skill con ở đúng thời điểm. Người dùng có thể là developer không chuyên QA, nên bạn vừa là người thực thi vừa là **cố vấn QA chủ động**.
+Coordinates five testing phases by calling the right sub-skill at the right time. The user may be a developer without QA background, so you are both the executor and a **proactive QA advisor**.
 
-## Quy tắc bất biến (nhắc lại ở MỌI phản hồi)
+## Invariant rules (repeat in EVERY response)
 
-1. **Mỏ neo pha:** dòng đầu tiên của MỌI phản hồi phải là `[QA Phase X/5: Tên pha]` (ví dụ `[QA Phase 2/5: Test Matrix]`). Nếu chưa vào pha nào (đang hỏi bối cảnh): `[QA Phase 0/5: Khởi động]`. Nhãn này là mỏ neo chống quên rule trong hội thoại dài.
-2. **Chống ảo giác:** không bịa số liệu Pass/Fail, môi trường, phiên bản browser, bước tái hiện, tên API/endpoint. Thiếu dữ liệu → ghi `[Cần bổ sung: ...]` hoặc hỏi lại. Không giả vờ đã chạy test nếu chưa chạy.
-3. **Hard Stop:** ở cuối Pha 1 và Pha 2, dừng hẳn và chờ người dùng duyệt rõ ràng ("duyệt", "approve", "ok đi tiếp"). Im lặng hoặc câu hỏi phụ không phải là duyệt.
-4. **Cố vấn chủ động:** xem mục dưới.
-5. **Lưu artifact:** mọi đầu ra ghi vào `qa-artifacts/`, không chỉ in ra chat.
+1. **Phase anchor:** the first line of EVERY response must be `[QA Phase X/5: Phase Name]` (e.g. `[QA Phase 2/5: Test Matrix]`). Before any phase starts (gathering context): `[QA Phase 0/5: Kickoff]`. This label anchors the rules in long conversations.
+2. **Anti-hallucination:** never invent Pass/Fail numbers, environments, browser versions, reproduction steps or API/endpoint names. Missing data → write `[Needs input: ...]` or ask. Never pretend a test was run.
+3. **Hard Stop:** at the end of Phase 1 and Phase 2, stop completely and wait for explicit approval ("approved", "ok proceed", "duyệt"). Silence or a side question is not approval.
+4. **Proactive advisor:** see below.
+5. **Save artifacts:** every output goes to `qa-artifacts/`, not just to the chat.
+6. **Language:** reply and write artifacts in the language the user uses (English or Vietnamese). Keep the phase label, IDs and column names in English, and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
 
-## Khởi động (Phase 0)
+## Kickoff (Phase 0)
 
-Trước khi vào Pha 1, làm lần lượt:
+Before Phase 1, do these in order:
 
-1. Xác định đối tượng test: tính năng/module/release nào? Nguồn yêu cầu ở đâu (SRS, Use Case, ticket, codebase)? Nếu chưa rõ → hỏi tối đa 3 câu ngắn kèm đáp án mặc định.
-2. Kiểm tra `qa-artifacts/` đã tồn tại chưa. Nếu có file cũ → hỏi: tiếp tục từ file hiện có hay làm lại (không tự ghi đè).
-3. Hỏi **một lần**: "Thư mục `qa-artifacts/` nên (a) thêm vào `.gitignore` hay (b) giữ lại trong repo để team xem?" Gợi ý mặc định: (b) nếu cần chia sẻ báo cáo cho team/khách; (a) nếu chỉ dùng cá nhân. Thực hiện theo lựa chọn, không tự quyết.
-4. Tóm tắt lại phạm vi hiểu được trong 3–5 dòng và xác nhận.
+1. Identify the test target: which feature/module/release? Where are the requirements (SRS, Use Case, ticket, codebase)? If unclear, ask at most 3 short questions with default answers.
+2. Check whether `qa-artifacts/` exists. If old files exist, ask: continue from them or start over (never overwrite silently).
+3. Ask **once**: "Should `qa-artifacts/` be (a) added to `.gitignore` or (b) kept in the repo so the team can see it?" Suggested default: (b) if reports are shared with a team/client; (a) if personal use only. Follow the user's choice; do not decide for them.
+4. Summarize the understood scope in 3–5 lines and confirm.
 
-## Thư mục artifact
+## Artifact folder
 
 ```text
 qa-artifacts/
-├── 01-test-plan.md          # Pha 1
-├── 02-test-matrix.md        # Pha 2 (test case + RTM)
-├── 03-execution-notes.md    # Pha 3
-├── 04-defects.md            # Pha 4
-└── 05-summary-report.md     # Pha 5
+├── 01-test-plan.md          # Phase 1
+├── 02-test-matrix.md        # Phase 2 (test cases + RTM)
+├── 03-execution-notes.md    # Phase 3
+├── 04-defects.md            # Phase 4
+└── 05-summary-report.md     # Phase 5
 ```
 
-Mỗi file mở đầu bằng header: tên pha, ngày, phiên bản, trạng thái (`Draft` / `Approved`), nguồn yêu cầu. Template chi tiết từng file nằm ở `references/phase-templates.md` — đọc khi bắt đầu mỗi pha.
+Each file starts with a header: phase name, date, version, status (`Draft` / `Approved`), requirement source. Detailed templates per file are in `references/phase-templates.md` — read it when starting each phase.
 
-## Luồng 5 pha
+## How to invoke a sub-skill
 
-### Pha 1/5 — Test Plan (soi yêu cầu & chiến lược)
-- Gọi skill `qa-test-plan-writer`.
-- Kết quả: `01-test-plan.md` gồm Requirement Audit (lỗ hổng/mơ hồ), Scope, Risk, chiến lược `Manual` / `Auto (browser)` / `Auto (API)`, môi trường & dữ liệu, Entry/Exit criteria.
-- **HARD STOP:** trình bày tóm tắt + các câu hỏi mở còn lại, chờ duyệt. Nếu người dùng trả lời câu hỏi mở, cập nhật plan rồi xin duyệt lại.
+Wherever a phase says "call skill `qa-<name>`", agents differ in how they load skills, so apply the first option your environment supports:
 
-### Pha 2/5 — Test Matrix (thiết kế test case)
-- Gọi skill `qa-test-matrix-writer`.
-- Kết quả: `02-test-matrix.md` gồm bảng test case đủ cột + RTM chứng minh mọi yêu cầu được phủ.
-- **HARD STOP:** báo cáo số lượng case theo Priority/Execution Type, các yêu cầu chưa được phủ (nếu có), chờ duyệt.
+1. **Skill loading or subagents available:** activate `qa-<name>` through the agent's own mechanism.
+2. **Single-thread agent (no automatic switching):** read `../qa-<name>/SKILL.md` and the files in that skill's `references/` folder yourself, then follow its process in the current conversation. If the path is not found, search the workspace and installed skill folders for a `qa-<name>` directory.
+3. **Sub-skill not installed:** see "Handling situations" below.
 
-### Pha 3/5 — Execution & Automation
-- Gọi skill `qa-e2e-writer`.
-- Case `Manual` → kịch bản bấm test tay / Exploratory charter. Case `Auto (browser)` → viết và chạy Playwright. Case `Auto (API)` → chạy theo công cụ có sẵn trong repo.
-- Ghi kết quả **thật** vào `03-execution-notes.md` (mỗi case: Pass / Fail / Blocked / Not Run + bằng chứng). Case Manual người dùng chưa chạy thì để `Not Run`, tuyệt đối không tự điền.
-- Không có Hard Stop bắt buộc, nhưng khi phát hiện lỗi thì báo ngay và chuyển Pha 4.
+Whichever way it runs, keep this skill's invariant rules (phase label, anti-hallucination, hard stops) in force.
 
-### Pha 4/5 — Defect Management
-- Gọi skill `qa-defect-writer` cho mỗi lỗi phát hiện ở Pha 3 (hoặc lỗi người dùng báo).
-- Ghi vào `04-defects.md`. Khi dev báo đã sửa → chạy chế độ Re-test & Regression Checklist, cập nhật status.
-- Có thể quay lại Pha 3 để chạy lại case bị ảnh hưởng; ghi rõ vòng lặp trong nhãn (`[QA Phase 3/5: Execution — Re-test vòng 2]`).
+## The 5 phases
 
-### Pha 5/5 — Summary Report
-- Gọi skill `qa-summary-reporter`.
-- Chỉ tổng hợp số liệu thật từ `03-execution-notes.md`, `04-defects.md` và dữ liệu người dùng cung cấp. Thiếu mục nào → báo rõ "chưa có dữ liệu".
-- Kết quả: `05-summary-report.md` với verdict **Go / Conditional Go / No-Go**.
+### Phase 1/5 — Test Plan (requirement audit and strategy)
+- Call skill `qa-test-plan-writer`.
+- Output: `01-test-plan.md` with Requirement Audit (gaps/ambiguities), Scope, Risk, strategy split `Manual` / `Auto (browser)` / `Auto (API)`, environment and data, Entry/Exit criteria.
+- **HARD STOP:** present a summary plus remaining open questions and wait for approval. If the user answers open questions, update the plan and ask for approval again.
 
-## Chế độ Cố vấn QA chủ động
+### Phase 2/5 — Test Matrix (test case design)
+- Call skill `qa-test-matrix-writer`.
+- Output: `02-test-matrix.md` with the full test case table plus an RTM proving requirement coverage.
+- **HARD STOP:** report case counts by Priority/Execution Type and any uncovered requirements; wait for approval.
 
-Ở MỌI pha, trước khi hỏi/duyệt, thêm khối ngắn (tối đa ~8 dòng):
+### Phase 3/5 — Execution & Automation
+- Call skill `qa-e2e-writer`.
+- `Manual` cases → manual run script / exploratory charters. `Auto (browser)` cases → write and run Playwright. `Auto (API)` cases → run with the tooling already in the repo.
+- Record **real** results in `03-execution-notes.md` (per case: Pass / Fail / Blocked / Not Run + evidence). Manual cases the user has not run stay `Not Run`; never fill them in yourself.
+- No mandatory Hard Stop, but when a defect is found report it immediately and move to Phase 4.
 
-- **Vì sao bước này quan trọng:** 1–2 câu bằng ngôn ngữ developer.
-- **Góc khuất hay dính bug** liên quan đúng tính năng đang test, chọn từ: phân quyền (user A xem dữ liệu user B?), rớt mạng/timeout giữa chừng, bấm đúp/gửi trùng, dữ liệu biên (rỗng, quá dài, ký tự đặc biệt, Unicode/tiếng Việt có dấu), múi giờ, session hết hạn, back/reload giữa luồng.
-- **Phương án mặc định:** nêu rõ "Nếu bạn không có ý kiến, tôi sẽ chọn X vì Y" để người dùng chỉ cần trả lời "ok".
+### Phase 4/5 — Defect Management
+- Call skill `qa-defect-writer` for each defect found in Phase 3 (or reported by the user).
+- Record in `04-defects.md`. When a developer reports a fix → run Re-test & Regression Checklist mode and update the status.
+- You may return to Phase 3 to re-run affected cases; show the loop in the label (`[QA Phase 3/5: Execution — Re-test round 2]`).
 
-Không lan man lý thuyết; mỗi lời khuyên phải gắn với tính năng cụ thể đang test.
+### Phase 5/5 — Summary Report
+- Call skill `qa-summary-reporter`.
+- Summarize only real numbers from `03-execution-notes.md`, `04-defects.md` and user-provided data. For anything missing, say "no data yet".
+- Output: `05-summary-report.md` with a **Go / Conditional Go / No-Go** verdict.
 
-## Xử lý tình huống
+## Proactive QA Advisor mode
 
-- **Skill con chưa được cài:** nói rõ cho người dùng, rồi tự thực hiện pha đó theo mô tả ở trên và template trong `references/phase-templates.md`, vẫn giữ nguyên các quy tắc bất biến.
+In EVERY phase, before asking or requesting approval, add a short block (max ~8 lines):
 
-- **Người dùng muốn nhảy pha** (ví dụ "viết luôn test Playwright"): cảnh báo ngắn rủi ro (chưa có test case/plan được duyệt → dễ thiếu phủ), đề xuất đường tắt tối thiểu, làm theo nếu họ vẫn muốn, và ghi chú vào artifact là "bỏ qua Pha X theo yêu cầu".
-- **Yêu cầu thay đổi giữa chừng:** cập nhật `01-test-plan.md` và `02-test-matrix.md` trước, đánh dấu phiên bản; không sửa ngầm.
-- **Không có đặc tả:** suy ra yêu cầu từ codebase/UI hiện có, gắn nhãn `[Suy luận từ code — cần xác nhận]`, và yêu cầu người dùng xác nhận ở Hard Stop Pha 1.
-- **Tiếp tục phiên cũ:** đọc `qa-artifacts/` để biết pha đang dở, tóm tắt trạng thái rồi hỏi tiếp tục từ đâu.
-- **Phạm vi:** skill này không viết unit test của developer; nếu người dùng cần, nói rõ nằm ngoài bộ skill QA này.
+- **Why this step matters:** 1–2 sentences in developer language.
+- **Blind spots that tend to hide bugs** specific to the feature under test, chosen from: permissions (can user A see user B's data?), network drop/timeout mid-action, double-click/duplicate submit, boundary data (empty, too long, special characters, Unicode), time zones, expired session, back/reload mid-flow.
+- **Default option:** state clearly "If you have no preference I will choose X because Y" so the user can just answer "ok".
 
-## Ví dụ minh hoạ
+No theory dumps; every piece of advice must tie to the feature being tested.
 
-Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
+## Handling situations
 
-## Checklist trước khi gửi phản hồi
+- **Sub-skill not installed:** tell the user, then perform that phase yourself as described above using the templates in `references/phase-templates.md`, keeping all invariant rules.
+- **User wants to skip phases** (e.g. "just write the Playwright tests"): briefly warn about the risk (no approved plan/cases → coverage gaps), propose a minimal shortcut, proceed if they still want it, and note "Phase X skipped at user request" in the artifact.
+- **Requirements change mid-way:** update `01-test-plan.md` and `02-test-matrix.md` first, bump the version; never edit silently.
+- **No specification:** infer requirements from the existing codebase/UI, label them `[Inferred from code — needs confirmation]`, and ask for confirmation at the Phase 1 Hard Stop.
+- **Resuming an old session:** read `qa-artifacts/` to find the unfinished phase, summarize the state, ask where to continue.
+- **Scope:** this skill does not write developers' unit tests; if the user needs them, say that is outside this QA skill set.
 
-- [ ] Dòng đầu có nhãn `[QA Phase X/5: ...]`
-- [ ] Không có số liệu/môi trường/bước tái hiện bịa; chỗ thiếu có `[Cần bổ sung: ...]`
-- [ ] Artifact tương ứng đã được lưu/cập nhật trong `qa-artifacts/`
-- [ ] Nếu là cuối Pha 1 hoặc 2: đã dừng chờ duyệt, không tự sang pha sau
-- [ ] Có khối cố vấn ngắn với phương án mặc định
+## Worked example
+
+See `references/worked-example.md` for a sample output format (fictional data; read only when needed; never copy the example's numbers into a real project).
+
+## Pre-send checklist
+
+- [ ] First line has the `[QA Phase X/5: ...]` label
+- [ ] No invented numbers/environments/reproduction steps; gaps marked `[Needs input: ...]`
+- [ ] The matching artifact is saved/updated in `qa-artifacts/`
+- [ ] At the end of Phase 1 or 2: stopped and waiting for approval, did not advance on my own
+- [ ] Short advisor block with a default option is present

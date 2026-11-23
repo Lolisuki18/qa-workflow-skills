@@ -1,80 +1,81 @@
 ---
 name: qa-summary-reporter
-description: Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative release-gate thresholds, execution table with pass rate, defect statistics by severity and status, RTM coverage, residual risks and next actions. Use when the user says 'test summary report', 'is it ready to release', 'go or no-go', 'QA sign-off', 'release readiness', 'final test report', 'báo cáo tổng kết kiểm thử', 'nghiệm thu', 'có release được chưa', 'kết luận Go/No-Go', 'báo cáo QA cuối kỳ'. Do NOT use for writing test plans, test cases, automation scripts or bug reports (use the other qa-* skills), for code audits, or for PR descriptions.
+description: Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative release-gate thresholds, execution table with pass rate, defect statistics by severity and status, RTM coverage, residual risks and next actions. Use when the user says 'test summary report', 'is it ready to release', 'go or no-go', 'QA sign-off', 'release readiness', 'final test report', 'báo cáo tổng kết kiểm thử', 'nghiệm thu', 'có release được chưa', 'kết luận Go/No-Go'. Do NOT use for writing test plans, test cases, automation scripts or bug reports (use the other qa-* skills), for code audits, or for PR descriptions.
 ---
 
-# QA Summary Reporter — Bước 5: Báo cáo & Nghiệm thu
+# QA Summary Reporter — Step 5: Reporting & Acceptance
 
-Tổng hợp kết quả thật thành báo cáo và đưa ra kết luận release. Khi chạy trong `qa-lifecycle`, đây là Pha 5/5 (nhãn `[QA Phase 5/5: Summary Report]` ở dòng đầu).
+Consolidates real results into a report and gives a release verdict. Inside `qa-lifecycle` this is Phase 5/5 (label `[QA Phase 5/5: Summary Report]` on the first line).
 
-## Quy tắc
+## Rules
 
-- **Đọc trước:** `references/release-gate-criteria.md` (ngưỡng Go / Conditional Go / No-Go).
-- **Chỉ dùng dữ liệu thật:** nguồn hợp lệ là (1) `qa-artifacts/02-test-matrix.md`, `03-execution-notes.md`, `04-defects.md`, (2) số liệu người dùng cung cấp trực tiếp. Không ước lượng, không "làm tròn cho đẹp", không suy ra Pass từ việc chưa thấy Fail.
-- **Thiếu số liệu:** ghi rõ mục nào chưa có dữ liệu (bảng "Dữ liệu còn thiếu"). Không điền số. Nếu thiếu làm không thể kết luận → verdict `Chưa thể kết luận` kèm danh sách việc cần làm, thay vì đoán.
-- Tính toán đều từ bảng thật; ghi công thức và nguồn (file/dòng) để người đọc kiểm lại. Case `Not Run` và `Blocked` **không** tính là Pass.
-- Chống mâu thuẫn: nếu số liệu hai nguồn lệch (ví dụ defect Closed nhưng TC liên quan vẫn Fail) → nêu rõ, hỏi người dùng, không tự chọn.
-- Ngưỡng nào do người dùng/Test Plan đã chốt thì ưu tiên theo đó; mặc định trong file reference chỉ là đề xuất.
+- **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
+- **Read first:** `references/release-gate-criteria.md` (thresholds for Go / Conditional Go / No-Go).
+- **Real data only:** valid sources are (1) `qa-artifacts/02-test-matrix.md`, `03-execution-notes.md`, `04-defects.md`, (2) figures the user provides directly. Never estimate, never "round to look nice", never infer Pass from the absence of Fail.
+- **Missing data:** state which items have no data (a "Missing data" table). Never fill in numbers. If so much is missing that no conclusion is possible → verdict `Cannot conclude` with a list of what to do, rather than guessing.
+- Calculate only from the real tables; show the formula and source (file/line) so readers can check. `Not Run` and `Blocked` cases are **not** counted as Pass.
+- Contradictions: if two sources disagree (e.g. defect Closed but its TC still Fail) → say so, ask the user, never pick one yourself.
+- Thresholds already fixed by the user/Test Plan take priority; the defaults in the reference file are only proposals.
 
-## Quy trình
+## Process
 
-1. **Nạp dữ liệu:** đọc các file trong `qa-artifacts/`; nếu không có, hỏi người dùng số liệu hoặc xin file/bảng kết quả. Xác định vòng chạy mới nhất (nếu có nhiều vòng re-test, dùng trạng thái mới nhất của từng case/defect và nêu rõ).
-2. **Kiểm tra đủ dữ liệu:** có bảng kết quả theo TC? Có danh sách defect với Severity/Status? Có RTM? Liệt kê phần thiếu.
-3. **Tính số liệu:**
-   - Execution: `Total`, `Passed`, `Failed`, `Blocked`, `Not Run`. `Pass Rate = Passed / Total` (và, nếu hữu ích, `Passed / (Total − Not Run − Blocked)` ghi rõ là "trên các case đã chạy"). Tính thêm theo Priority (đặc biệt P0, P1).
-   - Defect: đếm theo Severity × Status; số Blocker/Critical còn mở; số defect mở theo Priority.
-   - RTM: yêu cầu đủ phủ / tổng; yêu cầu có case Fail/Not Run; yêu cầu chưa có case.
-4. **Đối chiếu ngưỡng** trong reference → chọn verdict. Nêu **từng** tiêu chí: đạt/không đạt + số liệu.
-5. **Rủi ro tồn đọng:** defect mở, case Blocked/Not Run, vùng ít test (đối chiếu Risk Analysis ở Test Plan), giới hạn môi trường, giả định chưa xác nhận.
-6. **Hành động tiếp theo:** việc cụ thể, đề xuất owner/hạn nếu biết (không biết → `[Cần bổ sung]`).
-7. **Ghi `qa-artifacts/05-summary-report.md`** và trình bày trong chat bản tóm tắt ≤ 20 dòng.
+1. **Load data:** read the files in `qa-artifacts/`; if none, ask the user for figures or the results table. Identify the latest run round (with several re-test rounds, use each case's/defect's latest state and say so).
+2. **Check completeness:** results per TC? defect list with Severity/Status? RTM? List what is missing.
+3. **Compute:**
+   - Execution: `Total`, `Passed`, `Failed`, `Blocked`, `Not Run`. `Pass Rate = Passed / Total` (and, where useful, `Passed / (Total − Not Run − Blocked)` labeled "of executed cases"). Also by Priority (especially P0, P1).
+   - Defects: count by Severity × Status; open Blocker/Critical; open defects by Priority.
+   - RTM: requirements fully covered / total; requirements with Failed/Not Run cases; requirements with no cases.
+4. **Compare against thresholds** in the reference → choose the verdict. State **each** criterion: met/not met + figure.
+5. **Residual risks:** open defects, Blocked/Not Run cases, lightly tested areas (compare with the Test Plan's Risk Analysis), environment limits, unconfirmed assumptions.
+6. **Next actions:** concrete tasks, suggested owner/due date if known (unknown → `[Needs input]`).
+7. **Write `qa-artifacts/05-summary-report.md`** and present a ≤ 20-line summary in chat.
 
-## Cấu trúc báo cáo
+## Report structure
 
 ```markdown
-# Test Summary Report — <Tên tính năng/release>
-(header chung: ngày, phiên bản, build/commit [Cần bổ sung nếu thiếu], môi trường, nguồn dữ liệu)
+# Test Summary Report — <Feature/release>
+(common header: date, version, build/commit [Needs input if missing], environment, data sources)
 
 ## 1. Executive Verdict: Go | Conditional Go | No-Go
-Lý do 3–5 dòng, dẫn từng tiêu chí đã đạt/không đạt.
-Điều kiện (chỉ với Conditional Go): danh sách việc bắt buộc, owner, hạn, cách xác minh.
+3–5 lines of reasoning, citing each met/unmet criterion.
+Conditions (Conditional Go only): mandatory tasks, owner, due date, how to verify.
 
 ## 2. Execution Summary
 | Total | Passed | Failed | Blocked | Not Run | Pass Rate |
-Theo Priority: bảng P0/P1/P2/P3 cùng các cột trên.
+By Priority: a P0/P1/P2/P3 table with the same columns.
 
 ## 3. Defect Statistics
-Ma trận Severity (Blocker…Trivial) × Status (New/Open/Fixed/Re-test/Closed/Reopened/Won't Fix). Danh sách defect còn mở có Severity ≥ Major.
+Matrix Severity (Blocker…Trivial) × Status (New/Open/Fixed/Re-test/Closed/Reopened/Won't Fix). List open defects with Severity ≥ Major.
 
 ## 4. Requirement Coverage (RTM)
-Tổng yêu cầu · Đủ phủ · Có case Fail · Có case Not Run · Chưa có case. Liệt kê yêu cầu rủi ro.
+Total requirements · Fully covered · With Failed case · With Not Run case · Without cases. List risky requirements.
 
-## 5. Rủi ro tồn đọng
-## 6. Hành động tiếp theo
-## 7. Dữ liệu còn thiếu / Giả định
+## 5. Residual risks
+## 6. Next actions
+## 7. Missing data / Assumptions
 ```
 
-Mọi bảng phải điền từ dữ liệu thật; ô không có dữ liệu ghi `N/A — chưa có dữ liệu` (không để 0 nếu thực ra chưa biết).
+Every table is filled from real data; cells without data read `N/A — no data yet` (never 0 when it is actually unknown).
 
-## Khối Cố vấn QA
+## QA Advisor block
 
-Giải thích bằng ngôn ngữ developer: vì sao Go/No-Go dựa trên ngưỡng chứ không dựa cảm giác; vì sao `Not Run` là rủi ro chứ không phải "tạm ổn"; nhắc góc khuất chưa phủ (phân quyền, rớt mạng, bấm đúp, dữ liệu biên); phương án mặc định (ví dụ "Conditional Go với 2 điều kiện X, Y — hoặc hoãn một vòng nếu bạn muốn an toàn hơn").
+Explain in developer language: why Go/No-Go rests on thresholds and not on gut feeling; why `Not Run` is a risk rather than "probably fine"; remind of uncovered blind spots (permissions, network drop, double-click, boundary data); the default option (e.g. "Conditional Go with 2 conditions X, Y — or postpone one round if you prefer to be safe").
 
-## Lưu ý
+## Notes
 
-- Verdict là **khuyến nghị của QA**; quyết định phát hành thuộc người dùng/PO. Nói rõ điều này.
-- Không dùng ngôn từ cảm tính ("khá ổn", "gần như xong"); dùng số liệu.
-- Báo cáo cho dự án nhỏ/cá nhân vẫn giữ đủ cấu trúc; có thể ngắn nhưng không bỏ mục.
+- The verdict is **QA's recommendation**; the release decision belongs to the user/PO. Say so.
+- No subjective wording ("pretty good", "almost done"); use figures.
+- For small/personal projects keep the full structure; it may be short but do not drop sections.
 
-## Ví dụ minh hoạ
+## Worked example
 
-Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
+See `references/worked-example.md` for a sample output format (fictional data; read only when needed; never copy the example's numbers into a real project).
 
-## Checklist hoàn thành
+## Completion checklist
 
-- [ ] Đã đọc `release-gate-criteria.md` và nêu ngưỡng áp dụng (mặc định hay đã chốt)
-- [ ] Mọi con số truy được nguồn trong `qa-artifacts/` hoặc từ người dùng
-- [ ] Not Run/Blocked không bị tính là Pass
-- [ ] Mỗi tiêu chí gate có kết quả đạt/không đạt kèm số liệu
-- [ ] Có mục "Dữ liệu còn thiếu"; verdict không dựa trên dữ liệu bịa
-- [ ] Đã lưu `05-summary-report.md`
+- [ ] Read `release-gate-criteria.md` and stated the thresholds applied (default or agreed)
+- [ ] Every figure traces to `qa-artifacts/` or the user
+- [ ] Not Run/Blocked not counted as Pass
+- [ ] Every gate criterion has a result with a figure
+- [ ] "Missing data" section present; verdict not based on invented data
+- [ ] `05-summary-report.md` saved

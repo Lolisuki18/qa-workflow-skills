@@ -1,82 +1,82 @@
 # Release Gate Criteria
 
-Ngưỡng định lượng để chọn **Go / Conditional Go / No-Go**. Đây là **ngưỡng mặc định đề xuất**. Nếu Test Plan (`01-test-plan.md` mục Exit Criteria) hoặc người dùng đã chốt ngưỡng khác, dùng ngưỡng đó và ghi rõ nguồn. Khi áp mặc định, nói thẳng "ngưỡng mặc định, chưa được xác nhận".
+Quantitative thresholds to choose **Go / Conditional Go / No-Go**. These are **proposed default thresholds**. If the Test Plan (`01-test-plan.md` Exit Criteria) or the user has fixed other thresholds, use those and cite the source. When applying defaults, say plainly "default thresholds, not yet confirmed".
 
-## Định nghĩa số liệu
+## Metric definitions
 
-| Chỉ số | Công thức |
+| Metric | Formula |
 |---|---|
 | Pass Rate | Passed / Total |
 | Executed Rate | (Passed + Failed) / Total |
 | P0 Pass Rate | P0 Passed / P0 Total |
-| RTM Coverage | Số yêu cầu in-scope có đủ case / tổng yêu cầu in-scope |
-| Open Defect | Status ∈ {New, Open, Fixed (chưa re-test), Re-test, Reopened} |
+| RTM Coverage | In-scope requirements with full coverage / total in-scope requirements |
+| Open Defect | Status ∈ {New, Open, Fixed (not yet re-tested), Re-test, Reopened} |
 
-`Not Run` và `Blocked` **không** tính là Passed.
+`Not Run` and `Blocked` are **not** counted as Passed.
 
-## Ngưỡng mặc định
+## Default thresholds
 
-| Tiêu chí | Go | Conditional Go | No-Go |
+| Criterion | Go | Conditional Go | No-Go |
 |---|---|---|---|
-| P0 Pass Rate | 100% | 100% (bắt buộc) | < 100% |
+| P0 Pass Rate | 100% | 100% (mandatory) | < 100% |
 | P1 Pass Rate | ≥ 95% | ≥ 90% | < 90% |
-| Pass Rate tổng | ≥ 95% | ≥ 90% | < 90% |
-| Executed Rate | 100% | ≥ 95% (phần còn lại có lý do và kế hoạch) | < 95% |
-| Case Blocked | 0 | ≤ 5%, không thuộc P0 | > 5% hoặc có P0 Blocked |
-| Blocker mở | 0 | 0 | ≥ 1 |
-| Critical mở | 0 | 0 (hoặc có biện pháp giảm thiểu được người dùng/PO chấp nhận bằng văn bản) | ≥ 1 không biện pháp |
-| Major mở | 0 | ≤ 3, đều có workaround đã ghi nhận và kế hoạch sửa | > 3 hoặc có Major không workaround |
-| Minor/Trivial mở | Bất kỳ, đã ghi backlog | Bất kỳ, đã ghi backlog | — |
-| RTM Coverage | 100% | ≥ 95%, yêu cầu thiếu đều P2/P3 | < 95% hoặc thiếu yêu cầu P0/P1 |
-| Defect đã Fixed nhưng chưa Re-test | 0 | Có, chỉ ở Minor/Trivial | Có ở Major trở lên |
-| Phân quyền/bảo mật | Mọi case đã chạy và Pass | Như Go | Có case fail hoặc chưa chạy |
+| Overall Pass Rate | ≥ 95% | ≥ 90% | < 90% |
+| Executed Rate | 100% | ≥ 95% (rest has a reason and a plan) | < 95% |
+| Blocked cases | 0 | ≤ 5%, none P0 | > 5% or any P0 Blocked |
+| Open Blocker | 0 | 0 | ≥ 1 |
+| Open Critical | 0 | 0 (or a mitigation accepted in writing by the user/PO) | ≥ 1 without mitigation |
+| Open Major | 0 | ≤ 3, each with a recorded workaround and fix plan | > 3 or any Major without workaround |
+| Open Minor/Trivial | Any, logged in backlog | Any, logged in backlog | — |
+| RTM Coverage | 100% | ≥ 95%, missing requirements all P2/P3 | < 95% or missing P0/P1 requirements |
+| Defects Fixed but not Re-tested | 0 | Allowed only for Minor/Trivial | Present at Major or above |
+| Permissions/security | All cases run and Pass | Same as Go | Any failing or unrun case |
 
-> Điều kiện **bất kỳ cột No-Go nào đúng → No-Go**. Nếu không có cột No-Go nào đúng nhưng không đạt đủ cột Go → **Conditional Go**. Chỉ khi đạt **tất cả** cột Go → **Go**.
+> **Any No-Go cell true → No-Go.** If no No-Go cell is true but not every Go cell is met → **Conditional Go**. Only when **all** Go cells are met → **Go**.
 
-## Cách chọn verdict (thuật toán)
+## How to choose the verdict (algorithm)
 
-1. Có dữ liệu để tính mọi tiêu chí bắt buộc không? Không → `Chưa thể kết luận`, liệt kê dữ liệu cần bổ sung. (Không đoán.)
-2. Duyệt tiêu chí cột No-Go. Có bất kỳ cái nào đúng → **No-Go**; liệt kê tất cả.
-3. Ngược lại, đạt hết cột Go → **Go**.
-4. Ngược lại → **Conditional Go**, kèm điều kiện cụ thể.
+1. Is there data to compute every mandatory criterion? No → `Cannot conclude`, list the missing data. (Never guess.)
+2. Check the No-Go column. Any true → **No-Go**; list them all.
+3. Otherwise, all Go cells met → **Go**.
+4. Otherwise → **Conditional Go**, with concrete conditions.
 
-## Điều kiện cho Conditional Go
+## Conditions for Conditional Go
 
-Mỗi điều kiện phải:
-- Cụ thể, kiểm chứng được (ví dụ "Re-test DEF-007 và regression nhóm Thanh toán đều Pass trên build kế tiếp").
-- Có owner và hạn (nếu không biết → `[Cần bổ sung]`).
-- Nêu hậu quả nếu không thực hiện (chuyển thành No-Go).
+Each condition must be:
+- Specific and verifiable (e.g. "Re-test DEF-007 and regression of the Payment group both Pass on the next build").
+- Given an owner and due date (unknown → `[Needs input]`).
+- Stated with its consequence if unmet (becomes No-Go).
 
-Các loại điều kiện thường gặp: sửa và re-test defect Major cụ thể; chạy nốt nhóm case Not Run; xác nhận bằng văn bản chấp nhận rủi ro tồn đọng; theo dõi chỉ số sau phát hành; chuẩn bị kế hoạch rollback.
+Typical condition types: fix and re-test specific Major defects; run the remaining Not Run group; written acceptance of residual risk; post-release monitoring; a rollback plan.
 
-## Điều chỉnh theo bối cảnh (chỉ khi người dùng đồng ý)
+## Context adjustments (only with the user's agreement)
 
-| Bối cảnh | Điều chỉnh gợi ý |
+| Context | Suggested adjustment |
 |---|---|
-| Hệ thống tiền/y tế/bảo mật cao | Siết: Major mở = 0 cho Go và Conditional Go; Pass Rate ≥ 98% |
-| MVP/demo nội bộ/đồ án | Nới: chấp nhận Major mở có workaround, Pass Rate ≥ 85%; vẫn giữ P0 = 100% và Blocker/Critical = 0 |
-| Hotfix | Tập trung: re-test lỗi sửa + regression vùng ảnh hưởng đạt 100%; phần còn lại theo plan đã chốt |
-| Có tính năng tắt được bằng feature flag | Có thể nới điều kiện cho tính năng đó, ghi rõ cách tắt |
+| Money/medical/high-security systems | Tighten: open Major = 0 for Go and Conditional Go; Pass Rate ≥ 98% |
+| MVP/internal demo/student project | Relax: accept open Major with workaround, Pass Rate ≥ 85%; still keep P0 = 100% and Blocker/Critical = 0 |
+| Hotfix | Focus: re-test of the fix + regression of the affected area at 100%; the rest per the agreed plan |
+| Feature behind a feature flag | May relax conditions for that feature; state how to switch it off |
 
-Mọi điều chỉnh phải ghi vào báo cáo mục "Ngưỡng áp dụng" (mặc định hay chỉnh, ai chốt).
+Record every adjustment in the report under "Applied thresholds" (default or adjusted, who decided).
 
-## Mẫu đoạn kết luận
+## Sample verdict paragraph
 
 ```markdown
-**Executive Verdict: Conditional Go** (ngưỡng mặc định — chưa được xác nhận)
-- Đạt: P0 Pass Rate 100% (a/a), Blocker mở 0, Critical mở 0.
-- Không đạt cột Go: Pass Rate tổng x% (< 95%), Major mở n (> 0).
-- Điều kiện: (1) ... owner/hạn ..., (2) ...
-- Nếu không đạt điều kiện trước ngày ...: chuyển No-Go.
-Đây là khuyến nghị của QA; quyết định phát hành thuộc về người dùng/PO.
+**Executive Verdict: Conditional Go** (default thresholds — not yet confirmed)
+- Met: P0 Pass Rate 100% (a/a), open Blocker 0, open Critical 0.
+- Not meeting Go column: overall Pass Rate x% (< 95%), open Major n (> 0).
+- Conditions: (1) ... owner/due date ..., (2) ...
+- If conditions are not met by ...: becomes No-Go.
+This is QA's recommendation; the release decision belongs to the user/PO.
 ```
 
-(Ví dụ chỉ minh hoạ định dạng — các số a, x, n phải lấy từ dữ liệu thật.)
+(Illustrative format only — a, x, n must come from real data.)
 
-## Dữ liệu tối thiểu để báo cáo được
+## Minimum data needed to report
 
-- [ ] Bảng kết quả theo từng TC (có Priority)
-- [ ] Danh sách defect với Severity, Status
-- [ ] RTM hoặc danh sách yêu cầu in-scope
-- [ ] Build/phiên bản và môi trường đã test (thiếu → ghi `[Cần bổ sung]`, vẫn báo cáo được nhưng nêu giới hạn)
-- [ ] Ngưỡng Exit đã chốt (thiếu → dùng mặc định và nói rõ)
+- [ ] Results table per TC (with Priority)
+- [ ] Defect list with Severity, Status
+- [ ] RTM or the list of in-scope requirements
+- [ ] Build/version and environment tested (missing → `[Needs input]`; the report can still be written but state the limit)
+- [ ] Agreed Exit thresholds (missing → use defaults and say so)

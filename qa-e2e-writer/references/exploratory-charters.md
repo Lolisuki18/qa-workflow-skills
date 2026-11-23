@@ -1,80 +1,80 @@
 # Exploratory Charters & Manual Run Scripts
 
-Dùng cho case `Manual` và để "phá app" có chủ đích. Mọi mục dưới là **gợi ý** — chọn theo tính năng thực tế, không áp dụng máy móc. Kết quả chỉ ghi khi người dùng (hoặc bạn, nếu thực sự chạy được) đã quan sát thật.
+For `Manual` cases and deliberate "break the app" sessions. Everything below is a **suggestion** — choose by the actual feature, do not apply mechanically. Record a result only when the user (or you, if you truly could run it) actually observed it.
 
-## 1. Kịch bản bấm test nhanh (Manual Run Script)
+## 1. Quick Manual Run Script
 
-Gom case theo module/luồng để giảm đổi ngữ cảnh. Mẫu:
+Group cases by module/flow to reduce context switching. Template:
 
 ```markdown
-### Nhóm: <Module / luồng> — chuẩn bị: <tài khoản, dữ liệu, URL: [Cần bổ sung nếu chưa biết]>
+### Group: <Module / flow> — setup: <accounts, data, URL: [Needs input if unknown]>
 
-| # | TC ID | Bước | Dữ liệu | Kết quả mong đợi | Kết quả (Pass/Fail/Blocked) | Ghi chú/Bằng chứng |
+| # | TC ID | Steps | Data | Expected result | Result (Pass/Fail/Blocked) | Notes/Evidence |
 |---|---|---|---|---|---|---|
-| 1 | TC-LOGIN-001 | 1. Mở /login 2. Nhập ... 3. Bấm Đăng nhập | ... | ... | ☐ | |
+| 1 | TC-LOGIN-001 | 1. Open /login 2. Enter ... 3. Click Login | ... | ... | ☐ | |
 ```
 
-Quy tắc: sắp xếp để case tạo dữ liệu chạy trước case dùng dữ liệu đó, nhưng vẫn ghi pre-condition để từng case chạy độc lập được; đặt P0 lên đầu; ô kết quả để trống cho người dùng điền.
+Rules: order cases so data-creating cases run before data-using ones, but still write pre-conditions so each case can run on its own; P0 first; leave the result cell blank for the user.
 
-## 2. Charter thăm dò (Session-Based)
+## 2. Session-Based Exploratory Charter
 
-Mẫu một charter (30–60 phút):
+One charter (30–60 minutes):
 
 ```markdown
-**Charter:** Khám phá <khu vực> bằng <cách/dữ liệu> để tìm <loại rủi ro>
-**Thời lượng:** 45 phút | **Vai trò dùng:** <role> | **Môi trường:** [Cần bổ sung]
-**Ghi lại:** lỗi tìm thấy · câu hỏi · ý tưởng test mới · khu vực chưa kịp xem
+**Charter:** Explore <area> using <approach/data> to discover <type of risk>
+**Duration:** 45 min | **Role used:** <role> | **Environment:** [Needs input]
+**Record:** bugs found · questions · new test ideas · areas not reached
 ```
 
-Ví dụ charter (minh hoạ):
-- Khám phá form đăng ký bằng dữ liệu biên và ký tự đặc biệt để tìm lỗi validate/lưu sai.
-- Khám phá luồng thanh toán bằng thao tác lặp và gián đoạn để tìm trùng đơn/lệch trạng thái.
-- Khám phá màn hình quản trị bằng tài khoản quyền thấp để tìm lỗ hổng phân quyền.
+Illustrative charters:
+- Explore the signup form with boundary data and special characters to find validation/storage errors.
+- Explore the payment flow with repeated actions and interruptions to find duplicate orders/state mismatch.
+- Explore the admin screens with a low-privilege account to find permission holes.
 
-Kết thúc phiên: tóm tắt lỗi (→ `qa-defect-writer`), điều chưa xác định (→ hỏi), vùng còn rủi ro.
+End of session: summarize bugs (→ `qa-defect-writer`), open unknowns (→ ask), remaining risk areas.
 
-## 3. Danh mục "phá app"
+## 3. "Break the app" catalogue
 
-### Thao tác lặp & thời điểm
-- **Double-click / bấm liên tục** nút gửi, thanh toán, tạo mới → có tạo trùng bản ghi/trừ tiền hai lần không? Nút có bị vô hiệu khi đang xử lý không?
-- Gửi form từ **hai tab** cùng lúc; mở cùng bản ghi ở hai tab rồi sửa/xoá.
-- Bấm Enter nhiều lần trong ô nhập.
+### Repeated actions & timing
+- **Double-click / rapid clicks** on submit, pay, create → duplicate records/double charge? Is the button disabled while processing?
+- Submit the form from **two tabs** at once; open the same record in two tabs, then edit/delete.
+- Press Enter repeatedly in an input.
 
-### Điều hướng
-- **Back / Forward** sau khi submit, giữa luồng nhiều bước, sau khi đăng xuất (có xem lại được trang riêng tư từ cache không?).
-- **Reload (F5)** giữa luồng: mất dữ liệu đang nhập? Gửi lại form có tạo trùng?
-- Đóng tab/trình duyệt giữa chừng rồi mở lại; mở link sâu (deep link) khi chưa đăng nhập; sửa ID trên URL.
+### Navigation
+- **Back / Forward** after submit, mid multi-step flow, after logout (can a private page be viewed from cache?).
+- **Reload (F5)** mid-flow: is typed data lost? Does resubmission create duplicates?
+- Close the tab/browser mid-way and reopen; open a deep link while logged out; edit IDs in the URL.
 
-### Mạng & máy chủ
-- **Mất mạng** giữa lúc submit (tắt Wi-Fi hoặc chế độ offline của DevTools): thông báo gì, dữ liệu có mất, có thử lại an toàn không?
-- **Mạng chậm** (throttling "Slow 3G"): spinner, timeout, người dùng bấm lại.
-- Phản hồi lỗi từ server (500/timeout) → thông báo có thân thiện, không lộ chi tiết kỹ thuật nhạy cảm?
+### Network & server
+- **Lose network** mid-submit (turn off Wi-Fi or DevTools offline): which message, is data lost, is retry safe?
+- **Slow network** (throttling "Slow 3G"): spinner, timeout, users clicking again.
+- Server error responses (500/timeout) → is the message friendly without exposing sensitive technical detail?
 
-### Phiên & phân quyền
-- Phiên hết hạn khi đang điền form dài; đăng nhập hai thiết bị; đăng xuất ở tab khác rồi thao tác ở tab này.
-- Truy cập trực tiếp URL/chức năng của vai trò cao bằng tài khoản thấp; đổi ID tài nguyên của người khác.
+### Session & permissions
+- Session expires while filling a long form; login on two devices; log out in another tab then act in this one.
+- Open a higher role's URL/function directly with a low-privilege account; change another user's resource ID.
 
 ### File upload/download
-- File **nặng** vượt giới hạn, đúng bằng giới hạn; file **0 byte**; **sai định dạng** (đổi đuôi `.exe` thành `.jpg`); tên file rất dài/có dấu/ký tự đặc biệt/trùng tên; upload nhiều file; huỷ upload giữa chừng; mất mạng khi đang upload.
+- **Heavy** file over the limit, exactly at the limit; **0-byte** file; **wrong format** (rename `.exe` to `.jpg`); very long/accented/special/duplicate file names; multiple files; cancel mid-upload; lose network during upload.
 
-### Dữ liệu nhập
-- Rỗng, chỉ khoảng trắng, rất dài; `' " < > & % \`; tiếng Việt có dấu, emoji, ký tự RTL; dán văn bản có xuống dòng; số âm/0/rất lớn/thập phân; ngày 29/02, múi giờ, ngày quá khứ/tương lai.
-- Chuỗi dạng script/HTML/SQL để kiểm tra hệ thống **của dự án** có escape đúng. Không thử vào hệ thống không thuộc quyền kiểm thử.
+### Input data
+- Empty, whitespace only, very long; `' " < > & % \`; accented text, emoji, RTL characters; pasted text with newlines; negative/0/huge/decimal numbers; Feb 29, time zones, past/future dates.
+- Script/HTML/SQL-like strings to check that **the project's own** system escapes properly. Never try them against systems you are not authorized to test.
 
-### Giao diện & môi trường
-- Thu nhỏ cửa sổ/màn hình điện thoại, zoom 200%, xoay màn hình; trình duyệt khác; tắt cookie/JavaScript nếu hỗ trợ; chế độ tối; bàn phím (Tab/Enter/Esc) và screen reader cơ bản.
+### UI & environment
+- Shrink the window/phone screen, 200% zoom, rotate the screen; other browsers; cookies/JavaScript off if supported; dark mode; keyboard (Tab/Enter/Esc) and basic screen reader.
 
-### Dữ liệu tồn tại
-- Dữ liệu trùng (email đã đăng ký); bản ghi đã xoá nhưng link còn; danh sách rỗng/rất dài; xoá thứ đang được tham chiếu.
+### Existing data
+- Duplicates (already-registered email); deleted record whose link remains; empty/very long lists; deleting something still referenced.
 
-## 4. Cách ghi nhận khi phát hiện bất thường
+## 4. Recording anomalies
 
-1. Dừng tại thời điểm xảy ra; ghi lại bước chính xác dẫn tới lỗi.
-2. Chụp màn hình/log/Network tab (HAR) nếu có; ghi giờ xảy ra.
-3. Thử tái hiện ≥ 2 lần; ghi tỉ lệ (ví dụ "2/3 lần") — không nói "luôn luôn" khi chưa thử.
-4. Ghi môi trường **thật** đang dùng (không nhớ thì hỏi/ghi `[Cần bổ sung]`).
-5. Chuyển cho `qa-defect-writer`.
+1. Stop at the moment it happens; note the exact steps that led to it.
+2. Capture a screenshot/log/Network tab (HAR) if possible; note the time.
+3. Try to reproduce ≥ 2 times; record the ratio (e.g. "2/3 times") — never say "always" before trying.
+4. Record the **real** environment in use (do not remember → ask/write `[Needs input]`).
+5. Hand over to `qa-defect-writer`.
 
-## 5. Mẫu hỏi người dùng sau khi chạy tay
+## 5. Prompt to the user after manual runs
 
-> Bạn chạy xong nhóm "<Module>" chưa? Cho tôi biết với mỗi TC: Pass / Fail / Blocked, và với Fail thì hiện tượng + ảnh/log nếu có. Case nào chưa chạy tôi sẽ để `Not Run`.
+> Have you finished the "<Module>" group? For each TC tell me: Pass / Fail / Blocked, and for Fail the symptom + screenshot/log if available. Cases not yet run stay `Not Run`.

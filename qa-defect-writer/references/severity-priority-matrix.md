@@ -1,73 +1,73 @@
 # Severity vs Priority Matrix
 
-**Severity** = mức nghiêm trọng về **kỹ thuật/tác động lên hệ thống** (lỗi tệ đến đâu).
-**Priority** = độ **gấp về nghiệp vụ** (khi nào cần sửa). Hai trục độc lập: lỗi Severity cao có thể Priority thấp và ngược lại.
+**Severity** = how serious the defect is **technically / in impact on the system** (how bad is it).
+**Priority** = how **urgent it is for the business** (when it must be fixed). Two independent axes: a high-Severity bug can have low Priority and vice versa.
 
-## Severity (kỹ thuật)
+## Severity (technical)
 
-| Mức | Định nghĩa | Ví dụ thực tế (minh hoạ) |
+| Level | Definition | Realistic examples (illustrative) |
 |---|---|---|
-| **Blocker** | Chặn hoàn toàn: không test/dùng tiếp được; hệ thống sập; không có cách vòng | App không khởi động; không ai đăng nhập được; build crash khi mở |
-| **Critical** | Chức năng cốt lõi hỏng, mất/sai dữ liệu, lỗ hổng bảo mật, sai tiền; không có workaround | User A xem được dữ liệu user B; thanh toán trừ tiền hai lần; xoá nhầm dữ liệu người khác |
-| **Major** | Chức năng chính sai hoặc thiếu nhưng có workaround, hoặc ảnh hưởng nhóm người dùng đáng kể | Lọc theo ngày trả sai kết quả (vẫn xem được bằng cách tìm tay); không xuất được báo cáo PDF nhưng xuất được CSV |
-| **Minor** | Chức năng phụ sai, ảnh hưởng nhỏ, có workaround dễ | Sắp xếp cột sai ở trang phụ; thông báo lỗi sai ngữ cảnh nhưng vẫn chặn đúng |
-| **Trivial** | Thẩm mỹ/chính tả, không ảnh hưởng chức năng | Lỗi chính tả nhãn; lệch lề vài pixel; icon sai độ đậm |
+| **Blocker** | Total blocker: cannot test/use further; system down; no workaround | App will not start; nobody can log in; build crashes on open |
+| **Critical** | Core function broken, data loss/corruption, security hole, wrong money; no workaround | User A sees user B's data; payment charged twice; deleting another user's data |
+| **Major** | Main function wrong or missing but a workaround exists, or a significant user group is affected | Date filter returns wrong results (still searchable by hand); PDF export fails but CSV works |
+| **Minor** | Secondary function wrong, small impact, easy workaround | Wrong column sort on a secondary page; error message wording off but still blocks correctly |
+| **Trivial** | Cosmetic/typo, no functional impact | Label typo; a few pixels of misalignment; wrong icon weight |
 
-### Câu hỏi giúp chấm Severity (hỏi theo thứ tự, dừng ở câu đầu tiên trả lời "có")
-1. Hệ thống/luồng chính có dùng được không? Không → **Blocker**.
-2. Có mất/hỏng dữ liệu, sai tiền, lộ dữ liệu, hoặc vượt quyền không? Có → **Critical**.
-3. Chức năng chính có sai/thiếu không? Có → **Major** (nếu có workaround vẫn Major, ghi workaround).
-4. Chức năng phụ sai? → **Minor**.
-5. Chỉ là hình thức? → **Trivial**.
+### Questions to decide Severity (ask in order, stop at the first "yes")
+1. Is the system/main flow usable at all? No → **Blocker**.
+2. Is there data loss/corruption, wrong money, data exposure, or privilege escalation? Yes → **Critical**.
+3. Is a main function wrong/missing? Yes → **Major** (a workaround still counts as Major; record the workaround).
+4. Is a secondary function wrong? → **Minor**.
+5. Only presentation? → **Trivial**.
 
-## Priority (nghiệp vụ)
+## Priority (business)
 
-| Mức | Ý nghĩa | Hành động | Ví dụ |
+| Level | Meaning | Action | Example |
 |---|---|---|---|
-| **P0** | Khẩn cấp: phải sửa ngay, chặn release/vận hành | Dừng việc khác; hotfix | Lỗi thanh toán trên production; lộ dữ liệu khách hàng |
-| **P1** | Cao: sửa trong bản phát hành hiện tại | Đưa vào sprint/bản hiện tại | Lỗi chức năng chính chưa có workaround rõ |
-| **P2** | Trung bình: lên lịch | Bản kế tiếp | Lỗi chức năng phụ, có workaround |
-| **P3** | Thấp: làm khi rảnh | Backlog | Lỗi thẩm mỹ, trường hợp rất hiếm |
+| **P0** | Urgent: fix now, blocks release/operation | Drop other work; hotfix | Payment failure in production; customer data exposure |
+| **P1** | High: fix in the current release | Put into the current sprint/release | Main function bug with no clear workaround |
+| **P2** | Medium: schedule it | Next release | Secondary function bug with a workaround |
+| **P3** | Low: when time allows | Backlog | Cosmetic bug, very rare case |
 
-> P0–P3 của **defect** cùng thang tên với Priority của **test case**, nhưng nghĩa khác: Priority của test case = mức quan trọng khi chạy test; Priority của defect = độ gấp phải sửa. Không nhầm lẫn khi báo cáo.
+> The P0–P3 of a **defect** uses the same names as the Priority of a **test case**, but means something different: test-case Priority = importance when running tests; defect Priority = urgency of fixing. Do not mix them up when reporting.
 
-## Bảng đối chiếu (cách hai trục thường kết hợp)
+## Combination table (how the two axes usually pair)
 
 | Severity \ Priority | P0 | P1 | P2 | P3 |
 |---|---|---|---|---|
-| Blocker | Thường gặp | Có thể (chặn môi trường test nhưng không phải production) | Hiếm | Hiếm |
-| Critical | Thường gặp | Thường gặp | Hiếm | Hiếm |
-| Major | Có thể (khi trên luồng doanh thu/ngày cao điểm) | Thường gặp | Thường gặp | Hiếm |
-| Minor | Hiếm | Có thể (hiển thị cho khách VIP/demo) | Thường gặp | Thường gặp |
-| Trivial | Rất hiếm | Có thể (logo/tên thương hiệu sai) | Có thể | Thường gặp |
+| Blocker | Common | Possible (blocks the test environment, not production) | Rare | Rare |
+| Critical | Common | Common | Rare | Rare |
+| Major | Possible (on a revenue flow/peak day) | Common | Common | Rare |
+| Minor | Rare | Possible (shown to VIP customers/demo) | Common | Common |
+| Trivial | Very rare | Possible (wrong logo/brand name) | Possible | Common |
 
-### Ví dụ lệch trục (để giải thích cho người dùng)
-- **Severity thấp, Priority cao:** sai chính tả tên công ty trên trang chủ trước buổi ra mắt → Trivial / P1.
-- **Severity cao, Priority thấp:** crash ở tính năng cũ gần như không ai dùng, chỉ xảy ra với cấu hình đặc biệt → Critical / P2 (cần người dùng/PO xác nhận mức độ dùng thật).
+### Skewed examples (to explain to users)
+- **Low Severity, high Priority:** company name misspelled on the home page before a launch event → Trivial / P1.
+- **High Severity, low Priority:** crash in an old feature almost nobody uses, only under an unusual configuration → Critical / P2 (the user/PO must confirm real usage).
 
-## Yếu tố điều chỉnh Priority (hỏi nếu chưa biết)
+## Factors that adjust Priority (ask if unknown)
 
-- Số người dùng bị ảnh hưởng và tần suất gặp.
-- Có workaround dễ dàng không.
-- Có nằm trên luồng doanh thu/pháp lý/bảo mật không.
-- Sắp tới có mốc release/demo không.
-- Lỗi xuất hiện trên production hay chỉ môi trường test.
+- Number of affected users and how often they hit it.
+- Whether an easy workaround exists.
+- Whether it sits on a revenue/legal/security flow.
+- Whether a release/demo milestone is near.
+- Whether it appears in production or only in the test environment.
 
-Priority cuối cùng thuộc về Product Owner/người dùng. QA **đề xuất** kèm lý do.
+Final Priority belongs to the Product Owner/user. QA **proposes** it with a reason.
 
-## Mẫu ghi lý do (một dòng)
+## One-line reason template
 
 ```text
-Severity: Critical — user thường xem được hoá đơn của user khác (lộ dữ liệu), không có workaround.
-Priority: P0 (đề xuất) — ảnh hưởng toàn bộ khách hàng, cần chặn release.
+Severity: Critical — a regular user can view another user's invoice (data exposure), no workaround.
+Priority: P0 (proposed) — affects all customers, release should be blocked.
 ```
 
-## Quy tắc Reproducibility
+## Reproducibility rules
 
-| Tỉ lệ tái hiện | Ghi |
+| Reproduction ratio | Record as |
 |---|---|
-| Luôn (n/n) | `Always (n/n)` |
-| Thỉnh thoảng | `Intermittent (x/y)` + điều kiện nghi ngờ nếu có |
-| Chưa tái hiện được | `Cannot Reproduce` — giữ log/mô tả, hỏi thêm thông tin |
+| Always (n/n) | `Always (n/n)` |
+| Sometimes | `Intermittent (x/y)` + suspected conditions if any |
+| Not reproduced | `Cannot Reproduce` — keep the log/description, ask for more information |
 
-Chỉ ghi tỉ lệ khi đã thực sự thử; chưa thử → `[Cần bổ sung: số lần thử]`.
+Record a ratio only after actually trying; not tried → `[Needs input: number of attempts]`.

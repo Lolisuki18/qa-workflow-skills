@@ -1,37 +1,37 @@
-# Ví dụ chạy thật — qa-lifecycle
+# Worked Example — qa-lifecycle
 
-> ⚠️ Dữ liệu **hư cấu** để minh hoạ định dạng (ứng dụng giả định "DemoShop", tính năng Đăng nhập). Không dùng làm số liệu thật. Cùng kịch bản này xuyên suốt ví dụ của cả 6 skill.
+> ⚠️ **Fictional** data to illustrate the format (imaginary app "DemoShop", Login feature). Do not use as real figures. The same scenario runs through the examples of all 6 skills.
 
-## Lượt 1 — Khởi động
+## Turn 1 — Kickoff
 
-**Người dùng:** "Làm QA bài bản cho tính năng đăng nhập của DemoShop giúp tôi. Đặc tả nằm ở `docs/auth-srs.md`."
+**User:** "Do a proper QA for DemoShop's login feature. The spec is in `docs/auth-srs.md`."
 
-**Phản hồi mẫu:**
+**Sample response:**
 
 ```markdown
-[QA Phase 0/5: Khởi động]
+[QA Phase 0/5: Kickoff]
 
-Tôi đã đọc `docs/auth-srs.md`. Phạm vi tôi hiểu: đăng nhập email + mật khẩu, khoá tài khoản sau nhiều lần sai, và phân quyền trang /admin. Chưa có yêu cầu về "quên mật khẩu" nên tôi sẽ để ngoài phạm vi trừ khi bạn bảo khác.
+I read `docs/auth-srs.md`. Scope as I understand it: email + password login, account lockout after repeated failures, and permission control on /admin. There is no "forgot password" requirement, so I will keep it out of scope unless you say otherwise.
 
-Hai câu hỏi nhanh:
-1. Thư mục `qa-artifacts/` nên (a) thêm vào `.gitignore` hay (b) giữ lại trong repo? — Mặc định tôi chọn (b) nếu bạn cần chia sẻ báo cáo cho team.
-2. Môi trường test sẽ chạy ở đâu (URL/build)? — [Cần bổ sung: môi trường test]
+Two quick questions:
+1. Should `qa-artifacts/` be (a) added to `.gitignore` or (b) kept in the repo? — My default is (b) if you need to share reports with your team.
+2. Where will tests run (URL/build)? — [Needs input: test environment]
 
-> **Cố vấn QA**
-> - *Vì sao quan trọng:* đăng nhập là cửa vào của mọi tính năng; lỗi ở đây chặn toàn bộ người dùng.
-> - *Góc khuất:* khoá tài khoản (đếm sai thế nào, mở khoá khi nào), user thường vào được /admin, bấm đúp nút đăng nhập.
-> - *Mặc định:* tôi chọn giữ `qa-artifacts/` trong repo và tiếp tục Pha 1 ngay khi bạn trả lời.
+> **QA Advisor**
+> - *Why it matters:* login is the door to every feature; a bug here blocks all users.
+> - *Blind spots:* lockout (how failures are counted, when it unlocks), regular users reaching /admin, double-clicking the login button.
+> - *Default:* I will keep `qa-artifacts/` in the repo and start Phase 1 as soon as you answer.
 ```
 
-## Lượt 2 — Kết thúc Pha 1 (Hard Stop)
+## Turn 2 — End of Phase 1 (Hard Stop)
 
 ```markdown
 [QA Phase 1/5: Test Plan]
 
-Đã lưu `qa-artifacts/01-test-plan.md` (Draft). Top phát hiện: REQ-03 chưa nói bộ đếm sai được reset khi nào; REQ-04 không nói hành vi khi bị từ chối (chuyển trang hay báo 403).
+Saved `qa-artifacts/01-test-plan.md` (Draft). Top findings: REQ-03 does not say when the failure counter resets; REQ-04 does not say what happens when access is denied (redirect or 403).
 
-**⏸ HARD STOP — chờ duyệt**
-Vui lòng trả lời 2 câu hỏi mở (hoặc chấp nhận mặc định đã nêu) rồi nhắn "duyệt" để sang Pha 2.
+**⏸ HARD STOP — awaiting approval**
+Please answer the 2 open questions (or accept the stated defaults), then reply "approved" to start Phase 2.
 ```
 
-**Điểm cần học từ ví dụ:** nhãn pha ở dòng đầu; hỏi `.gitignore` đúng một lần; khối Cố vấn có mặc định; dừng hẳn, không tự sang Pha 2.
+**Takeaways:** phase label on the first line; `.gitignore` asked exactly once; advisor block with a default; a real stop, no auto-advance to Phase 2.
