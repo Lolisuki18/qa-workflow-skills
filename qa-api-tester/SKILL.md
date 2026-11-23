@@ -1,6 +1,6 @@
 ---
 name: qa-api-tester
-description: Designs and runs API tests for the Auto (API) cases of the approved test matrix — builds an endpoint inventory from the real spec or code, covers status codes, schema, validation, auth, permission and error bodies, writes tests in the repo's own tooling (Postman/Newman, pytest, supertest or Playwright) and records only real results. Use when the user says 'test the API', 'API testing', 'test these endpoints', 'Postman collection', 'check status codes and schema', 'kiểm thử API', 'viết test cho endpoint', 'tạo Postman collection', 'test phân quyền API', 'kiểm tra response schema'. Do NOT use for browser UI automation or manual scripts (use qa-e2e-writer), designing the test case table (use qa-test-matrix-writer), load and security scanning (use qa-nonfunctional-writer), bug reports (use qa-defect-writer), or developers' unit tests.
+description: Designs and runs API tests for the Auto (API) cases of the approved test matrix — builds an endpoint inventory from the real spec or code, covers status codes, schema, validation, auth. Use when the user says 'test the API', 'API testing', 'test these endpoints', 'Postman collection'. Do NOT use for browser UI automation or manual scripts (use qa-e2e-writer), designing the test case table (use qa-test-matrix-writer), load and security scanning (use qa-nonfunctional-writer), bug reports (use qa-defect-writer).
 ---
 
 # QA API Tester — Step 3 (API track): Test Execution

@@ -1,6 +1,6 @@
 ---
 name: qa-defect-writer
-description: Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions, steps to reproduce, actual vs expected, evidence), logs them in qa-artifacts/04-defects.md, and runs Re-test and Regression Checklist mode when developers report a fix. Use when the user says 'write a bug report', 'log this defect', 'report this bug', 'severity or priority?', 're-test the fix', 'regression checklist', 'viết bug report', 'ghi nhận lỗi', 'báo lỗi chuẩn', 'tạo defect', 'kiểm tra lại sau khi dev sửa'. Do NOT use for finding the root cause or fixing the code, designing test cases (use qa-test-matrix-writer), running tests (use qa-e2e-writer), summary reports (use qa-summary-reporter), or code review.
+description: Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions, steps to reproduce, actual vs expected, evidence). Use when the user says 'write a bug report', 'log this defect', 'report this bug', 'severity or priority?'. Do NOT use for finding the root cause or fixing the code, designing test cases (use qa-test-matrix-writer), running tests (use qa-e2e-writer), summary reports (use qa-summary-reporter), or code review.
 ---
 
 # QA Defect Writer — Step 4: Defect Management

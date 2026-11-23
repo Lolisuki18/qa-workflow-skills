@@ -1,6 +1,6 @@
 ---
 name: qa-e2e-writer
-description: Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests (Page Object Model, semantic locators, web-first assertions) for Auto (browser) cases, recording only real results in execution notes. Use when the user says 'run the tests', 'write Playwright tests', 'E2E test', 'browser automation', 'exploratory testing', 'manual test script', 'try to break the app', 'viết test Playwright', 'chạy test', 'kịch bản test tay', 'test thăm dò', 'phá app'. Do NOT use for designing the test plan or test case table (use qa-test-plan-writer or qa-test-matrix-writer), writing bug reports (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit and integration tests.
+description: Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests. Use when the user says 'run the tests', 'write Playwright tests', 'E2E test', 'browser automation'. Do NOT use for designing the test plan or test case table (use qa-test-plan-writer or qa-test-matrix-writer), writing bug reports (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit and integration tests.
 ---
 
 # QA E2E Writer — Step 3: Test Execution & Automation

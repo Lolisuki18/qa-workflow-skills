@@ -1,6 +1,6 @@
 ---
 name: qa-accessibility-auditor
-description: Audits a web UI for accessibility against WCAG 2.2 level AA by combining a code and DOM review, an automated scan when a tool is available (axe, Lighthouse) and a manual keyboard and screen-reader checklist, then reports findings with the page, element or file:line, the criterion, severity and a concrete fix, and says what automated tools cannot cover. Use when the user says 'accessibility audit', 'WCAG check', 'is this accessible', 'screen reader test', 'keyboard navigation test', 'contrast check', 'kiểm tra khả năng truy cập', 'kiểm thử accessibility', 'soát lỗi WCAG', 'test bằng bàn phím', 'trình đọc màn hình'. Do NOT use for designing a plan across all non-functional attributes (use qa-nonfunctional-writer), functional test cases (use qa-test-matrix-writer), browser flow automation (use qa-e2e-writer), or fixing the UI code (use dev-lifecycle from dev-workflow-skills).
+description: Audits a web UI for accessibility against WCAG 2.2 level AA by combining a code and DOM review, an automated scan when a tool is available. Use when the user says 'accessibility audit', 'WCAG check', 'is this accessible', 'screen reader test'. Do NOT use for designing a plan across all non-functional attributes (use qa-nonfunctional-writer), functional test cases (use qa-test-matrix-writer), browser flow automation (use qa-e2e-writer).
 ---
 
 # QA Accessibility Auditor — Step 3c: Accessibility Audit
