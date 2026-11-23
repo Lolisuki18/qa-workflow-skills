@@ -31,8 +31,10 @@ Before Phase 1, do these in order:
 qa-artifacts/
 ├── 01-test-plan.md          # Phase 1
 ├── 02-test-matrix.md        # Phase 2 (test cases + RTM)
-├── 03-execution-notes.md    # Phase 3
+├── 02b-nonfunctional.md     # Phase 2, optional (qa-nonfunctional-writer)
+├── 03-execution-notes.md    # Phase 3 (+ API and non-functional tracks)
 ├── 04-defects.md            # Phase 4
+├── 04b-regression-plan.md   # Phase 4, optional, one per build (qa-regression-planner)
 └── 05-summary-report.md     # Phase 5
 ```
 
@@ -64,11 +66,13 @@ Whichever way it runs, keep this skill's invariant rules (phase label, anti-hall
 - Call skill `qa-e2e-writer`.
 - `Manual` cases → manual run script / exploratory charters. `Auto (browser)` cases → write and run Playwright. `Auto (API)` cases → run with the tooling already in the repo.
 - Record **real** results in `03-execution-notes.md` (per case: Pass / Fail / Blocked / Not Run + evidence). Manual cases the user has not run stay `Not Run`; never fill them in yourself.
+- `Auto (API)` cases → `qa-api-tester` when installed; non-functional cases (performance, accessibility, compatibility, security basics) → `qa-nonfunctional-writer` when the plan lists them.
 - No mandatory Hard Stop, but when a defect is found report it immediately and move to Phase 4.
 
 ### Phase 4/5 — Defect Management
 - Call skill `qa-defect-writer` for each defect found in Phase 3 (or reported by the user).
 - Record in `04-defects.md`. When a developer reports a fix → run Re-test & Regression Checklist mode and update the status.
+- For each new build, `qa-regression-planner` chooses what to re-run (smoke / targeted / full) and writes `04b-regression-plan.md`.
 - You may return to Phase 3 to re-run affected cases; show the loop in the label (`[QA Phase 3/5: Execution — Re-test round 2]`).
 
 ### Phase 5/5 — Summary Report
