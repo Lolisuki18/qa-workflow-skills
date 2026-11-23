@@ -15,3 +15,13 @@ jobs:
           python-version: '3.12'
       - name: Validate skill structure
         run: python scripts/validate.py
+      - name: Hook tests
+        run: python -m unittest discover -s tests -v
+      - name: README skill index is current
+        run: python scripts/readme-index.py --check
+      - name: Shared scripts match ai-workflow-suite
+        run: |
+          for f in install.py readme-index.py validate.py; do
+            [ -f "scripts/$f" ] || continue
+            curl -fsSL "https://raw.githubusercontent.com/Lolisuki18/ai-workflow-suite/main/scripts/$f" | diff -q - "scripts/$f"
+          done
