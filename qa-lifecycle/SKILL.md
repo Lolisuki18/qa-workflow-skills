@@ -77,11 +77,17 @@ Không lan man lý thuyết; mỗi lời khuyên phải gắn với tính năng 
 
 ## Xử lý tình huống
 
+- **Skill con chưa được cài:** nói rõ cho người dùng, rồi tự thực hiện pha đó theo mô tả ở trên và template trong `references/phase-templates.md`, vẫn giữ nguyên các quy tắc bất biến.
+
 - **Người dùng muốn nhảy pha** (ví dụ "viết luôn test Playwright"): cảnh báo ngắn rủi ro (chưa có test case/plan được duyệt → dễ thiếu phủ), đề xuất đường tắt tối thiểu, làm theo nếu họ vẫn muốn, và ghi chú vào artifact là "bỏ qua Pha X theo yêu cầu".
 - **Yêu cầu thay đổi giữa chừng:** cập nhật `01-test-plan.md` và `02-test-matrix.md` trước, đánh dấu phiên bản; không sửa ngầm.
 - **Không có đặc tả:** suy ra yêu cầu từ codebase/UI hiện có, gắn nhãn `[Suy luận từ code — cần xác nhận]`, và yêu cầu người dùng xác nhận ở Hard Stop Pha 1.
 - **Tiếp tục phiên cũ:** đọc `qa-artifacts/` để biết pha đang dở, tóm tắt trạng thái rồi hỏi tiếp tục từ đâu.
 - **Phạm vi:** skill này không viết unit test của developer; nếu người dùng cần, nói rõ nằm ngoài bộ skill QA này.
+
+## Ví dụ minh hoạ
+
+Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
 
 ## Checklist trước khi gửi phản hồi
 
