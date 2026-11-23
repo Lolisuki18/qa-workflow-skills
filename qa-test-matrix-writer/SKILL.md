@@ -1,6 +1,6 @@
 ---
 name: qa-test-matrix-writer
-description: Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3, Execution Type) using test design techniques, plus a Requirement Traceability Matrix (RTM) proving every requirement has happy-path, negative and permission coverage, exportable as Markdown or clean CSV for Excel, Google Sheets or TestRail. Use when the user says 'write test cases', 'test matrix', 'traceability matrix', 'RTM', 'test case table', 'boundary value analysis', 'cover all requirements', 'viết test case', 'thiết kế test case', 'bảng test case', 'ma trận truy vết yêu cầu', 'xuất test case ra CSV/Excel', 'import TestRail'. Do NOT use for the test plan or requirement audit (use qa-test-plan-writer), writing Playwright code or manual run scripts (use qa-e2e-writer), logging defects (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit tests (use test-case-writer).
+description: Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3, Execution Type) using test design techniques, plus a Requirement Traceability Matrix (RTM) proving every requirement has happy-path, negative and permission coverage, exportable as Markdown or clean CSV for Excel, Google Sheets or TestRail. Use when the user says 'write test cases', 'test matrix', 'traceability matrix', 'RTM', 'test case table', 'boundary value analysis', 'cover all requirements', 'viết test case', 'thiết kế test case', 'bảng test case', 'ma trận truy vết yêu cầu', 'xuất test case ra CSV/Excel', 'import TestRail'. Do NOT use for the test plan or requirement audit (use qa-test-plan-writer), writing Playwright code or manual run scripts (use qa-e2e-writer), logging defects (use qa-defect-writer), summary reports (use qa-summary-reporter), or developer unit tests.
 ---
 
 # QA Test Matrix Writer — Bước 2: Thiết kế Test Case
@@ -73,7 +73,7 @@ Quy tắc:
 
 ## Định dạng đầu ra
 
-Mặc định: bảng Markdown trong `qa-artifacts/02-test-matrix.md` (cấu trúc ở `qa-lifecycle/references/phase-templates.md`). Nếu người dùng muốn CSV (hoặc import TestRail/Excel/Sheets):
+Mặc định: bảng Markdown trong `qa-artifacts/02-test-matrix.md` (các mục: tổng quan số lượng, bảng test case 10 cột, RTM, yêu cầu chưa phủ/mâu thuẫn). Nếu người dùng muốn CSV (hoặc import TestRail/Excel/Sheets):
 
 - Ghi `qa-artifacts/02-test-matrix.csv`, mã hoá UTF-8 **có BOM** để Excel đọc đúng tiếng Việt, dấu phân cách `,`.
 - Hàng tiêu đề đúng 10 cột ở trên, một hàng/test case, không gộp ô.
@@ -88,6 +88,10 @@ Mặc định: bảng Markdown trong `qa-artifacts/02-test-matrix.md` (cấu tr�
 2. Mâu thuẫn/điểm cần làm rõ phát sinh khi thiết kế, kèm mặc định đề xuất.
 3. Khối **Cố vấn QA**: vì sao cần các nhóm case này, góc khuất (phân quyền, rớt mạng, bấm đúp, dữ liệu biên) đã/chưa phủ, mặc định sẽ chọn.
 4. **HARD STOP:** chờ duyệt. Không sang chạy test (Pha 3) khi chưa duyệt.
+
+## Ví dụ minh hoạ
+
+Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
 
 ## Checklist hoàn thành
 
