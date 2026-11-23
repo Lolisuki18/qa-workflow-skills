@@ -39,7 +39,18 @@ Copy (or symlink) the six `qa-*` folders to where your agent reads skills. **Ins
 | Agent | Skills folder (for reference; check your agent's docs) |
 |---|---|
 | Claude Code | `~/.claude/skills/` or `<project>/.claude/skills/` |
-| Cursor / Gemini CLI / Codex | per each agent's skill/rules mechanism; you can also point the agent at the `SKILL.md` files |
+| Cursor | `.cursor/skills/` (also reads `.claude/skills/`) |
+| Gemini CLI | `.gemini/skills/` or `.agents/skills/`; user-level `~/.gemini/skills/` (may need enabling; check `gemini skills list`) |
+| Codex | `.agents/skills/` (older docs: `.codex/skills/`) |
+| Others | any tool that reads `SKILL.md` folders, or point the agent at the `SKILL.md` files |
+
+Paths change between agent versions; confirm against your tool's docs. The folder name of each skill must equal its `name`.
+
+```powershell
+# project-level install for Claude Code (run from the repo root)
+New-Item -ItemType Directory -Force .claude\skills | Out-Null
+Get-ChildItem -Directory -Filter 'qa-*' | ForEach-Object { Copy-Item -Recurse $_.FullName .claude\skills\ }
+```
 
 Each skill also works on its own; only `qa-lifecycle` expects the others to be present, and it says so when one is missing.
 
@@ -70,4 +81,15 @@ Each skill has a `references/worked-example.md` built on one fictional scenario 
 
 ## Self-check (evals)
 
-See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model.
+See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model. Status: the eval sets are written but their results are not yet recorded, and this repo has no structure validator or CI (every `SKILL.md` is 62-108 lines, descriptions are under 900 characters and include `Do NOT use`).
+
+## Sibling repos
+
+| Repo | Covers |
+|---|---|
+| [`dev-workflow-skills`](https://github.com/Lolisuki18/dev-workflow-skills) | idea → plan → code → tests → audit, bug investigation |
+| [`pull-request-skills`](https://github.com/Lolisuki18/pull-request-skills) | PR description, PR review, review replies, pre-PR self-review, code comments |
+| [`qa-workflow-skills`](https://github.com/Lolisuki18/qa-workflow-skills) (this one) | QA/STLC from test plan to Go/No-Go report |
+| [`docs-workflow-skills`](https://github.com/Lolisuki18/docs-workflow-skills) | README, diagrams, API docs, ADRs, SDLC reports, Review 2 pack |
+
+Developers' unit tests belong to `test-case-writer` in `dev-workflow-skills`; this repo covers testing from the QA viewpoint.
