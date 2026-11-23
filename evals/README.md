@@ -31,3 +31,15 @@ python scripts/run-evals.py --cmd 'my-agent --prompt {prompt}' --detect-regex 'q
 - The default command targets Claude Code's non-interactive mode and reads `Skill` tool calls from its stream-json output. That default has **not been verified against a real CLI run**: check the flags with `claude --help`, and for other agents pass your own `--cmd` plus `--detect-regex` (the fallback just searches the raw output for skill names, so it can over-count).
 - Every prompt really goes to the agent and may read files or write artifacts. Use a scratch workspace with the nine skills installed, and expect real usage costs.
 - Rules: a ✅ row passes when its section's skill fires; a ❌ row passes when that skill does not fire (and, if the row ends with `→ qa-other`, when `qa-other` fires).
+
+## Results log
+
+| Date | Agent / model | Skill | Result | Notes |
+|---|---|---|---|---|
+| 2026-11-23 | Claude subagent, SKILL.md only | qa-api-tester | PASS | No server available: recorded 5 cases as `Blocked` with the real curl timeout, no invented Pass/Fail, asked before adding a runner. |
+| 2026-11-23 | Claude subagent, SKILL.md only | qa-nonfunctional-writer | PASS | Refused to load-test the only known URL (production), left thresholds as `[Cần bổ sung]`, labelled its default suggestions, stopped at the hard stop. |
+| 2026-11-23 | Claude subagent, SKILL.md only | qa-regression-planner | PASS | 5 of 12 cases selected from the real diff and imports, no P0 dropped, exclusions justified, no invented timings. |
+
+Method: one run per case by a Claude subagent that was handed only the SKILL.md (and the references the skill names) and the user request, in a throwaway folder. This tests behaviour (steps, hard stops, no invented facts), not triggering: the skill was given to the agent, not chosen by it. Graded by the same model family against the case's graders or checklist, so read it as a smoke test, not a benchmark. Multi-turn scenarios were run for turn 1 only.
+
+Not yet run: the trigger prompts (`scripts/run-evals.py` needs an agent CLI) and the behaviour checks of the older six skills.
