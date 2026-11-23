@@ -8,7 +8,7 @@ Usage:
 The block sits between these markers in README.md:
   <!-- skills:start -->  ...  <!-- skills:end -->
 Skills are the top-level folders that contain SKILL.md. The text of each row is the first sentence of
-the skill description (everything before " Use "), shortened to 170 characters.
+the skill description (everything before " Use "), shortened to 150 characters.
 Stdlib only.
 """
 import argparse
@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 START, END = "<!-- skills:start -->", "<!-- skills:end -->"
-MAXLEN = 170
+MAXLEN = 150
 
 
 def frontmatter(text: str):
@@ -38,9 +38,14 @@ def frontmatter(text: str):
 def summary(desc: str) -> str:
     first = desc.split(" Use ", 1)[0].strip().rstrip(".")
     first = first.replace("|", "/")
-    if len(first) > MAXLEN:
-        first = first[:MAXLEN].rsplit(" ", 1)[0].rstrip(",;:- ") + "..."
-    return first
+    if len(first) <= MAXLEN:
+        return first
+    head = first[:MAXLEN]
+    for sep in (" - ", " \u2014 ", ": ", "; ", ", "):
+        i = head.rfind(sep)
+        if i >= 50:
+            return head[:i].rstrip(" ,;:-\u2014")
+    return head.rsplit(" ", 1)[0].rstrip(" ,;:-\u2014") + "..."
 
 
 def build_block() -> str:
@@ -48,7 +53,7 @@ def build_block() -> str:
     for d in sorted(p for p in ROOT.iterdir() if p.is_dir() and (p / "SKILL.md").exists()):
         fm = frontmatter((d / "SKILL.md").read_text(encoding="utf-8"))
         rows.append(f"| [`{d.name}`]({d.name}/SKILL.md) | {summary(fm.get('description', ''))} |")
-    head = (f"{START}\n**{len(rows)} skills.** This index is generated from each `SKILL.md`; "
+    head = (f"{START}\n**{len(rows)} {'skill' if len(rows) == 1 else 'skills'}.** This index is generated from each `SKILL.md`; "
             "run `python scripts/readme-index.py` to refresh it.\n\n| Skill | What it does |\n|---|---|")
     return "\n".join([head, *rows, END])
 

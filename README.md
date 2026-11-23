@@ -14,15 +14,15 @@ The skills are written in English and reply in the language you use (English or 
 | Skill | What it does |
 |---|---|
 | [`qa-accessibility-auditor`](qa-accessibility-auditor/SKILL.md) | Audits a web UI for accessibility against WCAG 2.2 level AA by combining a code and DOM review, an automated scan when a tool is available |
-| [`qa-api-tester`](qa-api-tester/SKILL.md) | Designs and runs API tests for the Auto (API) cases of the approved test matrix — builds an endpoint inventory from the real spec or code, covers status codes, schema... |
-| [`qa-defect-writer`](qa-defect-writer/SKILL.md) | Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions, steps to reproduce, actual... |
-| [`qa-e2e-writer`](qa-e2e-writer/SKILL.md) | Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests |
-| [`qa-lifecycle`](qa-lifecycle/SKILL.md) | Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation, defect management, and summary... |
-| [`qa-nonfunctional-writer`](qa-nonfunctional-writer/SKILL.md) | Designs non-functional test cases and checks from the approved test plan — performance and load, security basics, accessibility, browser and device compatibility... |
-| [`qa-regression-planner`](qa-regression-planner/SKILL.md) | Selects the regression suite for a new build or fix from the RTM, the change set and defect history — maps changed files and modules to impacted requirements and test... |
-| [`qa-summary-reporter`](qa-summary-reporter/SKILL.md) | Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative... |
-| [`qa-test-matrix-writer`](qa-test-matrix-writer/SKILL.md) | Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3, Execution Type) using test design... |
-| [`qa-test-plan-writer`](qa-test-plan-writer/SKILL.md) | Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis |
+| [`qa-api-tester`](qa-api-tester/SKILL.md) | Designs and runs API tests for the Auto (API) cases of the approved test matrix |
+| [`qa-defect-writer`](qa-defect-writer/SKILL.md) | Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions |
+| [`qa-e2e-writer`](qa-e2e-writer/SKILL.md) | Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases |
+| [`qa-lifecycle`](qa-lifecycle/SKILL.md) | Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation |
+| [`qa-nonfunctional-writer`](qa-nonfunctional-writer/SKILL.md) | Designs non-functional test cases and checks from the approved test plan |
+| [`qa-regression-planner`](qa-regression-planner/SKILL.md) | Selects the regression suite for a new build or fix from the RTM, the change set and defect history |
+| [`qa-summary-reporter`](qa-summary-reporter/SKILL.md) | Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/) |
+| [`qa-test-matrix-writer`](qa-test-matrix-writer/SKILL.md) | Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3 |
+| [`qa-test-plan-writer`](qa-test-plan-writer/SKILL.md) | Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope |
 <!-- skills:end -->
 
 ## 5 phases, 10 skills
