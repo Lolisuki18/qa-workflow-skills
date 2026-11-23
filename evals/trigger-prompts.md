@@ -56,6 +56,33 @@
 | ❌ | Viết bug report cho lỗi mới → `qa-defect-writer` |
 | ❌ | Viết mô tả pull request |
 
+## qa-api-tester
+| | Prompt |
+|---|---|
+| ✅ | Viết test API cho các endpoint đăng nhập và đặt hàng, kiểm tra status code và schema |
+| ✅ | Test these REST endpoints for auth, validation and permission, and give me a Postman collection |
+| ✅ | Chạy các case Auto (API) trong ma trận test và ghi kết quả |
+| ❌ | Viết test Playwright cho trang đăng nhập → `qa-e2e-writer` |
+| ❌ | Viết unit test cho controller này (unit test của dev) |
+
+## qa-nonfunctional-writer
+| | Prompt |
+|---|---|
+| ✅ | Thiết kế test hiệu năng và test tải cho trang danh sách sản phẩm |
+| ✅ | Check this signup flow for accessibility (WCAG) and cross-browser compatibility |
+| ✅ | Lập bộ test phi chức năng cho tính năng thanh toán |
+| ❌ | Viết bảng test case chức năng và RTM → `qa-test-matrix-writer` |
+| ❌ | Review code tìm lỗ hổng bảo mật trong mã nguồn (đây là review code, không phải QA) |
+
+## qa-regression-planner
+| | Prompt |
+|---|---|
+| ✅ | Dev vừa sửa 5 lỗi, tôi cần test lại những case nào? |
+| ✅ | Build a regression plan from the RTM and this diff: smoke, targeted and full |
+| ✅ | Chọn danh sách smoke test cho bản build mới |
+| ❌ | Viết checklist re-test cho đúng một lỗi vừa sửa → `qa-defect-writer` |
+| ❌ | Viết test plan cho release mới → `qa-test-plan-writer` |
+
 ## Ambiguous prompts — expect a clarifying question
 | Prompt | Expected |
 |---|---|
