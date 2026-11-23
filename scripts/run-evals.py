@@ -21,6 +21,12 @@ Run it in a scratch workspace with the six qa-* skills installed, and expect rea
 import argparse, json, re, shlex, subprocess, sys, time
 from pathlib import Path
 
+for _s in (sys.stdout, sys.stderr):  # Vietnamese prompts crash cp1252 consoles on Windows
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PROMPTS = ROOT / "evals" / "trigger-prompts.md"
 # Default targets Claude Code's non-interactive mode (stream-json lists Skill tool calls).
