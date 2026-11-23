@@ -1,6 +1,6 @@
 ---
 name: qa-test-plan-writer
-description: Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis, test strategy split (Manual / Auto browser / Auto API), test environment and data needs, and entry/exit criteria. Use when the user says 'write a test plan', 'review these requirements for testability', 'find gaps in the spec', 'test strategy', 'what should we test', 'viết test plan', 'lập kế hoạch kiểm thử', 'soi yêu cầu', 'phân tích đặc tả trước khi test', 'rà soát SRS', 'chiến lược test'. Do NOT use for writing individual test cases or RTM (use qa-test-matrix-writer), writing Playwright or manual test scripts (use qa-e2e-writer), logging bugs (use qa-defect-writer), final reports (use qa-summary-reporter), development implementation plans (use feature-plan-writer), or developer unit tests.
+description: Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis, test strategy split (Manual / Auto browser / Auto API), test environment and data needs, and entry/exit criteria. Use when the user says 'write a test plan', 'review these requirements for testability', 'find gaps in the spec', 'test strategy', 'what should we test', 'viết test plan', 'lập kế hoạch kiểm thử', 'soi yêu cầu', 'phân tích đặc tả trước khi test', 'rà soát SRS', 'chiến lược test'. Do NOT use for writing individual test cases or RTM (use qa-test-matrix-writer), writing Playwright or manual test scripts (use qa-e2e-writer), logging bugs (use qa-defect-writer), final reports (use qa-summary-reporter), development implementation plans, or developer unit tests.
 ---
 
 # QA Test Plan Writer — Bước 1: Soi yêu cầu & Chiến lược
@@ -38,7 +38,7 @@ Duyệt từng yêu cầu theo checklist:
 Mỗi phát hiện ghi dòng: ID yêu cầu · vấn đề · loại · câu hỏi làm rõ · **mặc định đề xuất** (để người dùng trả lời "ok"). Xếp hạng theo mức ảnh hưởng tới khả năng test. Nếu có phát hiện loại "chặn" (không thể viết test nếu không làm rõ) → nêu đầu danh sách.
 
 ### Bước 3 — Soạn Test Plan
-Dùng template ở `qa-lifecycle/references/phase-templates.md` mục `01-test-plan.md`. Nếu chạy độc lập, dùng cấu trúc dưới.
+Cấu trúc file `01-test-plan.md`: header (pha, ngày, phiên bản, trạng thái Draft/Approved, nguồn yêu cầu) → 1. Requirement Audit → 2. Scope → 3. Risk Analysis → 4. Chiến lược → 5. Môi trường & dữ liệu → 6. Entry/Exit → 7. Câu hỏi mở & giả định. Nội dung từng mục theo các điểm dưới.
 
 1. **Scope**
    - In-scope: liệt kê module/luồng/vai trò/nền tảng, gắn ID yêu cầu.
@@ -69,6 +69,10 @@ Dùng template ở `qa-lifecycle/references/phase-templates.md` mục `01-test-p
 | REQ-07 "Admin xoá được bài viết" | Không nói tác giả có xoá bài mình không; xoá mềm hay cứng? | Thiếu phân quyền/trạng thái | Ma trận quyền xoá? | Tác giả + Admin; xoá mềm |
 
 (Đây là ví dụ định dạng, không phải dữ liệu của dự án thật.)
+
+## Ví dụ minh hoạ
+
+Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
 
 ## Checklist hoàn thành
 
