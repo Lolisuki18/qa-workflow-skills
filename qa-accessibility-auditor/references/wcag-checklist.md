@@ -11,9 +11,11 @@ Criterion numbers below are from WCAG 2.x. For wording, exceptions and the full 
 | Keyboard | Every function works with the keyboard alone | 2.1.1 Keyboard |
 | No trap | Focus can always leave a component (dialogs, menus, widgets) | 2.1.2 No Keyboard Trap |
 | Bypass | A skip link or landmarks let users jump past repeated blocks | 2.4.1 Bypass Blocks |
+| Page title | Each page has a descriptive `<title>` | 2.4.2 Page Titled |
 | Focus order | Tab order follows the visual and logical order | 2.4.3 Focus Order |
 | Focus visible | The focused element is clearly visible | 2.4.7 Focus Visible |
 | Target size | Pointer targets are at least 24 by 24 CSS px, or have enough spacing | 2.5.8 Target Size (Minimum) |
+| Language | The page language is set (`lang` on `<html>`) | 3.1.1 Language of Page |
 | Labels | Inputs have labels or instructions | 3.3.2 Labels or Instructions |
 | Errors | Errors are identified in text and tied to the field | 3.3.1 Error Identification |
 | Name, role, value | Custom controls expose name, role and state to assistive tech | 4.1.2 Name, Role, Value |

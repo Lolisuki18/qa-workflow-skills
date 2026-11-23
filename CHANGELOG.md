@@ -5,7 +5,7 @@ Format: newest first. Skills are prompts, so "breaking" means a change in behavi
 ## Unreleased (next: 0.2.0)
 
 ### Added
-- Skills: `qa-api-tester`, `qa-nonfunctional-writer`, `qa-regression-planner`, each with a reference file and a worked example; `qa-accessibility-auditor` (WCAG 2.2 AA checklist, not yet run on an agent). New artifacts: `02b-nonfunctional.md`, `04b-regression-plan.md`.
+- Skills: `qa-api-tester`, `qa-nonfunctional-writer`, `qa-regression-planner`, each with a reference file and a worked example; `qa-accessibility-auditor` (WCAG 2.2 AA checklist; one smoke run, see `evals/README.md`). New artifacts: `02b-nonfunctional.md`, `04b-regression-plan.md`.
 - Trigger prompts for the three new skills; behaviour smoke runs recorded in `evals/README.md`.
 - Optional hook `scripts/qa-gate.py` that enforces the Phase 1 and 2 hard stops from the artifact status (10 tests, see `docs/hard-stop-enforcement.md`).
 - `scripts/validate.py` (names, descriptions, line counts, fences, references) and a GitHub Actions workflow.

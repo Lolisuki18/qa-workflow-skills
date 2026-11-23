@@ -39,6 +39,7 @@ python scripts/run-evals.py --cmd 'my-agent --prompt {prompt}' --detect-regex 'q
 | 2026-11-23 | Claude subagent, SKILL.md only | qa-api-tester | PASS | No server available: recorded 5 cases as `Blocked` with the real curl timeout, no invented Pass/Fail, asked before adding a runner. |
 | 2026-11-23 | Claude subagent, SKILL.md only | qa-nonfunctional-writer | PASS | Refused to load-test the only known URL (production), left thresholds as `[Cần bổ sung]`, labelled its default suggestions, stopped at the hard stop. |
 | 2026-11-23 | Claude subagent, SKILL.md only | qa-regression-planner | PASS | 5 of 12 cases selected from the real diff and imports, no P0 dropped, exclusions justified, no invented timings. |
+| 2026-11-23 | Claude subagent, SKILL.md only | qa-accessibility-auditor | PASS | Found all seeded problems with correct WCAG criteria and file:line, labelled the 2.85:1 contrast as computed not measured, listed every unrun manual and tool check as `Not Run`. Exposed a gap: criteria 3.1.1 and 2.4.2 were missing from the checklist (added). |
 
 Method: one run per case by a Claude subagent that was handed only the SKILL.md (and the references the skill names) and the user request, in a throwaway folder. This tests behaviour (steps, hard stops, no invented facts), not triggering: the skill was given to the agent, not chosen by it. Graded by the same model family against the case's graders or checklist, so read it as a smoke test, not a benchmark. Multi-turn scenarios were run for turn 1 only.
 
