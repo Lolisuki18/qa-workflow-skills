@@ -1,6 +1,6 @@
 ---
 name: qa-summary-reporter
-description: Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative release-gate thresholds, execution table with pass rate, defect statistics by severity and status, RTM coverage, residual risks and next actions. Use when the user says 'test summary report', 'is it ready to release', 'go or no-go', 'QA sign-off', 'release readiness', 'final test report', 'báo cáo tổng kết kiểm thử', 'nghiệm thu', 'có release được chưa', 'kết luận Go/No-Go'. Do NOT use for writing test plans, test cases, automation scripts or bug reports (use the other qa-* skills), for code audits, or for PR descriptions.
+description: Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative release-gate thresholds. Use when the user says 'test summary report', 'is it ready to release', 'go or no-go', 'QA sign-off'. Do NOT use for writing test plans, test cases, automation scripts or bug reports (use the other qa-* skills), for code audits, or for PR descriptions.
 ---
 
 # QA Summary Reporter — Step 5: Reporting & Acceptance

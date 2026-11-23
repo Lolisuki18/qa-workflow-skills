@@ -1,6 +1,6 @@
 ---
 name: qa-test-plan-writer
-description: Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis, test strategy split (Manual / Auto browser / Auto API), test environment and data needs, and entry/exit criteria. Use when the user says 'write a test plan', 'review these requirements for testability', 'find gaps in the spec', 'test strategy', 'what should we test', 'viết test plan', 'lập kế hoạch kiểm thử', 'soi yêu cầu', 'rà soát SRS', 'chiến lược test'. Do NOT use for writing individual test cases or RTM (use qa-test-matrix-writer), writing Playwright or manual test scripts (use qa-e2e-writer), logging bugs (use qa-defect-writer), final reports (use qa-summary-reporter), development implementation plans, or developer unit tests.
+description: Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis. Use when the user says 'write a test plan', 'review these requirements for testability', 'find gaps in the spec', 'test strategy'. Do NOT use for writing individual test cases or RTM (use qa-test-matrix-writer), writing Playwright or manual test scripts (use qa-e2e-writer), logging bugs (use qa-defect-writer), final reports (use qa-summary-reporter).
 ---
 
 # QA Test Plan Writer — Step 1: Requirement Audit & Strategy

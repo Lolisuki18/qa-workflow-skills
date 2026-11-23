@@ -5,9 +5,8 @@ Usage: python scripts/validate.py [repo_root]        (default: parent of this sc
 
 Checks per skill folder (any top-level folder containing SKILL.md):
   - frontmatter has exactly `name` and `description`; name == folder name, kebab-case
-  - description: starts with a capitalised third-person verb (ends with "s"), <= 900 characters,
-    contains "Do NOT use", contains Vietnamese keywords (diacritics) and no duplicated trigger phrases
-    across skills
+  - description: English only, starts with a capitalised third-person verb (ends with "s"), <= 650
+    characters, contains "Do NOT use" and no duplicated trigger phrases across skills
   - every .md file outside evals/ is < 250 lines; code fences balanced
   - only `references/`, `scripts/` (one level deep) and `evals/` (may nest) sub folders
   - every `references/x.md` or `scripts/x.py` mentioned in SKILL.md exists
@@ -53,12 +52,12 @@ for s in skills:
         w = desc.split()[0]
         if not (w[0].isupper() and w.endswith('s')):
             e.append(f'description starts with "{w}" (needs a third-person verb)')
-        if len(desc) > 900:
-            e.append(f'description is {len(desc)} chars (> 900)')
+        if len(desc) > 650:
+            e.append(f'description is {len(desc)} chars (> 650)')
         if 'Do NOT use' not in desc:
             e.append('description lacks "Do NOT use"')
-        if not re.search(r'[À-ỹ]', desc):
-            e.append('description lacks Vietnamese trigger keywords')
+        if re.search(r'[^\x00-\x7f\u2014\u2192\u2013]', desc):
+            e.append('description must be English only (found non-ASCII characters)')
         for q in set(re.findall(r'"([^"]+)"', desc.split('Do NOT use')[0])):
             triggers.setdefault(q.lower(), []).append(s)
     for dp, dn, fn in os.walk(d):

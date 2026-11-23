@@ -1,6 +1,6 @@
 ---
 name: qa-regression-planner
-description: Selects the regression suite for a new build or fix from the RTM, the change set and defect history — maps changed files and modules to impacted requirements and test cases, ranks them by risk and priority, splits them into smoke, targeted and full regression with time estimates, and records the plan in qa-artifacts/. Use when the user says 'regression plan', 'which tests should I re-run', 'what to retest after this change', 'smoke test list', 'impact analysis for testing', 'regression suite for this release', 'chọn test hồi quy', 'kiểm thử hồi quy', 'sau khi sửa lỗi cần test lại những gì', 'phân tích ảnh hưởng thay đổi', 'danh sách smoke test'. Do NOT use for writing the initial test plan (use qa-test-plan-writer), designing new test cases (use qa-test-matrix-writer), logging one defect or its single re-test checklist (use qa-defect-writer), or running the tests (use qa-e2e-writer).
+description: Selects the regression suite for a new build or fix from the RTM, the change set and defect history — maps changed files and modules to impacted requirements and test cases. Use when the user says 'regression plan', 'which tests should I re-run', 'what to retest after this change', 'smoke test list'. Do NOT use for writing the initial test plan (use qa-test-plan-writer), designing new test cases (use qa-test-matrix-writer), logging one defect or its single re-test checklist (use qa-defect-writer), or running the tests (use qa-e2e-writer).
 ---
 
 # QA Regression Planner — Step 4b: Regression Selection

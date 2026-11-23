@@ -1,6 +1,6 @@
 ---
 name: qa-lifecycle
-description: Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation, defect management, and summary report with Go/No-Go verdict — with hard stops for user approval and artifacts saved in qa-artifacts/. Use when the user says 'run a full QA process', 'test this feature end to end', 'QA workflow', 'quality assurance for this project', 'is this ready to release', 'software acceptance testing', 'chạy quy trình QA', 'kiểm thử toàn bộ tính năng', 'lập quy trình test bài bản', 'nghiệm thu phần mềm'. Do NOT use for a single QA step on its own (use qa-test-plan-writer, qa-test-matrix-writer, qa-e2e-writer, qa-defect-writer or qa-summary-reporter directly), for developer unit tests or TDD, for debugging a code bug, or for code review.
+description: Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation, defect management, and summary report with Go/No-Go verdict. Use when the user says 'run a full QA process', 'test this feature end to end', 'QA workflow', 'quality assurance for this project'. Do NOT use for a single QA step on its own (use qa-test-plan-writer, qa-test-matrix-writer, qa-e2e-writer, qa-defect-writer or qa-summary-reporter directly), for developer unit tests or TDD, for debugging a code bug, or for code review.
 ---
 
 # QA Lifecycle — Conductor of the 5 STLC Phases
