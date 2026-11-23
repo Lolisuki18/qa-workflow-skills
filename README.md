@@ -28,7 +28,8 @@ qa-workflow-skills/
 ├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md, worked-example.md)
 ├── qa-defect-writer/        (SKILL.md, references/severity-priority-matrix.md, worked-example.md)
 ├── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md, worked-example.md)
-└── evals/                   Trigger prompts and behavior checks
+├── evals/                   Trigger prompts and behavior checks
+└── scripts/run-evals.py     Optional runner that sends the trigger prompts to an agent CLI
 ```
 
 ## Installation
@@ -69,4 +70,4 @@ Each skill has a `references/worked-example.md` built on one fictional scenario 
 
 ## Self-check (evals)
 
-See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). Results vary by agent and model.
+See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model.
