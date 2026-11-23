@@ -10,6 +10,8 @@ Usage:
   python scripts/install.py --copy                # copy instead of link
   python scripts/install.py --dry-run             # show what would happen
   python scripts/install.py --uninstall           # remove links/copies made from this repo
+  python scripts/install.py --only a,b            # install only these skills (names not in this repo are ignored)
+  python scripts/install.py --exclude a,b         # install everything except these skills
 
 A skill is any top-level folder here that contains SKILL.md. Existing entries are never
 overwritten: they are reported as `exists` (or `replaced` only with --force, links only).
@@ -101,6 +103,8 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--uninstall", action="store_true")
     ap.add_argument("--force", action="store_true", help="replace an existing LINK that points elsewhere")
+    ap.add_argument("--only", help="comma-separated skill names to install; others in this repo are skipped")
+    ap.add_argument("--exclude", help="comma-separated skill names to skip")
     args = ap.parse_args()
 
     if args.list_agents:
@@ -125,6 +129,15 @@ def main() -> int:
     if not names:
         print("error: no skills found", file=sys.stderr)
         return 1
+    if args.only:
+        wanted = {n.strip() for n in args.only.split(",") if n.strip()}
+        names = [s for s in names if s.name in wanted]
+    if args.exclude:
+        dropped = {n.strip() for n in args.exclude.split(",") if n.strip()}
+        names = [s for s in names if s.name not in dropped]
+    if not names:
+        print("nothing to install here (no skill matches --only/--exclude)")
+        return 0
     if not args.dry_run and not args.uninstall:
         target.mkdir(parents=True, exist_ok=True)
 
