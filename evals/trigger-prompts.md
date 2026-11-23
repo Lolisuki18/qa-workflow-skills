@@ -1,6 +1,6 @@
 # Trigger Prompts
 
-✅ should trigger, ❌ should not (the better skill is noted where one exists). Vietnamese prompts are kept on purpose: descriptions carry bilingual trigger keywords.
+✅ should trigger, ❌ should not (the better skill is noted where one exists). Vietnamese prompts are kept on purpose: descriptions are English only, so these check that the agent still picks the right skill.
 
 ## qa-lifecycle
 | | Prompt |

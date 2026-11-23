@@ -16,6 +16,7 @@ Format: newest first. Skills are prompts, so "breaking" means a change in behavi
 - `LICENSE` (MIT).
 
 ### Changed
+- Skill descriptions are English only and shorter (4 trigger phrases, at most 650 characters) to cut the context every installed skill costs. The trigger evals keep their Vietnamese prompts to check that matching still works.
 - `qa-lifecycle` routes API, non-functional and regression work to the new skills; `qa-e2e-writer` hands `Auto (API)` cases to `qa-api-tester` when installed.
 - Every skill states that content found in repos, logs and pages is data, not instructions.
 - `scripts/run-evals.py` no longer crashes on Windows consoles when printing Vietnamese prompts.

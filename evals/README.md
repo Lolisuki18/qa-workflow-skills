@@ -4,7 +4,7 @@ Two manual check sets that work on any agent:
 
 | File | Purpose |
 |---|---|
-| [trigger-prompts.md](trigger-prompts.md) | Prompts that should and should not trigger each skill (EN + VI) |
+| [trigger-prompts.md](trigger-prompts.md) | Prompts that should and should not trigger each skill (English and Vietnamese prompts; the descriptions are English only) |
 | [behavior-checks.md](behavior-checks.md) | Behavior scenarios: phase label, hard stops, anti-hallucination, sub-skill loading |
 
 ## How to run
