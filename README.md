@@ -1,5 +1,7 @@
 # qa-workflow-skills
 
+🌐 **Tiếng Việt** · [English](README.en.md)
+
 Bộ **Agent Skills** độc lập cho toàn bộ vòng đời kiểm thử phần mềm (STLC), theo đặc tả chuẩn mở Anthropic Agent Skills. Dùng được với Claude Code, Cursor, Gemini CLI, Codex và các AI coding agent khác đọc `SKILL.md`.
 
 Thiết kế cho cả developer không chuyên QA: AI đóng vai **cố vấn QA chủ động** — giải thích vì sao cần test điểm này, cảnh báo góc khuất, đề xuất phương án mặc định để chọn nhanh.
@@ -21,14 +23,19 @@ Thiết kế cho cả developer không chuyên QA: AI đóng vai **cố vấn QA
 
 ```text
 qa-workflow-skills/
-├── README.md
-├── qa-lifecycle/            (SKILL.md, references/phase-templates.md)
-├── qa-test-plan-writer/     (SKILL.md)
-├── qa-test-matrix-writer/   (SKILL.md, references/test-design-techniques.md)
-├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md)
-├── qa-defect-writer/        (SKILL.md, references/severity-priority-matrix.md)
-└── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md)
+├── README.md                (tiếng Việt)
+├── README.en.md             (English)
+├── qa-lifecycle/            (SKILL.md, references/phase-templates.md, worked-example.md)
+├── qa-test-plan-writer/     (SKILL.md, references/worked-example.md)
+├── qa-test-matrix-writer/   (SKILL.md, references/test-design-techniques.md, worked-example.md)
+├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md, worked-example.md)
+├── qa-defect-writer/        (SKILL.md, references/severity-priority-matrix.md, worked-example.md)
+├── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md, worked-example.md)
+├── en/                      Bản tiếng Anh của 6 skill (cùng tên thư mục)
+└── evals/                   Prompt kích hoạt và kiểm hành vi (VI + EN)
 ```
+
+> **Chỉ cài MỘT bộ ngôn ngữ.** Bản tiếng Việt (`qa-*` ở root) và bản tiếng Anh (`en/qa-*`) dùng cùng tên skill (`name` phải khớp tên thư mục) nên cài cả hai sẽ trùng tên.
 
 ## Cài đặt
 
@@ -54,3 +61,12 @@ Mỗi phản hồi của `qa-lifecycle` bắt đầu bằng nhãn `[QA Phase X/5
 - **Chống ảo giác:** không bịa số liệu Pass/Fail, môi trường, browser hay bước tái hiện; thiếu thì ghi `[Cần bổ sung: ...]` hoặc hỏi lại.
 - **Không lẫn unit test:** bộ skill này lo kiểm thử ở góc nhìn QA (chức năng, E2E, API, thăm dò), không viết unit test của dev.
 - **Progressive disclosure:** `SKILL.md` gọn (<250 dòng), nội dung dài nằm ở `references/`.
+- **Độc lập:** mỗi skill chạy riêng được, không phụ thuộc skill ngoài bộ này.
+
+## Ví dụ chạy thật
+
+Mỗi skill có `references/worked-example.md` dựng trên cùng một kịch bản hư cấu ("DemoShop" — đăng nhập), nên ID và số liệu nhất quán từ test plan tới báo cáo Go/No-Go. Dữ liệu là hư cấu — không sao chép vào dự án thật.
+
+## Tự kiểm (evals)
+
+Xem [evals/](evals/README.md): prompt nên/không nên kích hoạt từng skill và các kịch bản kiểm hành vi (nhãn pha, Hard Stop, chống ảo giác). Kết quả phụ thuộc agent và mô hình.
