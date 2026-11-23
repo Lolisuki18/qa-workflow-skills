@@ -1,6 +1,6 @@
 ---
 name: qa-defect-writer
-description: Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions, steps to reproduce, actual vs expected, evidence), logs them in qa-artifacts/04-defects.md, and runs Re-test and Regression Checklist mode when developers report a fix. Use when the user says 'write a bug report', 'log this defect', 'report this bug', 'severity or priority?', 're-test the fix', 'regression checklist', 'viết bug report', 'ghi nhận lỗi', 'báo lỗi chuẩn', 'tạo defect', 'đánh giá mức độ nghiêm trọng', 'kiểm tra lại sau khi dev sửa', 'regression sau khi fix'. Do NOT use for finding the root cause or fixing the code (use bug-investigator), designing test cases (use qa-test-matrix-writer), running tests (use qa-e2e-writer), summary reports (use qa-summary-reporter), or code review.
+description: Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions, steps to reproduce, actual vs expected, evidence), logs them in qa-artifacts/04-defects.md, and runs Re-test and Regression Checklist mode when developers report a fix. Use when the user says 'write a bug report', 'log this defect', 'report this bug', 'severity or priority?', 're-test the fix', 'regression checklist', 'viết bug report', 'ghi nhận lỗi', 'báo lỗi chuẩn', 'tạo defect', 'đánh giá mức độ nghiêm trọng', 'kiểm tra lại sau khi dev sửa', 'regression sau khi fix'. Do NOT use for finding the root cause or fixing the code, designing test cases (use qa-test-matrix-writer), running tests (use qa-e2e-writer), summary reports (use qa-summary-reporter), or code review.
 ---
 
 # QA Defect Writer — Bước 4: Quản lý lỗi
@@ -13,7 +13,7 @@ Chuẩn hoá lỗi thành báo cáo dev có thể tái hiện ngay, và theo dõ
 - **Chống ảo giác tuyệt đối:** chỉ ghi điều người dùng/log/kết quả test thật cho thấy.
   - Không bịa môi trường, phiên bản browser/OS/build, bước tái hiện, tần suất, thông báo lỗi.
   - Thiếu → `[Cần bổ sung: ...]` và hỏi lại (gom thành một danh sách câu hỏi ngắn, không hỏi lắt nhắt).
-  - Không suy đoán nguyên nhân gốc như thể chắc chắn. Có giả thuyết thì đặt ở mục "Ghi chú/Giả thuyết (chưa xác nhận)". Tìm và sửa nguyên nhân là việc của `bug-investigator`/dev.
+  - Không suy đoán nguyên nhân gốc như thể chắc chắn. Có giả thuyết thì đặt ở mục "Ghi chú/Giả thuyết (chưa xác nhận)". Tìm và sửa nguyên nhân là việc của dev.
 - **Mỗi defect một vấn đề.** Gộp nhiều triệu chứng cùng một gốc thì ghi chú liên kết; tách khi có hai hiện tượng độc lập.
 - Kiểm tra trùng: so với `04-defects.md` hiện có trước khi tạo mới; nghi trùng → hỏi.
 - Giữ giọng trung tính, mô tả sự kiện, không đổ lỗi.
@@ -26,7 +26,7 @@ Chuẩn hoá lỗi thành báo cáo dev có thể tái hiện ngay, và theo dõ
 3. **Phân biệt Actual vs Expected:** Expected lấy từ đặc tả/Expected Result của TC (nêu nguồn); không có nguồn → `[Cần bổ sung: nguồn Expected]`.
 4. **Chấm Severity** (tác động kỹ thuật) và **Priority** (độ gấp nghiệp vụ) **riêng biệt** theo matrix, nêu lý do một dòng. Priority là đề xuất — người dùng/PO quyết định cuối.
 5. **Evidence:** liệt kê file/đường dẫn log/ảnh thật; trích dòng log liên quan (nguyên văn, không sửa). Không có → ghi "Chưa có".
-6. **Ghi vào `qa-artifacts/04-defects.md`** (bảng tổng hợp + mục chi tiết, template ở `qa-lifecycle/references/phase-templates.md`). Tiếp số Defect ID (`DEF-001`, `DEF-002`...), không đánh lại.
+6. **Ghi vào `qa-artifacts/04-defects.md`** (đầu file: bảng tổng hợp `Defect ID | Title | Severity | Priority | Status | TC liên quan`; tiếp theo là mục chi tiết theo mẫu dưới; cuối file: bảng "Lịch sử Re-test" `Defect ID | Vòng | Build | Kết quả | Regression đã kiểm`). Tiếp số Defect ID (`DEF-001`, `DEF-002`...), không đánh lại.
 
 ### Mẫu Defect Report
 
@@ -68,6 +68,10 @@ Kích hoạt khi dev báo đã sửa (hoặc người dùng nói "đã fix DEF-x
 ## Khối Cố vấn QA
 
 Giải thích vì sao tách Severity/Priority; cảnh báo lỗi dễ bị đánh giá thấp (phân quyền, mất dữ liệu, lỗi chỉ xảy ra khi bấm đúp/rớt mạng); nêu mặc định (ví dụ "tôi xếp Major/P1, bạn có thể nâng nếu lỗi chặn demo").
+
+## Ví dụ minh hoạ
+
+Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
 
 ## Checklist hoàn thành
 
