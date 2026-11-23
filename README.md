@@ -6,7 +6,26 @@ Designed for developers who are not QA specialists: the AI acts as a **proactive
 
 The skills are written in English and reply in the language you use (English or Vietnamese). Trigger keywords in each `description` are bilingual (EN + VI).
 
-## 5 phases, 9 skills
+## Skill index
+
+<!-- skills:start -->
+**10 skills.** This index is generated from each `SKILL.md`; run `python scripts/readme-index.py` to refresh it.
+
+| Skill | What it does |
+|---|---|
+| [`qa-accessibility-auditor`](qa-accessibility-auditor/SKILL.md) | Audits a web UI for accessibility against WCAG 2.2 level AA by combining a code and DOM review, an automated scan when a tool is available (axe, Lighthouse) and a manual... |
+| [`qa-api-tester`](qa-api-tester/SKILL.md) | Designs and runs API tests for the Auto (API) cases of the approved test matrix — builds an endpoint inventory from the real spec or code, covers status codes, schema... |
+| [`qa-defect-writer`](qa-defect-writer/SKILL.md) | Turns raw bug descriptions, logs and screenshots into standardized Defect Reports (title, environment, severity vs priority, pre-conditions, steps to reproduce, actual... |
+| [`qa-e2e-writer`](qa-e2e-writer/SKILL.md) | Executes test cases from the approved test matrix — produces manual run scripts and exploratory charters for Manual cases, and writes and runs Playwright tests (Page... |
+| [`qa-lifecycle`](qa-lifecycle/SKILL.md) | Orchestrates a 5-phase QA/QC workflow (STLC) — requirement audit and test plan, test case matrix with RTM, test execution and automation, defect management, and summary... |
+| [`qa-nonfunctional-writer`](qa-nonfunctional-writer/SKILL.md) | Designs non-functional test cases and checks from the approved test plan — performance and load, security basics, accessibility, browser and device compatibility... |
+| [`qa-regression-planner`](qa-regression-planner/SKILL.md) | Selects the regression suite for a new build or fix from the RTM, the change set and defect history — maps changed files and modules to impacted requirements and test... |
+| [`qa-summary-reporter`](qa-summary-reporter/SKILL.md) | Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative... |
+| [`qa-test-matrix-writer`](qa-test-matrix-writer/SKILL.md) | Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3, Execution Type) using test design... |
+| [`qa-test-plan-writer`](qa-test-plan-writer/SKILL.md) | Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope, risk analysis, test... |
+<!-- skills:end -->
+
+## 5 phases, 10 skills
 
 | Phase | Skill | Output (`qa-artifacts/`) |
 |---|---|---|
@@ -24,6 +43,7 @@ Optional specialist skills, used inside the phases above:
 | `qa-api-tester` | Phase 3, `Auto (API)` cases: endpoint inventory, API checklist, real results | API track in `03-execution-notes.md` |
 | `qa-nonfunctional-writer` | Phase 2-3: performance, security basics, accessibility, compatibility with measurable thresholds | `02b-nonfunctional.md` + non-functional track in `03-execution-notes.md` |
 | `qa-regression-planner` | Phase 4, every new build: smoke / targeted / full selection from the RTM and the diff | `04b-regression-plan.md` |
+| `qa-accessibility-auditor` | Phase 3: WCAG 2.2 AA audit from code, an automated scan and manual keyboard / screen-reader checks | `03c-accessibility.md` |
 
 ## Repository layout
 
@@ -38,7 +58,9 @@ qa-workflow-skills/
 ├── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md, worked-example.md)
 ├── qa-api-tester/           (SKILL.md, references/api-test-checklist.md)
 ├── qa-nonfunctional-writer/ (SKILL.md, references/nonfunctional-catalog.md)
-├── qa-regression-planner/   (SKILL.md, references/regression-selection.md)
+├── qa-regression-planner/   (SKILL.md, references/regression-selection.md, worked-example.md)
+├── qa-accessibility-auditor/ (SKILL.md, references/wcag-checklist.md)
+├── docs/hard-stop-enforcement.md, tests/test_qa_gate.py
 ├── scripts/                 validate.py (structure checks, also run by CI), install.py, run-evals.py
 ├── .github/workflows/validate.yml
 ├── LICENSE
@@ -47,7 +69,7 @@ qa-workflow-skills/
 
 ## Installation
 
-Copy (or symlink) the nine `qa-*` folders to where your agent reads skills. **Install them together** and keep them as siblings: in agents without automatic skill switching, `qa-lifecycle` reads `../qa-<name>/SKILL.md` directly.
+Copy (or symlink) the ten `qa-*` folders to where your agent reads skills. **Install them together** and keep them as siblings: in agents without automatic skill switching, `qa-lifecycle` reads `../qa-<name>/SKILL.md` directly.
 
 | Agent | Skills folder (for reference; check your agent's docs) |
 |---|---|
@@ -88,8 +110,9 @@ Just speak naturally, for example:
 - "Test these REST endpoints for auth and validation" → `qa-api-tester`
 - "Design performance and accessibility tests for checkout" → `qa-nonfunctional-writer`
 - "The dev fixed 5 bugs, which tests should I re-run?" → `qa-regression-planner`
+- "Audit the checkout page for accessibility (WCAG)" → `qa-accessibility-auditor`
 
-Every `qa-lifecycle` response starts with the label `[QA Phase X/5: Phase Name]`. Phases 1 and 2 have a **Hard Stop**: the AI waits for your approval before continuing.
+Every `qa-lifecycle` response starts with the label `[QA Phase X/5: Phase Name]`. Phases 1 and 2 have a **Hard Stop**: the AI waits for your approval before continuing. For Claude Code an optional hook (`scripts/qa-gate.py`) enforces the stops with the artifact status; see [docs/hard-stop-enforcement.md](docs/hard-stop-enforcement.md).
 
 ## Core principles
 
