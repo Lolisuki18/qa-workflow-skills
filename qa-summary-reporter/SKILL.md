@@ -1,6 +1,6 @@
 ---
 name: qa-summary-reporter
-description: Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative release-gate thresholds, execution table with pass rate, defect statistics by severity and status, RTM coverage, residual risks and next actions. Use when the user says 'test summary report', 'is it ready to release', 'go or no-go', 'QA sign-off', 'release readiness', 'final test report', 'báo cáo tổng kết kiểm thử', 'nghiệm thu', 'có release được chưa', 'kết luận Go/No-Go', 'báo cáo QA cuối kỳ'. Do NOT use for writing test plans, test cases, automation scripts or bug reports (use the other qa-* skills), for code audits (use codebase-auditor), or for PR descriptions.
+description: Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/), with executive verdict Go / Conditional Go / No-Go against quantitative release-gate thresholds, execution table with pass rate, defect statistics by severity and status, RTM coverage, residual risks and next actions. Use when the user says 'test summary report', 'is it ready to release', 'go or no-go', 'QA sign-off', 'release readiness', 'final test report', 'báo cáo tổng kết kiểm thử', 'nghiệm thu', 'có release được chưa', 'kết luận Go/No-Go', 'báo cáo QA cuối kỳ'. Do NOT use for writing test plans, test cases, automation scripts or bug reports (use the other qa-* skills), for code audits, or for PR descriptions.
 ---
 
 # QA Summary Reporter — Bước 5: Báo cáo & Nghiệm thu
@@ -65,6 +65,10 @@ Giải thích bằng ngôn ngữ developer: vì sao Go/No-Go dựa trên ngưỡ
 - Verdict là **khuyến nghị của QA**; quyết định phát hành thuộc người dùng/PO. Nói rõ điều này.
 - Không dùng ngôn từ cảm tính ("khá ổn", "gần như xong"); dùng số liệu.
 - Báo cáo cho dự án nhỏ/cá nhân vẫn giữ đủ cấu trúc; có thể ngắn nhưng không bỏ mục.
+
+## Ví dụ minh hoạ
+
+Xem `references/worked-example.md` để biết định dạng đầu ra mẫu (dữ liệu hư cấu, chỉ đọc khi cần; không sao chép số liệu của ví dụ vào dự án thật).
 
 ## Checklist hoàn thành
 
