@@ -83,6 +83,15 @@
 | ❌ | Viết checklist re-test cho đúng một lỗi vừa sửa → `qa-defect-writer` |
 | ❌ | Viết test plan cho release mới → `qa-test-plan-writer` |
 
+## qa-accessibility-auditor
+| | Prompt |
+|---|---|
+| ✅ | Kiểm tra khả năng truy cập của trang thanh toán theo WCAG, gồm test bằng bàn phím |
+| ✅ | Run an accessibility audit on the signup flow: keyboard, contrast and screen reader checks |
+| ✅ | Trang này có dùng được với trình đọc màn hình không? |
+| ❌ | Thiết kế bộ test hiệu năng và tương thích trình duyệt → `qa-nonfunctional-writer` |
+| ❌ | Sửa lỗi thiếu alt text trong component này (sửa code, không phải audit) |
+
 ## Ambiguous prompts — expect a clarifying question
 | Prompt | Expected |
 |---|---|
