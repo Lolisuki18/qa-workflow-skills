@@ -16,10 +16,10 @@ User replies: "tried 3 times, every time; I have a screenshot; staging, I don't 
 ### DEF-001 — [Authz] Regular user can open the /admin page by typing the URL directly
 | Field | Content |
 |---|---|
+| Title | [Authz] Regular user can open the /admin page by typing the URL directly |
 | Related TC | TC-LOGIN-006 |
 | Environment | Staging; build [Needs input]; browser [Needs input] |
-| Severity / Priority | Critical / P0 (proposed) |
-| Reason | Unauthorized access to the admin area, no workaround; PO to confirm Priority |
+| Severity / Priority | Critical / P0 (proposed) — Unauthorized access to the admin area, no workaround; PO to confirm Priority |
 | Status | New |
 | Reproducibility | Always (3/3) |
 | Pre-conditions | Logged in with a User-role account |
