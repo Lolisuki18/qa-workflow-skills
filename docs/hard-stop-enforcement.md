@@ -4,7 +4,7 @@
 
 1. **Anchor (built in):** every reply starts with `[QA Phase X/5: ...]`.
 2. **Artifact status (built in):** each `qa-artifacts/0N-*.md` has `Status: Draft | Approved` in its header. The agent sets `Approved` only after the user says so.
-3. **Hook (optional, Claude Code):** [`scripts/qa-gate.py`](../scripts/qa-gate.py) is a PreToolUse hook that refuses Write/Edit on `02-*` and `02b-*` while `01-*` is Draft, and on `03-*` while `02-*` is Draft. Phases 4 and 5 are never blocked, a missing prerequisite is allowed (the phase was skipped at the user's request), and any error fails open.
+3. **Hook (optional, Claude Code):** [`scripts/qa-gate.py`](../scripts/qa-gate.py) is a PreToolUse hook that refuses Write/Edit on `02-*` and `02b-*` while `01-*` is Draft, and on `03-*` while `02-*` (or `02b-*`, when it exists) is Draft. Phases 4 and 5 are never blocked, a missing prerequisite is allowed (the phase was skipped at the user's request), and any error fails open.
 
 Add to `.claude/settings.json` of the project under test (adjust the path; use `py` or `python3` if `python` is not on PATH):
 
@@ -22,6 +22,18 @@ Add to `.claude/settings.json` of the project under test (adjust the path; use `
   }
 }
 ```
+
+### What the hook does not cover
+
+- The default matcher `Write|Edit` checks only Write/Edit tool calls. A write made through Bash (`echo > file`, `tee`, `sed -i`, a Python script) is not seen by that matcher.
+- Optional: add a `Bash` matcher to the same hook. For Bash the script reads `tool_input.command` and blocks only conservatively: the command must name `qa-artifacts/02-`, `02b-` or `03-` and look like a write (redirect, `tee`, `sed -i`, `Set-Content`/`Out-File`, `python` with `open(`/`write`). A script that builds the path at run time still gets through. Fails open as before.
+
+```json
+{ "matcher": "Write|Edit|Bash", "hooks": [ { "type": "command", "command": "python /path/to/qa-workflow-skills/scripts/qa-gate.py" } ] }
+```
+
+- The hook cannot tell who set `Approved`: an agent could edit the status itself. The skills forbid it, the hook does not.
+- The hook does not block running tests or commands; it only guards the artifact files. Executing tests before the matrix is approved is prevented by the written rule alone.
 
 Bypass on purpose only: set `QA_GATE=off`, or create an empty `qa-artifacts/.no-gate`. The block message tells the agent to ask you first and never to bypass by itself.
 

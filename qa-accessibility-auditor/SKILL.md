@@ -20,6 +20,10 @@ Finds barriers that stop people using the product with a keyboard, a screen read
 - Run scans only on local or test environments the user names. Ask before installing a tool.
 - Do not change application code; report. Fixes go through `dev-lifecycle`.
 
+## Not applicable
+
+If the target has no UI (CLI, script, API only), say "Not applicable: no UI" and stop. A terminal tool's readability is a usability question for `qa-nonfunctional-writer`.
+
 ## Process
 
 1. **Scope.** Pages and flows to audit (default: the main flows from the test plan), target level, browsers and assistive tech available. Report what you will cover and what you will not.

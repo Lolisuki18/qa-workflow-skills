@@ -26,7 +26,7 @@ Standardizes bugs into reports a developer can reproduce immediately, and tracks
 ### Process
 1. **Collect:** raw description, logs, screenshots/video, related TC (`Defect ID` ↔ `TC ID`), environment information.
 2. **Normalize reproduction steps:** numbered, one action per step, with concrete data. Someone unfamiliar with the system should be able to follow. If the raw description lacks steps → ask, never fill the gap yourself.
-3. **Separate Actual vs Expected:** Expected comes from the spec / the TC's Expected Result (cite the source); no source → `[Needs input: Expected source]`.
+3. **Separate Actual vs Expected:** Expected comes from the spec / the TC's Expected Result (cite the source); no source → `[Needs input: Expected source]`. The source uses the matrix `Oracle` values: `spec` / `approved default` / `code behavior` / `none`. If it is not `spec`, write "expected result disputed" in Notes (the PO may overrule); a defect against an `approved default` must say so.
 4. **Rate Severity** (technical impact) and **Priority** (business urgency) **separately** per the matrix, with a one-line reason. Priority is a proposal — the user/PO decides.
 5. **Evidence:** list real files/log paths/screenshots; quote the relevant log lines verbatim. None → "None yet".
 6. **Write into `qa-artifacts/04-defects.md`** (top: summary table `Defect ID | Title | Severity | Priority | Status | Related TC`; then detail sections per the template below; bottom: "Re-test history" table `Defect ID | Round | Build | Result | Regression checked`). Continue the Defect ID numbering (`DEF-001`, `DEF-002`...), never renumber.
@@ -46,7 +46,7 @@ Standardizes bugs into reports a developer can reproduce immediately, and tracks
 | Pre-conditions | ... |
 | Steps to Reproduce | 1. ... 2. ... 3. ... |
 | Actual Result | ... |
-| Expected Result | ... (source: REQ-xx / TC-xx) |
+| Expected Result | ... (source: spec REQ-xx / approved default TC-xx / code behavior / none) |
 | Evidence | log: ..., screenshot: ... |
 | Notes / Hypothesis (unconfirmed) | ... |
 ```
@@ -66,7 +66,7 @@ Triggered when a developer reports a fix (or the user says "DEF-xxx is fixed").
 4. After the user reports results: update Status per the lifecycle and add a row to "Re-test history" (round, build, result, regression checked). Never close a defect without real results.
 
 ### Status lifecycle
-`New → Open (confirmed) → Fixed (dev reports) → Re-test → Closed` · branches: `Reopened` (re-test fails), `Won't Fix` / `Duplicate` / `Cannot Reproduce` (need a reason and the decision maker). Never skip steps; never move to `Closed` yourself.
+`New → Open (confirmed) → Fixed (dev reports) → Re-test → Closed` · branches: `Reopened` (re-test fails), `Won't Fix` / `Duplicate` / `Cannot Reproduce` (need a reason and the decision maker). Never skip steps; never move to `Closed` yourself: QA cannot close a defect, only the user can. After a passed re-test the defect stays `Re-test` (awaiting user close); `qa-summary-reporter` counts it as open and lists it separately.
 
 ## QA Advisor block
 

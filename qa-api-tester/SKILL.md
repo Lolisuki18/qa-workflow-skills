@@ -20,6 +20,10 @@ Turns `Auto (API)` cases into runnable API tests with real results. Inside `qa-l
 - **Safety:** run only against a local, test or staging environment the user names. Never run write or delete calls against production. Never put real credentials, tokens or personal data in files; read them from environment variables and document the names.
 - Agent-agnostic: use whatever command-running capability the environment has.
 
+## Not applicable
+
+If the target exposes no HTTP endpoints (CLI, script, library), say "Not applicable: no endpoints" and stop. Automated command-line runs belong to `qa-e2e-writer`.
+
 ## Process
 
 1. **Inventory.** Find the spec (`openapi.*`, `swagger.*`, Postman collection) or read routers/controllers/DTOs. Produce a table: `Method · Path · Auth · Request fields (required/optional) · Success status · Error statuses` with `file:line` or spec location. Mark undocumented behavior `[Needs input]`.

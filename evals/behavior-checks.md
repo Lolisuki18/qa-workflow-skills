@@ -33,7 +33,7 @@ Run each scenario in a fresh session and mark every criterion pass/fail.
 
 ## B5 — Requirement coverage (qa-test-matrix-writer)
 **Prompt:** Provide 4 requirements, one about permissions, and ask for test cases
-- [ ] All 10 columns; numbered steps; concrete test data
+- [ ] All 11 columns (incl. Oracle); numbered steps; concrete test data
 - [ ] Each requirement has happy + negative; the permission requirement has a permission case
 - [ ] The RTM shows a coverage % computed from the real table
 - [ ] Error messages/limits absent from the spec → `[Needs input: ...]`
