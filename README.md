@@ -21,7 +21,7 @@ The skills are written in English and reply in the language you use (English or 
 | [`qa-nonfunctional-writer`](qa-nonfunctional-writer/SKILL.md) | Designs non-functional test cases and checks from the approved test plan |
 | [`qa-regression-planner`](qa-regression-planner/SKILL.md) | Selects the regression suite for a new build or fix from the RTM, the change set and defect history |
 | [`qa-summary-reporter`](qa-summary-reporter/SKILL.md) | Compiles a Test Summary Report from real execution results and defect lists (or qa-artifacts/) |
-| [`qa-test-matrix-writer`](qa-test-matrix-writer/SKILL.md) | Designs a complete test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Steps, Test Data, Expected Result, Priority P0-P3 |
+| [`qa-test-matrix-writer`](qa-test-matrix-writer/SKILL.md) | Designs a complete 11-column test case table (TC ID, Req/UC ID, Module, Title, Pre-condition, Test Steps, Test Data, Expected Result, Oracle |
 | [`qa-test-plan-writer`](qa-test-plan-writer/SKILL.md) | Audits requirements for ambiguity, missing error flows, missing permission rules and business contradictions, then drafts a Test Plan with scope |
 <!-- skills:end -->
 
