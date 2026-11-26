@@ -13,6 +13,12 @@ Open: the plan says "should load fast" with no number → `[Needs input: p95 tar
 ## 2. `02b-nonfunctional.md` (draft, waiting for approval)
 
 ```markdown
+# Non-functional Checks — DemoShop
+- **Phase:** 2/5 — Test Matrix (non-functional design)
+- **Date:** 2026-11-26
+- **Version:** v0.1
+- **Status:** Draft
+
 | NF ID | Attribute | Scenario | Metric & threshold | Tool | Environment | Priority | Linked requirement |
 |---|---|---|---|---|---|---|---|
 | NF-PERF-01 | Performance | Product list, 20 concurrent users, 5 min | p95 < [Needs input: SLA] ms, errors < 1% (suggested, not approved) | k6 | staging-test | P1 | REQ-07 |

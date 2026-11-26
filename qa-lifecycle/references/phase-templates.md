@@ -20,7 +20,7 @@ Templates for the 5 files in `qa-artifacts/`. Anywhere real data is missing, wri
 
 ```markdown
 ## 1. Requirement Audit
-| # | Requirement (ID) | Issue | Type (Ambiguous/Missing error flow/Missing permission/Contradiction) | Clarifying question | Suggested default |
+| # | Requirement (ID) | Issue | Type (Ambiguous/Missing error flow/Missing permission/Contradiction/Missing states/Data/Non-functional/Dependencies/Abuse/Observability/Output & console) | Clarifying question | Suggested default |
 ## 2. Scope
 - In-scope: ...
 - Out-of-scope: ... (with reason)
@@ -34,8 +34,19 @@ Templates for the 5 files in `qa-artifacts/`. Anywhere real data is missing, wri
 - Accounts/roles: ...
 - Data to prepare: ...
 ## 6. Entry / Exit Criteria
-## 7. Schedule & assignment (if any)
-## 8. Open questions / Assumptions
+## 7. Open questions / Assumptions
+```
+
+## 02b-nonfunctional.md
+
+```markdown
+## 1. Attributes selected
+- Selected: ...
+- Out of scope this round: ... (with reason)
+## 2. Cases
+| NF ID | Attribute | Scenario | Metric & threshold | Tool | Environment | Priority | Linked requirement |
+## 3. Tooling
+## 4. Open threshold questions
 ```
 
 ## 02-test-matrix.md
