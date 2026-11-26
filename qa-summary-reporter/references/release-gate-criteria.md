@@ -39,8 +39,8 @@ If the plan's exit criteria and these defaults differ: values the user confirmed
 
 ## How to choose the verdict (algorithm)
 
-1. Is there data to compute every mandatory criterion? No → `Cannot conclude`, list the missing data. (Never guess.)
-2. Check the No-Go column. Any true → **No-Go**; list them all.
+1. Check the **No-Go** column for every criterion that has data. Any true → **No-Go**; list them all (and still list any missing data).
+2. Otherwise, is there data to compute every mandatory criterion? No → `Cannot conclude`, list the missing data. (Never guess.)
 3. Otherwise, all Go cells met → **Go**.
 4. Otherwise → **Conditional Go**, with concrete conditions.
 
@@ -48,7 +48,7 @@ If the plan's exit criteria and these defaults differ: values the user confirmed
 
 Each condition must be:
 - Specific and verifiable (e.g. "Re-test DEF-007 and regression of the Payment group both Pass on the next build").
-- Given an owner and due date (unknown → `[Needs input]`).
+- Given an owner and due date (unknown → `[Needs input: owner and due date]`).
 - Stated with its consequence if unmet (becomes No-Go).
 
 Typical condition types: fix and re-test specific Major defects; run the remaining Not Run group; written acceptance of residual risk; post-release monitoring; a rollback plan.
