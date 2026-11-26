@@ -44,7 +44,7 @@ Templates for the 5 files in `qa-artifacts/`. Anywhere real data is missing, wri
 ## 1. Overview
 Cases: N | P0: a | P1: b | P2: c | P3: d | Manual: x | Auto (browser): y | Auto (API): z
 ## 2. Test Cases
-| TC ID | Req/UC ID | Module | Title | Pre-condition | Test Steps | Test Data | Expected Result | Priority | Execution Type |
+| TC ID | Req/UC ID | Module | Title | Pre-condition | Test Steps | Test Data | Expected Result | Oracle (spec/approved default/code behavior/none) | Priority | Execution Type |
 ## 3. RTM (Requirement Traceability Matrix)
 | Req/UC ID | Requirement | TC ID (Happy) | TC ID (Negative) | TC ID (Permission) | Coverage |
 ## 4. Uncovered requirements / Notes
@@ -56,7 +56,7 @@ Cases: N | P0: a | P1: b | P2: c | P3: d | Manual: x | Auto (browser): y | Auto 
 ## 1. Run info
 - Round: 1 | Date: ... | Build/commit: [Needs input] | Environment: [Needs input] | Runner: ...
 ## 2. Results per test case
-| TC ID | Execution Type | Result (Pass/Fail/Blocked/Not Run) | Run date | Defect ID | Evidence/Notes |
+| TC ID | Execution Type | Result (Pass/Fail/Blocked/Not Run/Informational) | Run date | Defect ID | Evidence/Notes |
 ## 3. Automation
 - Test files: ... | Command: ... | Raw output (paste real output): ...
 ## 4. Findings from exploratory testing

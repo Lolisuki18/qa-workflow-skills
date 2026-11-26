@@ -13,7 +13,7 @@ Coordinates five testing phases by calling the right sub-skill at the right time
 
 1. **Phase anchor:** the first line of EVERY response must be `[QA Phase X/5: Phase Name]` (e.g. `[QA Phase 2/5: Test Matrix]`). Before any phase starts (gathering context): `[QA Phase 0/5: Kickoff]`. This label anchors the rules in long conversations.
 2. **Anti-hallucination:** never invent Pass/Fail numbers, environments, browser versions, reproduction steps or API/endpoint names. Missing data → write `[Needs input: ...]` or ask. Never pretend a test was run.
-3. **Hard Stop:** at the end of Phase 1 and Phase 2, stop completely and wait for explicit approval ("approved", "ok proceed", "duyệt"). Silence or a side question is not approval.
+3. **Hard Stop:** at the end of Phase 1 and Phase 2, stop completely and wait for explicit approval ("approved", "ok proceed", "duyệt"). Silence or a side question is not approval. Phase 3 must not start before `02-test-matrix.md` is `Approved`. If `02b-nonfunctional.md` exists, its design table is a **second approval inside Phase 2** (`Status: Approved` in that file too) before any heavy run.
 4. **Proactive advisor:** see below.
 5. **Save artifacts:** every output goes to `qa-artifacts/`, not just to the chat.
 6. **Language:** reply and write artifacts in the language the user uses (English or Vietnamese). Keep the phase label, IDs and column names in English, and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
@@ -63,25 +63,28 @@ Whichever way it runs, keep this skill's invariant rules (phase label, anti-hall
 ### Phase 2/5 — Test Matrix (test case design)
 - Call skill `qa-test-matrix-writer`.
 - Output: `02-test-matrix.md` with the full test case table plus an RTM proving requirement coverage.
-- **HARD STOP:** report case counts by Priority/Execution Type and any uncovered requirements; wait for approval.
+- If the plan lists non-functional attributes, `qa-nonfunctional-writer` adds `02b-nonfunctional.md`; its design table needs its own approval (second approval inside Phase 2).
+- **HARD STOP:** report case counts by Priority/Execution Type and any uncovered requirements; wait for approval of the matrix (and of 02b when it exists). Do not start Phase 3 before the matrix is `Approved`.
 
 ### Phase 3/5 — Execution & Automation
 - Call skill `qa-e2e-writer`.
 - `Manual` cases → manual run script / exploratory charters. `Auto (browser)` cases → write and run Playwright. `Auto (API)` cases → run with the tooling already in the repo.
-- Record **real** results in `03-execution-notes.md` (per case: Pass / Fail / Blocked / Not Run + evidence). Manual cases the user has not run stay `Not Run`; never fill them in yourself.
-- `Auto (API)` cases → `qa-api-tester` when installed; non-functional cases (performance, compatibility, security basics) → `qa-nonfunctional-writer` when the plan lists them; accessibility audits → `qa-accessibility-auditor`.
+- Record **real** results in `03-execution-notes.md` (per case: Pass / Fail / Blocked / Not Run / Informational + evidence). Manual cases: you may run and record one only if you actually executed it and have evidence; otherwise it stays `Not Run`. Cases needing a real person or device (real terminal, phone, screen reader) stay `Not Run` until the user reports a result.
+- Record the environment you actually used (OS, shell, encoding, versions): your shell can differ from the user's, so never assume it matches theirs.
+- `Auto (API)` cases → `qa-api-tester` only when the target exposes HTTP endpoints and the skill is installed (a CLI/script/library has no endpoints: its automated command-line runs use the `Auto (API)` slot as an "automated non-UI run" and go to `qa-e2e-writer`); non-functional cases (performance, compatibility, security basics) → `qa-nonfunctional-writer` when the plan lists them; accessibility audits → `qa-accessibility-auditor`.
 - No mandatory Hard Stop, but when a defect is found report it immediately and move to Phase 4.
 
 ### Phase 4/5 — Defect Management
 - Call skill `qa-defect-writer` for each defect found in Phase 3 (or reported by the user).
-- Record in `04-defects.md`. When a developer reports a fix → run Re-test & Regression Checklist mode and update the status.
+- Record in `04-defects.md`. QA never closes a defect: after a passed re-test it stays `Re-test` until the user closes it. When a developer reports a fix → run Re-test & Regression Checklist mode and update the status.
 - For each new build, `qa-regression-planner` chooses what to re-run (smoke / targeted / full) and writes `04b-regression-plan.md`.
 - You may return to Phase 3 to re-run affected cases; show the loop in the label (`[QA Phase 3/5: Execution — Re-test round 2]`).
 
 ### Phase 5/5 — Summary Report
 - Call skill `qa-summary-reporter`.
 - Summarize only real numbers from `03-execution-notes.md`, `04-defects.md` and user-provided data. For anything missing, say "no data yet".
-- Output: `05-summary-report.md` with a **Go / Conditional Go / No-Go** verdict.
+- Output: `05-summary-report.md` with a **Go / Conditional Go / No-Go** verdict. Defects in `Re-test` are listed separately as "Re-test (awaiting user close)".
+- Before the final report, the stop message asks the user to close the verified defects (or confirm them), then the report is finalized.
 
 ## Proactive QA Advisor mode
 
@@ -92,6 +95,15 @@ In EVERY phase, before asking or requesting approval, add a short block (max ~8 
 - **Default option:** state clearly "If you have no preference I will choose X because Y" so the user can just answer "ok".
 
 No theory dumps; every piece of advice must tie to the feature being tested.
+
+## Small scope
+
+For a target under ~500 lines or with one actor, keep the same artifact set but make it compact:
+
+- Matrix columns: `id | module | requirement | steps | expected | oracle | priority | type`.
+- Skip advisor blocks that would all say N/A; write "advisor: nothing applicable" once.
+- You may generate the matrix from a case list script, so the table and the runner cannot drift. Keep helper scripts under `qa-artifacts/tools/`.
+- The hard stops still apply.
 
 ## Handling situations
 

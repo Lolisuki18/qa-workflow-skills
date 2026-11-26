@@ -14,9 +14,10 @@ Turns approved test cases into scripts that actually run. Inside `qa-lifecycle` 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
 - **Input:** `qa-artifacts/02-test-matrix.md` (or CSV), approved. Missing → suggest running `qa-test-matrix-writer`; if the user insists, ask for the list of cases to test.
 - **Anti-hallucination:**
-  - Never record Pass/Fail for a case that was not actually run. A Manual case the user has not run = `Not Run`.
+  - Never record Pass/Fail for a case that was not actually run. A Manual case may be recorded by you only if you actually executed it and have evidence; otherwise it is `Not Run`. A case needing a real person or device stays `Not Run`.
+  - `Informational` = observed, but there is no oracle or threshold to judge it against; record what was seen. It is not Pass or Fail.
   - Never invent environments, URLs, browser versions, accounts. Missing → `[Needs input: ...]` or ask.
-  - When pasting automation results, paste the real command output; never summarize from memory. If you cannot run (no environment, app not up) → record `Blocked` with the real cause.
+  - When pasting automation results, paste the real command output; never summarize from memory. If a script truncates the evidence, say the paste is truncated and where the full output is. If you cannot run (no environment, app not up) → record `Blocked` with the real cause.
 - **Inspect real code before choosing locators:** read the component/template/HTML or open the app to see the real DOM, labels, roles and existing `data-testid`. Never guess selectors. If stable hooks are missing → propose adding `data-testid` for the developers rather than writing brittle CSS/XPath.
 - Agent-agnostic: use whatever command-running/file-reading capability the current environment has; assume no specific IDE.
 
@@ -36,6 +37,15 @@ Turns approved test cases into scripts that actually run. Inside `qa-lifecycle` 
 5. **Prefer machine-readable results:** when the runner supports it, run with a JSON or JUnit reporter (for Playwright see "Machine-readable results" in `references/playwright-standards.md`) and build the results table by reading that file, so no result is lost or mistyped from terminal text. Keep the report file path in the notes. If the reporter output is unavailable, fall back to the verbatim terminal output and say so.
 6. **Write `qa-artifacts/03-execution-notes.md`** containing: run info (build/commit and environment if known, otherwise `[Needs input]`), per-TC results table, commands, raw output, exploratory findings, Blocked cases.
 7. **Present:** counts of Pass/Fail/Blocked/Not Run taken from the real table, suspected product defects, and the next question (move to Phase 4 to log defects?).
+
+## CLI / script targets
+
+When the target is a command-line tool or script (no browser, no HTTP API):
+
+- Run commands through the shell with a temporary data directory, never the user's real data.
+- Capture stdout, stderr and the exit code for each case; real output is the evidence.
+- Force the console encoding when relevant (for example UTF-8 vs the legacy code page) and record it.
+- Your shell may differ from the user's real terminal. A case that needs a real interactive terminal stays `Not Run`.
 
 ## Test defect vs product defect
 

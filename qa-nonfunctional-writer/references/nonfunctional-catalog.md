@@ -45,6 +45,13 @@ Black-box checks a QA can run safely on a test environment. For code-level revie
 - Labels and messages consistent with the glossary; no truncated text in other languages or long strings.
 - Right-to-left or non-Latin scripts where supported.
 
+## 6. CLI and local tools (NF-PERF / NF-SEC)
+
+- Performance with growing data: run time and memory at 10x and 100x the normal row count; report the curve, not one number.
+- Data safety: write interrupted midway (kill the process), corrupt or truncated input file, empty file, wrong encoding, read-only folder.
+- Concurrency: two runs on the same data file at once; is data lost or corrupted?
+- Report-only measurements without an approved threshold get status `Informational`.
+
 ## Case row example
 
 ```text

@@ -25,9 +25,13 @@ Adds the tests that functional matrices usually miss. Inside `qa-lifecycle` the 
 2. **Define measurable criteria.** For each case: metric, condition, threshold, source of the threshold. Example: "p95 of `GET /products` below 800 ms at 50 concurrent users, from the SLA".
 3. **Write `qa-artifacts/02b-nonfunctional.md`.** Table: `NF ID · Attribute · Scenario · Metric & threshold · Tool · Environment · Priority · Linked requirement`. Use IDs `NF-PERF-01`, `NF-SEC-01`, `NF-A11Y-01`, `NF-COMP-01`, `NF-USA-01`. Link each to a requirement or risk in the plan.
 4. **Propose tooling** matched to the repo and stack, and ask before adding anything: for example k6 or JMeter for load, axe or Lighthouse for accessibility, Playwright projects for browsers, OWASP ZAP baseline for passive security checks.
-5. **HARD STOP.** Present the table with open threshold questions and wait for approval before running anything heavy.
-6. **Run and record.** Execute approved cases within the safe-run rules. Add a "Non-functional track" section to `03-execution-notes.md` with environment, tool version, exact command, raw output and a results table (`Pass / Fail / Blocked / Not Run`). Compare only against approved thresholds.
+5. **HARD STOP.** Present the table with open threshold questions and wait for approval (this is a second approval inside Phase 2; set `Status: Approved` in `02b-nonfunctional.md`) before running anything heavy. Exemption: a run that takes seconds on a local temp environment does not need the hard stop; say so in the table.
+6. **Run and record.** Execute approved cases within the safe-run rules. Add a "Non-functional track" section to `03-execution-notes.md` with environment, tool version, exact command, raw output and a results table (`Pass / Fail / Blocked / Not Run`). Compare only against approved thresholds. A metric that is only reported (no threshold) gets status `Informational`, not Pass or Fail.
 7. **Hand off.** Failed checks go to `qa-defect-writer` with the measurement as evidence. Summarize for `qa-summary-reporter`.
+
+## CLI / local-tool angle
+
+For a CLI or local tool, also consider: performance as data grows (time and memory with 10x and 100x rows), and data safety (interrupted writes, corrupt or truncated input files, two concurrent runs on the same data file). See the catalog.
 
 ## QA Advisor block (end of response)
 

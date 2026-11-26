@@ -12,7 +12,7 @@ Chooses what to re-test, from evidence, so a small fix does not trigger a full r
 ## Rules
 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
-- **Input:** `qa-artifacts/02-test-matrix.md` with its RTM, `04-defects.md`, and the change set (`git diff`, commit list, release notes or a list from the developer). No matrix → suggest `qa-test-matrix-writer`; without an RTM, say the mapping will be weaker and mark it `[Inferred from code — needs confirmation]`.
+- **Input:** `qa-artifacts/02-test-matrix.md` with its RTM, `04-defects.md` (optional: a fix made before QA, with no defect record, gets a retrospective plan from the diff alone), and the change set (`git diff`, commit list, release notes or a list from the developer). No matrix → suggest `qa-test-matrix-writer`; without an RTM, say the mapping will be weaker and mark it `[Inferred from code — needs confirmation]`.
 - **Anti-hallucination:** never claim a module is "not affected" without evidence from the diff, imports or the RTM. Unknown dependency → treat as possibly affected and say why. Never invent run times; estimate only from past real runs (execution notes), otherwise `[Needs input]`.
 - Never decide that a P0 case can be skipped. Skipping is the user's decision, recorded as `Skipped by user`.
 
@@ -26,8 +26,8 @@ Chooses what to re-test, from evidence, so a small fix does not trigger a full r
    - **Targeted:** every case for changed or defect-fixed areas, plus their direct neighbours.
    - **Full:** everything, recommended only for large changes, release candidates or when the targeted run fails.
 5. **Estimate effort** from execution notes where real timings exist, split Manual vs Auto, and list what can run unattended.
-6. **Write `qa-artifacts/04b-regression-plan.md`:** header (build, date, version, status), change summary, impact table (`Changed area · Impacted requirements · Cases · Why`), the layered case lists, excluded cases with reasons, effort, and entry/exit conditions (for example "stop and report if any smoke case fails").
-7. **Present** the recommendation with a default: "I suggest smoke first, then targeted; full run if smoke or targeted shows a failure". Wait for the user to confirm before handing cases to `qa-e2e-writer`.
+6. **Write `qa-artifacts/04b-regression-plan.md`** (for a single-file diff a short form is enough: change, impacted cases, layer, exit condition): header (build, date, version, status), change summary, impact table (`Changed area · Impacted requirements · Cases · Why`), the layered case lists, excluded cases with reasons, effort, and entry/exit conditions (for example "stop and report if any smoke case fails").
+7. **Present** the recommendation with a default: "I suggest smoke first, then targeted; full run if smoke or targeted shows a failure". Wait for the user to confirm before handing cases to `qa-e2e-writer`. If the test harness cannot run a subset, the user confirms the whole layer first.
 
 ## QA Advisor block (end of response)
 
