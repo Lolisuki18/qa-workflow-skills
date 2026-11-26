@@ -39,6 +39,7 @@ Walk each requirement through this checklist:
 | Dependencies | External services (email, payment, SMS)? Is a sandbox available? |
 | Abuse protection | Rate limiting per IP/account/endpoint? Brute-force and enumeration protection (login, OTP, password reset)? |
 | Observability | Are sensitive actions (permission change, deletion, account lock, login failures) written to an audit log/telemetry so they can be traced? |
+| Output & console (CLI/script targets) | stdout/stderr encoding and code page, exit codes, terminal width, pipes/stdin, locale. Compare the developer's own tests against the spec: what can they not see (for example output captured in memory hides encoding errors)? |
 
 For each finding write one row: requirement ID · issue · type · clarifying question · **suggested default** (so the user can answer "ok"). Rank by impact on testability. If a finding is a "blocker" (tests cannot be written without clarification), list it first.
 
@@ -53,11 +54,12 @@ File structure `01-test-plan.md`: header (phase, date, version, status Draft/App
    - `Auto (browser)`: important, stable, frequently repeated flows (login, checkout, main CRUD) — for regression.
    - `Auto (API)`: business logic, validation, API-level permissions, large data combinations.
    - `Manual`: UX/visual checks, new unstable features, exploratory testing, cases that are hard/expensive to automate, "break the app" scenarios.
+   - CLI, script or library with no browser or HTTP API: automated command-line runs use the `Auto (API)` slot. Add one line to the plan: "Auto (API) = automated non-UI run". Do not route them to `qa-api-tester`.
    - Give a reason for each choice; propose a default if the repo already has tooling (e.g. Playwright detected → use it).
 4. **Environment & test data** — URL/build, DB seed, accounts per role, boundary data to create, simulated services, browsers/devices. Unknown → `[Needs input: ...]`; **never** fill in something like "Chrome 120" yourself.
 5. **Entry / Exit Criteria**
    - Entry: build deployable to the test environment, smoke test passes, data ready, blocker requirements clarified.
-   - Exit: propose thresholds (e.g. 100% P0 pass, no open Blocker/Critical, RTM covers 100% of in-scope requirements). Final thresholds are settled with `qa-summary-reporter`; mark `Proposed — user to confirm`.
+   - Exit: propose thresholds (e.g. 100% P0 pass, no open Blocker/Critical, RTM covers 100% of in-scope requirements). Final thresholds are settled with `qa-summary-reporter`; mark `Proposed — user to confirm`. Values the user confirms win over the default gate; otherwise the stricter one applies.
 6. **Open questions & assumptions** — numbered list, each with a default.
 
 ### Step 4 — Save and present
@@ -81,7 +83,7 @@ See `references/worked-example.md` for a sample output format (fictional data; r
 
 ## Completion checklist
 
-- [ ] Every requirement has an ID; the audit covered all 10 groups
+- [ ] Every requirement has an ID; the audit covered all groups (Output & console only for CLI/script targets)
 - [ ] Every finding has a question + suggested default
 - [ ] Scope includes Out-of-scope with reasons
 - [ ] Every area has an Execution Type and a reason

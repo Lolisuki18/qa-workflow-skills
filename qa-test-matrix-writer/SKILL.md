@@ -40,6 +40,7 @@ Generates a systematic test case table and an RTM proving requirement coverage. 
 | `Test Steps` | Numbered 1., 2., 3.; one action per step; followable by someone new to the system |
 | `Test Data` | Concrete value per input (including boundary values); never a vague "valid data" |
 | `Expected Result` | Observable and verifiable (what is shown, saved, which status code); never "works correctly" |
+| `Oracle` | Where the Expected Result comes from: `spec` / `approved default` / `code behavior` / `none`. A default suggested by QA and accepted at approval is `approved default`, never `spec`. `none` = observe and report only (status `Informational` when run) |
 | `Priority` | `P0`–`P3` |
 | `Execution Type` | `Manual` / `Auto (browser)` / `Auto (API)` |
 
@@ -52,7 +53,7 @@ Generates a systematic test case table and an RTM proving requirement coverage. 
 | P2 | Secondary functionality, medium risk | Filter/sort, detailed error messages, rare boundaries |
 | P3 | Presentation, convenience, low risk | Alignment, hint text, display order |
 
-How to derive: Risk H×H → P0; H×M or M×H → P1; M×M or L×H → P2; otherwise P3. Risk data comes from `01-test-plan.md`; if the user adjusts it, follow the user.
+How to derive: Risk H×H → P0; H×M or M×H → P1; M×M or L×H → P2; otherwise P3. Risk data comes from `01-test-plan.md`. The risk derivation is the default; the P0 definition above (core flow, money, security, data loss) can also set P0 and overrides upward. The user may raise (or adjust) any priority; follow the user.
 
 ## Execution Type hints (when the plan has not specified)
 
@@ -76,10 +77,10 @@ Rules:
 
 ## Output format
 
-Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts overview, 10-column test case table, RTM, uncovered requirements/contradictions). If the user wants CSV (or TestRail/Excel/Sheets import):
+Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts overview, 11-column test case table, RTM, uncovered requirements/contradictions). If the user wants CSV (or TestRail/Excel/Sheets import):
 
 - Write `qa-artifacts/02-test-matrix.csv`, UTF-8 **with BOM** so Excel reads accents correctly, `,` as delimiter.
-- Header row with exactly the 10 columns above, one row per test case, no merged cells.
+- Header row with exactly the 11 columns above, one row per test case, no merged cells.
 - A cell containing a comma, double quote or newline must be wrapped in `"..."`, with inner double quotes doubled `""`.
 - Multiple steps in one cell: separate by a real newline inside the quoted cell, or ` | ` if the user wants a single line; ask if unclear.
 - Ask whether extra TestRail columns (Section, Type, Estimate) are needed — do not add them on your own.
@@ -90,7 +91,8 @@ Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts 
 1. Summary: total cases; distribution by Priority and Execution Type (counted from the real table); RTM coverage %; requirements missing which case types.
 2. Contradictions/clarifications found during design, each with a suggested default.
 3. **QA Advisor** block: why these case groups, which blind spots (permissions, network drop, double-click, boundary data) are covered or not, the default you will choose.
-4. **HARD STOP:** wait for approval. Do not start execution (Phase 3) before approval.
+4. **HARD STOP:** wait for approval. Do not start execution (Phase 3) before the matrix is `Approved`. If `02b-nonfunctional.md` exists, its table needs its own approval.
+5. A defect raised against an `approved default` oracle must say so (see `qa-defect-writer`).
 
 ## Worked example
 
@@ -99,7 +101,7 @@ See `references/worked-example.md` for a sample output format (fictional data; r
 ## Completion checklist
 
 - [ ] Read `references/test-design-techniques.md` and used fitting techniques
-- [ ] All 10 columns; numbered Steps; concrete Test Data; verifiable Expected Result
+- [ ] All 11 columns (including `Oracle`); numbered Steps; concrete Test Data; verifiable Expected Result
 - [ ] Each requirement has happy + negative (+ permission if relevant) or a reason for N/A
 - [ ] RTM percentage computed from real data; orphan cases listed (if any)
 - [ ] No invented error messages/limits; gaps marked `[Needs input: ...]`

@@ -10,9 +10,13 @@ Quantitative thresholds to choose **Go / Conditional Go / No-Go**. These are **p
 | Executed Rate | (Passed + Failed) / Total |
 | P0 Pass Rate | P0 Passed / P0 Total |
 | RTM Coverage | In-scope requirements with full coverage / total in-scope requirements |
-| Open Defect | Status ∈ {New, Open, Fixed (not yet re-tested), Re-test, Reopened} |
+| Open Defect | Status ∈ {New, Open, Fixed (not yet re-tested), Re-test, Reopened}. QA cannot close defects: list `Re-test` ones separately as "Re-test (awaiting user close)" |
 
-`Not Run` and `Blocked` are **not** counted as Passed.
+`Not Run` and `Blocked` are **not** counted as Passed. `Informational` cases are excluded from every rate and listed separately.
+
+A criterion with no applicable cases (for example no permission cases because the target has no roles) is reported as `Go (N/A, <reason>)`, not silently dropped.
+
+If the plan's exit criteria and these defaults differ: values the user confirmed win; otherwise the stricter applies.
 
 ## Default thresholds
 

@@ -15,9 +15,9 @@ Consolidates real results into a report and gives a release verdict. Inside `qa-
 - **Read first:** `references/release-gate-criteria.md` (thresholds for Go / Conditional Go / No-Go).
 - **Real data only:** valid sources are (1) `qa-artifacts/02-test-matrix.md`, `03-execution-notes.md`, `04-defects.md`, (2) figures the user provides directly. Never estimate, never "round to look nice", never infer Pass from the absence of Fail.
 - **Missing data:** state which items have no data (a "Missing data" table). Never fill in numbers. If so much is missing that no conclusion is possible → verdict `Cannot conclude` with a list of what to do, rather than guessing.
-- Calculate only from the real tables; show the formula and source (file/line) so readers can check. `Not Run` and `Blocked` cases are **not** counted as Pass.
+- Calculate only from the real tables; show the formula and source (file/line) so readers can check. `Not Run` and `Blocked` cases are **not** counted as Pass. `Informational` cases (observed, no oracle or threshold) are excluded from the pass rate and listed separately.
 - Contradictions: if two sources disagree (e.g. defect Closed but its TC still Fail) → say so, ask the user, never pick one yourself.
-- Thresholds already fixed by the user/Test Plan take priority; the defaults in the reference file are only proposals.
+- Thresholds already fixed by the user/Test Plan take priority; the defaults in the reference file are only proposals. Plan exit criteria that the user has not confirmed: apply the stricter of plan and default.
 
 ## Process
 
@@ -25,7 +25,7 @@ Consolidates real results into a report and gives a release verdict. Inside `qa-
 2. **Check completeness:** results per TC? defect list with Severity/Status? RTM? List what is missing.
 3. **Compute:**
    - Execution: `Total`, `Passed`, `Failed`, `Blocked`, `Not Run`. `Pass Rate = Passed / Total` (and, where useful, `Passed / (Total − Not Run − Blocked)` labeled "of executed cases"). Also by Priority (especially P0, P1).
-   - Defects: count by Severity × Status; open Blocker/Critical; open defects by Priority.
+   - Defects: count by Severity × Status; open Blocker/Critical; open defects by Priority. QA cannot close defects, so list `Re-test` ones separately as "Re-test (awaiting user close)" and ask the user to close the verified ones before the final report.
    - RTM: requirements fully covered / total; requirements with Failed/Not Run cases; requirements with no cases.
 4. **Compare against thresholds** in the reference → choose the verdict. State **each** criterion: met/not met + figure.
 5. **Residual risks:** open defects, Blocked/Not Run cases, lightly tested areas (compare with the Test Plan's Risk Analysis), environment limits, unconfirmed assumptions.
@@ -44,6 +44,7 @@ Conditions (Conditional Go only): mandatory tasks, owner, due date, how to verif
 
 ## 2. Execution Summary
 | Total | Passed | Failed | Blocked | Not Run | Pass Rate |
+Informational cases: listed separately, not in Total for Pass Rate.
 By Priority: a P0/P1/P2/P3 table with the same columns.
 
 ## 3. Defect Statistics
