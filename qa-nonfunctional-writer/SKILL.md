@@ -23,11 +23,15 @@ Adds the tests that functional matrices usually miss. Inside `qa-lifecycle` the 
 
 1. **Select attributes.** From the plan and the feature, choose which of the five groups apply (`references/nonfunctional-catalog.md`). Report the choice and why the rest are out of scope.
 2. **Define measurable criteria.** For each case: metric, condition, threshold, source of the threshold. Example: "p95 of `GET /products` below 800 ms at 50 concurrent users, from the SLA".
-3. **Write `qa-artifacts/02b-nonfunctional.md`.** Include the standard header with `- **Status:** Draft` on its own line (required by `qa-gate.py`) and table: `NF ID · Attribute · Scenario · Metric & threshold · Tool · Environment · Priority · Linked requirement`. Use IDs `NF-PERF-01`, `NF-SEC-01`, `NF-A11Y-01`, `NF-COMP-01`, `NF-USA-01`. Link each to a requirement or risk in the plan.
+3. **Write `qa-artifacts/02b-nonfunctional.md`.** Include the standard header with `- **Status:** Draft` on its own line (required by `qa-gate.py`) and table: `NF ID · Attribute · Scenario · Metric & threshold · Tool · Environment · Priority · Linked requirement`. Use IDs `NF-PERF-01`, `NF-SEC-01`, `NF-A11Y-01`, `NF-COMP-01`, `NF-USA-01`. Link each to a requirement or risk in the plan. Use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`.
 4. **Propose tooling** matched to the repo and stack, and ask before adding anything: for example k6 or JMeter for load, axe or Lighthouse for accessibility, Playwright projects for browsers, OWASP ZAP baseline for passive security checks.
-5. **HARD STOP.** Present the table with open threshold questions and wait for explicit approval (this is a second approval inside Phase 2; update `Status: Draft` → `Status: Approved` in `02b-nonfunctional.md`) before running anything heavy. Note: `qa-gate.py` blocks writing `03-execution-notes.md` while `02b-nonfunctional.md` has `Status: Draft`, so for trivial seconds-long local checks either get quick approval first or omit `02b-nonfunctional.md` and record them directly in `02-test-matrix.md`.
+5. **HARD STOP.** Present the table with open threshold questions and wait for explicit approval (this is a second approval inside Phase 2; update `Status: Draft` → `Status: Approved` in `02b-nonfunctional.md`) before running anything heavy. Note: `qa-gate.py` blocks writing `03-execution-notes.md` while `02b-nonfunctional.md` has `Status: Draft`. Default: if every NF case is a local run under ~10 s, skip `02b`, record them in `02-test-matrix.md` and say so once.
 6. **Run and record.** Execute approved cases within the safe-run rules. Add a "Non-functional track" section to `03-execution-notes.md` with environment, tool version, exact command, raw output and a results table (`Pass / Fail / Blocked / Not Run`). Compare only against approved thresholds. A metric that is only reported (no threshold) gets status `Informational`, not Pass or Fail.
 7. **Hand off.** Failed checks go to `qa-defect-writer` with the measurement as evidence. Summarize for `qa-summary-reporter`.
+
+## Browser storage / static browser app angle
+
+For a browser app that keeps data in `localStorage` or IndexedDB, or a static app with no server, also consider: storage disabled or blocked (private mode, policy), quota exceeded, corrupt or hand-edited JSON in storage, many records (time and memory as data grows), and two tabs writing the same keys. Record which browser or pane you actually used.
 
 ## CLI / local-tool angle
 

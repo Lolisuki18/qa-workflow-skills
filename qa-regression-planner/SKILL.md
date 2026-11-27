@@ -26,8 +26,8 @@ Chooses what to re-test, from evidence, so a small fix does not trigger a full r
    - **Targeted:** every case for changed or defect-fixed areas, plus their direct neighbours.
    - **Full:** everything, recommended only for large changes, release candidates or when the targeted run fails.
 5. **Estimate effort** from execution notes where real timings exist, split Manual vs Auto, and list what can run unattended.
-6. **Write `qa-artifacts/04b-regression-plan.md`** (if it already exists, ask before overwriting or appending; for a single-file diff a short form is enough: change, impacted cases, layer, exit condition): header (build, date, version, status Draft/Approved), change summary, impact table (`Changed area · Impacted requirements · Cases · Risk · Why`), the layered case lists, excluded cases with reasons, effort, and entry/exit conditions (for example "stop and report if any smoke case fails").
-7. **HARD STOP:** Present the recommendation with a default: "I suggest smoke first, then targeted; full run if smoke or targeted shows a failure". Wait for explicit approval (`approved`, `ok proceed`, `duyệt`) before handing cases to `../qa-e2e-writer/`. If the test harness cannot run a subset, the user confirms the whole layer first.
+6. **Write `qa-artifacts/04b-regression-plan.md`** (if the file exists and this is a re-test round, append a `Round N` section and bump the version without asking; ask only when it belongs to another module or build; use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`), default `qa-artifacts/`; for a single-file diff a short form is enough: change, impacted cases, layer, exit condition): header (build, date, version, status Draft/Approved), change summary, impact table (`Changed area · Impacted requirements · Cases · Risk · Why`), the layered case lists, excluded cases with reasons, effort, and entry/exit conditions (for example "stop and report if any smoke case fails").
+7. **Confirm the layer (not an approval stop):** present the plan and a default: "I suggest smoke first, then targeted; full run if smoke or targeted shows a failure". Proceed on `ok` / `approved` / `duyệt` before handing cases to `../qa-e2e-writer/`. For a single-file diff with only smoke/targeted layers, state the plan and continue without stopping. If the test harness cannot run a partial set, the user confirms the whole layer first.
 
 ## QA Advisor block (end of response)
 
@@ -42,4 +42,4 @@ See `references/worked-example.md` for a sample output format (fictional data; r
 - [ ] Each selected case traces to a changed area, a fixed defect or a P0 rule
 - [ ] Each excluded case has a stated reason; no P0 excluded silently
 - [ ] No estimate or "not affected" claim without evidence
-- [ ] `04b-regression-plan.md` saved; user confirmed the layer to run
+- [ ] `04b-regression-plan.md` saved; layer confirmed (or stated, for a single-file diff)

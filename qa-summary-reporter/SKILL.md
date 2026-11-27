@@ -13,7 +13,7 @@ Consolidates real results into a report and gives a release verdict. Inside `qa-
 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
 - **Read first:** `references/release-gate-criteria.md` (thresholds for Go / Conditional Go / No-Go).
-- **Real data only:** valid sources are (1) `qa-artifacts/02-test-matrix.md`, `03-execution-notes.md`, `04-defects.md`, (2) figures the user provides directly. Never estimate, never "round to look nice", never infer Pass from the absence of Fail.
+- **Real data only:** valid sources are (1) `qa-artifacts/02-test-matrix.md`, `03-execution-notes.md`, `04-defects.md`, (2) figures the user provides directly. In a re-test round the `Round N` sections of `02b`, `03`, `03c`, `04`, `04b` are read too. Never estimate, never "round to look nice", never infer Pass from the absence of Fail.
 - **Missing data:** state which items have no data (a "Missing data" table). Never fill in numbers. If so much is missing that no conclusion is possible → verdict `Cannot conclude` with a list of what to do, rather than guessing.
 - Calculate only from the real tables; show the formula and source (file/line) so readers can check. `Not Run` and `Blocked` cases are **not** counted as Pass. `Informational` cases (observed, no oracle or threshold) are excluded from the pass rate and listed separately.
 - Contradictions: if two sources disagree (e.g. defect Closed but its TC still Fail) → say so, ask the user, never pick one yourself.
@@ -25,12 +25,12 @@ Consolidates real results into a report and gives a release verdict. Inside `qa-
 2. **Check completeness:** results per TC? defect list with Severity/Status? RTM? List what is missing.
 3. **Compute:**
    - Execution: `Total`, `Passed`, `Failed`, `Blocked`, `Not Run`. `Pass Rate = Passed / Total` (and, where useful, `Passed / (Total − Not Run − Blocked)` labeled "of executed cases"). Also by Priority (especially P0, P1).
-   - Defects: count by Severity × Status; open Blocker/Critical; open defects by Priority. QA cannot close defects, so list `Re-test` ones separately as "Re-test (awaiting user close)" and **Hard stop** to ask the user to close the verified ones before the final report.
+   - Defects: count by Severity × Status; open Blocker/Critical; open defects by Priority. QA cannot close defects, so list `Re-test` ones separately as "Re-test (awaiting user close)" and ask the user, in the same message as the report, to close the verified ones. With no answer the verdict reads "provisional until closed". This is not an approval stop: do not stall Phase 5. Not Run cases that need a person or device are listed as "Not run: needs person" (see the gate reference).
    - RTM: requirements fully covered / total; requirements with Failed/Not Run cases; requirements with no cases.
 4. **Compare against thresholds** in the reference → choose the verdict. State **each** criterion: met/not met + figure.
 5. **Residual risks:** open defects, Blocked/Not Run cases, lightly tested areas (compare with the Test Plan's Risk Analysis), environment limits, unconfirmed assumptions.
 6. **Next actions:** concrete tasks, suggested owner/due date if known (unknown → `[Needs input]`).
-7. **Write `qa-artifacts/05-summary-report.md`** (if it already exists or belongs to another module, ask before overwriting) and present a ≤ 20-line summary in chat.
+7. **Write `qa-artifacts/05-summary-report.md`** (if the file exists and this is a re-test round, append a `Round N` section and bump the version without asking; ask only when it belongs to another module or build) and present a ≤ 20-line summary in chat. Use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`.
 
 ## Report structure
 
