@@ -12,7 +12,7 @@ Quantitative thresholds to choose **Go / Conditional Go / No-Go**. These are **p
 | RTM Coverage | In-scope requirements with full coverage / total in-scope requirements |
 | Open Defect | Status ∈ {New, Open, Fixed (not yet re-tested), Re-test, Reopened}. QA cannot close defects: list `Re-test` ones separately as "Re-test (awaiting user close)" |
 
-`Not Run` and `Blocked` are **not** counted as Passed. `Informational` cases are excluded from every rate and listed separately.
+`Not Run` and `Blocked` are **not** counted as Passed. `Informational` cases (including `Oracle: none` exploratory checks) are excluded from every rate and listed separately. Failures against an `approved default` (when no formal SRS exists) **do** count toward Pass Rate and open defects unless the user explicitly reclassifies them as `Informational`.
 
 A criterion with no applicable cases (for example no permission cases because the target has no roles) is reported as `Go (N/A, <reason>)`, not silently dropped.
 

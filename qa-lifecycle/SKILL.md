@@ -23,7 +23,7 @@ Coordinates five testing phases by calling the right sub-skill at the right time
 Before Phase 1, do these in order:
 
 1. Identify the test target: which feature/module/release? Where are the requirements (SRS, Use Case, ticket, codebase)? If unclear, ask at most 3 short questions with default answers.
-2. Check whether `qa-artifacts/` exists. If old files exist, ask: continue from them, isolate under `qa-artifacts/<module>/` (if they belong to another module), or start over (never overwrite silently).
+2. Check whether `qa-artifacts/` exists. If old files exist, ask: continue from them, isolate under `qa-artifacts/<module>/` (if they belong to another module — pass that `<module>/` folder to every sub-skill in this run), or start over (never overwrite silently).
 3. Check `.gitignore` and `git ls-files qa-artifacts`. If `qa-artifacts/` is not yet tracked or configured, ask **once**: "Should `qa-artifacts/` be (a) added to `.gitignore` or (b) kept in the repo so the team can see it?" Suggested default: (b) if reports are shared with a team/client; (a) if personal use only. Follow the user's choice; do not decide for them.
 4. Summarize the understood scope in 3–5 lines and confirm.
 

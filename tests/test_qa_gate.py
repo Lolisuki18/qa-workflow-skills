@@ -102,6 +102,23 @@ class QaGateTests(unittest.TestCase):
     def test_fails_open_on_bad_input(self):
         self.assertEqual(self.run_gate("x", raw="not json").returncode, 0)
 
+    def test_namespaced_module_blocks_and_allows_independently(self):
+        (self.root / "qa-artifacts" / "vault").mkdir()
+        self.write("01-test-plan.md", "Approved")
+        self.write("02-test-matrix.md", "Approved")
+        self.write("vault/01-test-plan.md", "Approved")
+        self.write("vault/02-test-matrix.md", "Draft")
+        self.assertEqual(self.run_gate("qa-artifacts/03-execution-notes.md").returncode, 0)
+        self.assertEqual(self.run_gate("qa-artifacts/vault/03-execution-notes.md").returncode, 2)
+        self.write("vault/02-test-matrix.md", "Approved")
+        self.assertEqual(self.run_gate("qa-artifacts/vault/03-execution-notes.md").returncode, 0)
+
+    def test_bash_write_to_namespaced_execution_notes_blocked(self):
+        (self.root / "qa-artifacts" / "vault").mkdir()
+        self.write("vault/01-test-plan.md", "Approved")
+        self.write("vault/02-test-matrix.md", "Draft")
+        self.assertEqual(self.run_bash("echo hi > qa-artifacts/vault/03-execution-notes.md").returncode, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

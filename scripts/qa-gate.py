@@ -30,7 +30,7 @@ from pathlib import Path
 
 STATUS_RE = re.compile(r"(?im)^[\s>*\-]*\**status\**\s*:\s*\**\s*(draft|approved)")
 NEEDS = [(re.compile(r"^02b?-"), ["01-"]), (re.compile(r"^03-"), ["02-", "02b-"])]
-BASH_TARGET_RE = re.compile(r"qa-artifacts[/\\]+(0(?:2b?|3)-[\w.\-]*)")
+BASH_TARGET_RE = re.compile(r"qa-artifacts[/\\]+(?:([\w.\-]+)[/\\]+)?(0(?:2b?|3)-[\w.\-]*)")
 BASH_WRITE_RE = re.compile(
     r">>?\s*['\"]?\S*qa-artifacts|\btee\b[^|;&\n]*qa-artifacts|\bsed\s+(?:-\w+\s+)*-i|"
     r"\b(?:Set-Content|Add-Content|Out-File)\b|\bpython3?\b.*(?:open\(|write)", re.I | re.S)
@@ -80,8 +80,9 @@ def main() -> int:
         if isinstance(command, str):
             if not BASH_WRITE_RE.search(command):
                 return 0
-            for name in BASH_TARGET_RE.findall(command):
-                if check(art, root, name) == 2:
+            for mod, name in BASH_TARGET_RE.findall(command):
+                target_art = (art / mod) if mod else art
+                if target_art.is_dir() and check(target_art, root, name) == 2:
                     return 2
             return 0
         file_path = tool_input.get("file_path") or tool_input.get("path")
@@ -94,9 +95,9 @@ def main() -> int:
             rel = target.relative_to(art)
         except ValueError:
             return 0
-        if len(rel.parts) != 1:
+        if len(rel.parts) not in (1, 2):
             return 0
-        return check(art, root, rel.name)
+        return check(target.parent, root, rel.name)
     except Exception:
         return 0
 
