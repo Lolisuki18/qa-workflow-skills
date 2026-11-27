@@ -4,6 +4,14 @@ Format: newest first. Skills are prompts, so "breaking" means a change in behavi
 
 ## Unreleased (next: 0.2.0)
 
+### Changed (friction fixes from an HTTP API run)
+- `release-gate-criteria.md`: small-N rule (< ~10 cases in a class): judge by defect severity, not the percentage; Minor-only failures give Conditional Go.
+- `qa-lifecycle` and `qa-nonfunctional-writer` agree: `02b` may be skipped when all NF runs are under ~10 s.
+- Matrix regeneration keeps `Status: Approved` when cases do not change; changed cases need a one-line re-approval (`qa-lifecycle`, `qa-test-matrix-writer`).
+- Module folder: omit `<module>/` when no other module's artifacts exist; vague replies are not approval.
+- `qa-api-tester`: stdlib HTTP handler hint, dropped connection recorded as a defect, wrong-type JSON and non-ASCII header probes.
+- README: eval status reflects the recorded smoke runs.
+
 ### Added
 - Consistency fixes: `qa-regression-planner` honours the caller's folder; re-test rounds list `02b`/`03c` too; release-gate criteria define "provisional" and `Re-test` defects like the suite.
 - Docs and evals aligned with module folders: phase-templates paths are relative to the module folder; new behavior check for `Round N` appends and module runs; README says four optional skills.

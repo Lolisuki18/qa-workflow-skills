@@ -39,6 +39,8 @@ If the plan's exit criteria and these defaults differ: values the user confirmed
 | Defects Fixed but not Re-tested | 0 | Allowed only for Minor/Trivial | Present at Major or above |
 | Permissions/security | All cases run and Pass | Same as Go | Any failing or unrun case |
 
+**Small-N rule (< ~10 cases in a priority class):** one failed case moves that class's rate by more than 10 points (1 of 7 = 85.7%), so the percentage alone is not a fair gate. For such a class, judge by the severity of the failing cases' defects instead of the rate: no open Blocker/Critical/Major and every failing case has a Minor/Trivial defect → **Conditional Go**, with the defects listed as conditions. Otherwise apply the normal cells. State the rule and the numbers in the report (for example "P1: 6/7 = 85.7%, small-N rule applied, 1 Minor defect DEF-002"). Classes with ≥ 10 cases keep the strict percentage gates. P0 stays 100% regardless of N.
+
 > **Any No-Go cell true → No-Go.** If no No-Go cell is true but not every Go cell is met → **Conditional Go**. Only when **all** Go cells are met → **Go**.
 
 ## How to choose the verdict (algorithm)

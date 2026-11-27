@@ -128,7 +128,7 @@ Each skill has a `references/worked-example.md` built on one fictional scenario 
 
 ## Self-check (evals)
 
-See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model. Status: the eval sets are written but their results are not yet recorded, and `python scripts/validate.py` (also run by GitHub Actions) checks structure only: names, descriptions, line counts, references. `scripts/run-evals.py` needs an agent CLI that is not verified here.
+See [evals/](evals/README.md): trigger prompts (should / should not fire each skill) and behavior checks (phase label, hard stops, anti-hallucination). `scripts/run-evals.py` can run the trigger prompts automatically against an agent CLI (see the evals README for caveats). Results vary by agent and model. Status: the eval sets are written; behaviour smoke runs for the four newer skills are recorded in the evals README results log, the trigger prompts and the older six skills are not yet run, and `python scripts/validate.py` (also run by GitHub Actions) checks structure only: names, descriptions, line counts, references. `scripts/run-evals.py` needs an agent CLI that is not verified here.
 
 ## Sibling repos
 

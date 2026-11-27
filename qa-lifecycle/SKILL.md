@@ -13,7 +13,7 @@ Coordinates five testing phases by calling the right sub-skill at the right time
 
 1. **Phase anchor:** the first line of EVERY response must be `[QA Phase X/5: Phase Name]` (e.g. `[QA Phase 2/5: Test Matrix]`). Before any phase starts (gathering context): `[QA Phase 0/5: Kickoff]`. This label anchors the rules in long conversations.
 2. **Anti-hallucination:** never invent Pass/Fail numbers, environments, browser versions, reproduction steps or API/endpoint names. Missing data → write `[Needs input: ...]` or ask. Never pretend a test was run.
-3. **Hard Stop:** at the end of Phase 1 and Phase 2, stop completely and wait for explicit approval ("approved", "ok proceed", "duyệt"). Silence or a side question is not approval. These are the only approval stops: the regression-layer confirmation (Phase 4) and the Phase 5 defect-closure question are asked but are **not** approval stops and must not stall the run. Phase 3 must not start before `02-test-matrix.md` is `Approved`. If `02b-nonfunctional.md` exists, its design table is a **second approval inside Phase 2** (`Status: Approved` in that file too) before any heavy run.
+3. **Hard Stop:** at the end of Phase 1 and Phase 2, stop completely and wait for explicit approval ("approved", "ok proceed", "duyệt"). Silence, a side question or a vague reply ("sounds good", "looks fine", "ok I guess") is not approval: ask once for an explicit word. These are the only approval stops: the regression-layer confirmation (Phase 4) and the Phase 5 defect-closure question are asked but are **not** approval stops and must not stall the run. Phase 3 must not start before `02-test-matrix.md` is `Approved`. If `02b-nonfunctional.md` exists, its design table is a **second approval inside Phase 2** (`Status: Approved` in that file too) before any heavy run. `02b` is optional: when every NF case is a local run under ~10 s, `qa-nonfunctional-writer` may skip it and record those cases in `02-test-matrix.md` (say so once).
 4. **Proactive advisor:** see below.
 5. **Save artifacts:** every output goes to `qa-artifacts/` (or `qa-artifacts/<module>/`, see "Module run"), not just to the chat.
 6. **Language:** reply and write artifacts in the language the user uses (English or Vietnamese). Keep the phase label, IDs, column names and the header key `Status:` (the hook only reads that English key) in English, and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
@@ -42,7 +42,9 @@ qa-artifacts/
 └── 05-summary-report.md     # Phase 5
 ```
 
-**Module run:** when old files belong to another module, or the user tests several modules, use `qa-artifacts/<module>/` with the same file names and tools under `qa-artifacts/<module>/tools/`. Tell every sub-skill the folder to use; each module has its own approvals. A repo with a single module omits `<module>/`.
+**Module run:** when old files belong to another module, or the user tests several modules, use `qa-artifacts/<module>/` with the same file names and tools under `qa-artifacts/<module>/tools/`. Tell every sub-skill the folder to use; each module has its own approvals. Omit `<module>/` when no other module's artifacts exist (including a repo with one surface, such as a single API); ask once which folder to use only when another module's artifacts already exist.
+
+**Matrix regeneration:** regenerating or correcting `02-test-matrix.md` (for example from a case-list script) without adding, removing or changing the meaning of cases keeps `Status: Approved`; the generator must write the header from the previous file, not a fixed `Draft`. Adding, removing or changing the meaning of cases (including an expected result) needs re-approval: bump the version and ask in one line ("Matrix v0.3 changes TC-X expected result: approved?"); this is not a full stop. `qa-gate.py` only checks the `Status:` line, so a preserved header passes and a reset to `Draft` blocks Phase 3.
 
 Each file starts with a header: phase name, date, version, status (`Draft` / `Approved`), requirement source. Detailed templates per file are in `references/phase-templates.md` — read it when starting each phase.
 
@@ -66,7 +68,7 @@ Whichever way it runs, keep this skill's invariant rules (phase label, anti-hall
 ### Phase 2/5 — Test Matrix (test case design)
 - Call skill `qa-test-matrix-writer`.
 - Output: `02-test-matrix.md` with the full test case table plus an RTM proving requirement coverage.
-- If the plan lists non-functional attributes, `qa-nonfunctional-writer` adds `02b-nonfunctional.md`; its design table needs its own approval (second approval inside Phase 2).
+- If the plan lists non-functional attributes, `qa-nonfunctional-writer` adds `02b-nonfunctional.md` (or skips it when all NF runs are under ~10 s and records the cases in the matrix); its design table needs its own approval (second approval inside Phase 2).
 - **HARD STOP:** report case counts by Priority/Execution Type and any uncovered requirements; wait for approval of the matrix (and of 02b when it exists). Do not start Phase 3 before the matrix is `Approved`.
 
 ### Phase 3/5 — Execution & Automation

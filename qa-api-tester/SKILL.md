@@ -26,7 +26,7 @@ Before reading `Auto (API)` rows from `02-test-matrix.md`, check the actual code
 
 ## Process
 
-1. **Inventory.** Find the spec (`openapi.*`, `swagger.*`, Postman collection) or read routers/controllers/DTOs (including Next.js `app/api/**/route.ts`; `"use server"` UI mutations go to `../qa-e2e-writer/` unless exposed as HTTP routes). Produce a table: `Method · Path · Auth · Request fields (required/optional) · Success status · Error statuses` with `file:line` or spec location. Mark undocumented behavior `[Needs input]`.
+1. **Inventory.** Find the spec (`openapi.*`, `swagger.*`, Postman collection) or read routers/controllers/DTOs (including Next.js `app/api/**/route.ts`; `"use server"` UI mutations go to `../qa-e2e-writer/` unless exposed as HTTP routes). Produce a table: `Method · Path · Auth · Request fields (required/optional) · Success status · Error statuses` with `file:line` or spec location. Mark undocumented behavior `[Needs input]`. Stdlib or raw HTTP handlers (`http.server`, `BaseHTTPRequestHandler`, no framework) have no router: read the `do_GET`/`do_POST` branches, and do not assume automatic 404/405/validation; probe them (unknown path, unsupported method, bad body).
 2. **Select cases.** Take the Auto (API) rows of the matrix. For endpoints with no case, report the gap and propose cases using `references/api-test-checklist.md`; do not silently add them to the matrix, ask first.
 3. **Choose tooling.** Use what the repo already has (Postman/Newman, `pytest` + `requests`, `node:test` + `fetch`, `supertest`, REST-assured, Playwright). None → propose Playwright's `APIRequestContext` if Playwright is present, otherwise the simplest runner for the stack (e.g. built-in `node:test` + `fetch` or Python `unittest` + `urllib`), and ask before adding dependencies.
 4. **Write the tests.** One test per case, TC ID in the title. Independent data: each test creates what it needs and cleans up, or uses unique ids. Assert status, response schema/required fields, key values, and error body shape. No assertion on volatile fields (timestamps, generated ids) beyond type and format.
@@ -37,7 +37,8 @@ Before reading `Auto (API)` rows from `02-test-matrix.md`, check the actual code
 ## What a good API case checks
 
 - Correct status code and body for the happy path; consistent error format for each failure.
-- Validation: required, type, length, format, boundary, unknown fields.
+- Validation: required, type, length, format, boundary, unknown fields; wrong-type JSON fields (`null`, number, array where a string is expected) and malformed or non-ASCII headers (for example a non-ASCII Bearer token) are standard probes.
+- Dropped connection or empty reply (no HTTP status): record it as a Fail with the exact request and the client error (for example `RemoteDisconnected`), reproduce once by hand, and hand it to Phase 4 as a defect; never retry silently or call it a "network error".
 - AuthN/AuthZ: no token, expired token, wrong role, another user's resource (object-level access).
 - Idempotency and duplicates: repeat POST/PUT, concurrent updates.
 - Pagination, filtering, sorting edges; empty results; very large payloads.

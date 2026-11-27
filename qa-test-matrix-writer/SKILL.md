@@ -92,7 +92,8 @@ Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts 
 2. Contradictions/clarifications found during design, each with a suggested default.
 3. **QA Advisor** block: why these case groups, which blind spots (permissions, network drop, double-click, boundary data) are covered or not, the default you will choose.
 4. **HARD STOP:** wait for approval. Do not start execution (Phase 3) before the matrix is `Approved`. If `02b-nonfunctional.md` exists, its table needs its own approval.
-5. A defect raised against an `approved default` oracle must say so (see `qa-defect-writer`).
+5. **Regeneration:** if you generate the table from a script, the script must read the previous file's header (`Status`, version) and write it back. A regeneration or correction that does not add, remove or change the meaning of cases keeps `Status: Approved`. Adding, removing or changing cases (including expected results) bumps the version and needs re-approval: a one-line ask, not a full stop. A reset to `Draft` makes `qa-gate.py` block Phase 3.
+6. A defect raised against an `approved default` oracle must say so (see `qa-defect-writer`).
 
 ## Worked example
 
