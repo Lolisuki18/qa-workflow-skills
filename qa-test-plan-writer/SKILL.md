@@ -55,7 +55,7 @@ File structure `01-test-plan.md`: header (`- **Phase:** ...`, `- **Date:** ...`,
    - `Auto (browser)`: important, stable, frequently repeated flows (login, checkout, main CRUD) — for regression.
    - `Auto (API)`: business logic, validation, API-level permissions, large data combinations.
    - `Manual`: UX/visual checks, new unstable features, exploratory testing, cases that are hard/expensive to automate, "break the app" scenarios.
-   - CLI, script or library with no browser or HTTP API: automated command-line runs use the `Auto (API)` slot. Add one line to the plan: "Auto (API) = automated non-UI run". Do not route them to `qa-api-tester`.
+   - CLI-only, script or library with no browser or HTTP API: automated command-line runs use the `Auto (API)` slot. Add one line to the plan: "Auto (API) = automated non-UI run". Do not route them to `qa-api-tester`. For hybrid targets (both HTTP API and CLI), route HTTP endpoints to `qa-api-tester` and CLI runs to `qa-e2e-writer`.
    - Give a reason for each choice; propose a default if the repo already has tooling (e.g. Playwright detected → use it).
 4. **Environment & test data** — URL/build, DB seed, accounts per role, boundary data to create, simulated services, browsers/devices. Unknown → `[Needs input: ...]`; **never** fill in something like "Chrome 120" yourself.
 5. **Entry / Exit Criteria**
