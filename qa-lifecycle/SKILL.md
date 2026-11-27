@@ -100,8 +100,9 @@ No theory dumps; every piece of advice must tie to the feature being tested.
 
 For a target under ~500 lines or with one actor, keep the same artifact set but make it compact:
 
-- Matrix columns: `id | module | requirement | steps | expected | oracle | priority | type`.
+- Keep the same 11-column matrix structure (`id | req | module | title | pre | steps | data | expected | oracle | priority | type`) so it stays aligned with `qa-test-matrix-writer`.
 - Skip advisor blocks that would all say N/A; write "advisor: nothing applicable" once.
+- List skills considered and skipped with reasons in the handover note.
 - You may generate the matrix from a case list script, so the table and the runner cannot drift. Keep helper scripts under `qa-artifacts/tools/`.
 - The hard stops still apply.
 

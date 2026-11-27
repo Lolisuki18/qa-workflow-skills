@@ -55,7 +55,7 @@ Templates for the 5 files in `qa-artifacts/`. Anywhere real data is missing, wri
 ## 1. Overview
 Cases: N | P0: a | P1: b | P2: c | P3: d | Manual: x | Auto (browser): y | Auto (API): z
 ## 2. Test Cases
-| TC ID | Req/UC ID | Module | Title | Pre-condition | Test Steps | Test Data | Expected Result | Oracle (spec/approved default/code behavior/none) | Priority | Execution Type |
+| TC ID | Req/UC ID | Module | Title | Pre-condition | Test Steps | Test Data | Expected Result | Oracle (spec/approved default/proposed default/code behavior/none) | Priority | Execution Type |
 ## 3. RTM (Requirement Traceability Matrix)
 | Req/UC ID | Requirement | TC ID (Happy) | TC ID (Negative) | TC ID (Permission) | Coverage |
 ## 4. Uncovered requirements / Notes
