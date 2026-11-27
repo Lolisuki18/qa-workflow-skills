@@ -2,9 +2,12 @@
 
 Format: newest first. Skills are prompts, so "breaking" means a change in behavior an agent will notice (labels, hard stops, script flags).
 
-## Unreleased (next: 0.2.0)
+## [Unreleased]
+
+## [1.0.0] - 2026-11-27
 
 ### Changed (friction fixes from an HTTP API run)
+- References now load on demand per step: `qa-lifecycle/references/phase-templates.md` keeps the shared blocks and the per-file layouts moved to `phase-templates-files.md` (read only when a sub-skill does not spell out its sections); `qa-defect-writer`, `qa-e2e-writer`, `qa-test-matrix-writer` and `qa-summary-reporter` read references at the step that needs them. Measured (tokens = bytes / 3.8): `qa-lifecycle` eager 4,678 -> 4,058; QA path with 5 sub-skills eager 23,882 -> 22,143 (-7.3%); single-thread worst case 27,075 -> 22,143 (-18%).
 - `release-gate-criteria.md`: small-N rule (< ~10 cases in a class): judge by defect severity, not the percentage; Minor-only failures give Conditional Go.
 - `qa-lifecycle` and `qa-nonfunctional-writer` agree: `02b` may be skipped when all NF runs are under ~10 s.
 - Matrix regeneration keeps `Status: Approved` when cases do not change; changed cases need a one-line re-approval (`qa-lifecycle`, `qa-test-matrix-writer`).

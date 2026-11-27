@@ -1,6 +1,6 @@
 {
   "name": "qa-workflow-skills",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Ten agent skills for the software testing life cycle: test plan, test matrix, E2E, API, non-functional, regression, accessibility, defects and summary report with a Go/No-Go verdict.",
   "author": {
     "name": "Lolisuki18",

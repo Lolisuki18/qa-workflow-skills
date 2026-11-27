@@ -50,7 +50,7 @@ Optional specialist skills, used inside the phases above:
 ```text
 qa-workflow-skills/
 ├── README.md
-├── qa-lifecycle/            (SKILL.md, references/phase-templates.md, worked-example.md)
+├── qa-lifecycle/            (SKILL.md, references/phase-templates.md, phase-templates-files.md, worked-example.md)
 ├── qa-test-plan-writer/     (SKILL.md, references/worked-example.md)
 ├── qa-test-matrix-writer/   (SKILL.md, references/test-design-techniques.md, worked-example.md)
 ├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md, worked-example.md)
@@ -66,6 +66,40 @@ qa-workflow-skills/
 ├── LICENSE
 ├── evals/                   Trigger prompts and behavior checks
 ```
+
+## What a run looks like
+
+These excerpts come from a test run on a sample app (`Test-skill`, a small habit tracker plus two other toy modules), not from a production project. Excerpt of `qa-artifacts/habitly/05-summary-report.md` (Round 1), written by `qa-summary-reporter` from the sample habit tracker's test run: the verdict and the execution tables:
+
+Source: `Test-skill/qa-artifacts/habitly/05-summary-report.md`, quoted verbatim.
+
+````markdown
+## 1. Executive Verdict: No-Go
+- Open Blocker is 1 (DEF-001, No-Go cell: ≥ 1) and Executed Rate is 94.8% (55/58, No-Go cell: < 95%).
+- Met: P0 pass 100% (8/8), P1 pass 95.8% (23/24), Blocked 0, open Critical 0, RTM coverage 100% (8/8), nothing Fixed-but-not-re-tested.
+- Not meeting the Go column: overall pass rate 93.1% (54/58, needs ≥ 95%), open Major 1 (DEF-003, needs 0), Executed Rate.
+- What would change it: DEF-001 is rated Blocker by the severity decision tree (the page is dead in the affected configuration) but Priority P2 (rare configuration). If the user re-rates DEF-001 to Major, the Blocker cell clears; the 3 `Not Run` cases (a real person, a real device and a midnight wait) still hold Executed Rate at 94.8% until the user reports them.
+
+| Total | Passed | Failed | Blocked | Not Run | Pass Rate |
+|---|---|---|---|---|---|
+| 58 | 54 | 1 | 0 | 3 | 54/58 = 93.1% (of executed: 54/55 = 98.2%) |
+
+| Priority | Total | Passed | Failed | Blocked | Not Run | Pass Rate |
+|---|---|---|---|---|---|---|
+| P0 | 8 | 8 | 0 | 0 | 0 | 100% |
+| P1 | 24 | 23 | 1 | 0 | 0 | 95.8% |
+````
+
+## Install as a Claude Code plugin
+
+After the repos are published, the marketplace lives in `ai-workflow-suite`:
+
+```bash
+claude plugin marketplace add Lolisuki18/ai-workflow-suite
+claude plugin install qa-workflow-skills@lolisuki18-skills
+```
+
+The manifest (`.claude-plugin/plugin.json`) has **not** been checked with `claude plugin validate` yet. Plugin skills are namespaced by the plugin name. The script install below does not need any of this.
 
 ## Installation
 

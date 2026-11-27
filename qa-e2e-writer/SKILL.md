@@ -24,11 +24,11 @@ Turns approved test cases into scripts that actually run. Inside `qa-lifecycle` 
 ## Process
 
 1. **Classify cases** by `Execution Type`: `Manual`, `Auto (browser)`, `Auto (API)` (or `Auto (CLI)` / non-UI for CLI/script targets — see `## CLI / script targets`). Report the count per group.
-2. **Manual** → read `references/exploratory-charters.md`. Produce:
+2. **Manual** → when the Manual group has cases, read `references/exploratory-charters.md` (not otherwise). Produce:
    - A quick manual run script grouped by module/flow to minimize context switching (each row: TC ID · steps · data · expected result · a cell for the user to mark Pass/Fail/Blocked).
    - Exploratory charters per feature: double-click, Back, reload mid-flow, network loss, heavy/wrong-format files...
    - Wait for the user's results; record only what they report.
-3. **Auto (browser)** → read `references/playwright-standards.md`, then:
+3. **Auto (browser)** → when the Auto (browser) group has cases, read `references/playwright-standards.md` (not otherwise), then:
    1. Inspect the repo and the environment (see "Environment / tools"): is Playwright already present (`playwright.config.*`, `package.json`), test folder layout, baseURL, how to start the app. Not present → ask before installing anything or adding dependencies.
    2. Inspect the DOM/code of the relevant pages to choose locators.
    3. Write the Page Objects and specs; put the TC ID in each test title (`TC-LOGIN-001: ...`).

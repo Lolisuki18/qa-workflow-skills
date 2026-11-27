@@ -12,7 +12,7 @@ Standardizes bugs into reports a developer can reproduce immediately, and tracks
 ## Rules
 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
-- **Read first:** `references/severity-priority-matrix.md` to rate Severity and Priority.
+- **Rating:** read `references/severity-priority-matrix.md` when you rate Severity and Priority (Mode 1 step 4, or when a re-test changes a rating); a Mode 2 re-test that only updates status does not need it.
 - **Strict anti-hallucination:** record only what the user/logs/real test results show.
   - Never invent environment, browser/OS/build versions, reproduction steps, frequency, error messages.
   - Missing → `[Needs input: ...]` and ask (batch into one short list of questions, not piecemeal).
