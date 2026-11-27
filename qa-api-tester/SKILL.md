@@ -26,7 +26,7 @@ Before reading `Auto (API)` rows from `02-test-matrix.md`, check the actual code
 
 ## Process
 
-1. **Inventory.** Find the spec (`openapi.*`, `swagger.*`, Postman collection) or read routers/controllers/DTOs. Produce a table: `Method · Path · Auth · Request fields (required/optional) · Success status · Error statuses` with `file:line` or spec location. Mark undocumented behavior `[Needs input]`.
+1. **Inventory.** Find the spec (`openapi.*`, `swagger.*`, Postman collection) or read routers/controllers/DTOs (including Next.js `app/api/**/route.ts`; `"use server"` UI mutations go to `../qa-e2e-writer/` unless exposed as HTTP routes). Produce a table: `Method · Path · Auth · Request fields (required/optional) · Success status · Error statuses` with `file:line` or spec location. Mark undocumented behavior `[Needs input]`.
 2. **Select cases.** Take the Auto (API) rows of the matrix. For endpoints with no case, report the gap and propose cases using `references/api-test-checklist.md`; do not silently add them to the matrix, ask first.
 3. **Choose tooling.** Use what the repo already has (Postman/Newman, `pytest` + `requests`, `node:test` + `fetch`, `supertest`, REST-assured, Playwright). None → propose Playwright's `APIRequestContext` if Playwright is present, otherwise the simplest runner for the stack (e.g. built-in `node:test` + `fetch` or Python `unittest` + `urllib`), and ask before adding dependencies.
 4. **Write the tests.** One test per case, TC ID in the title. Independent data: each test creates what it needs and cleans up, or uses unique ids. Assert status, response schema/required fields, key values, and error body shape. No assertion on volatile fields (timestamps, generated ids) beyond type and format.
