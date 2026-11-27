@@ -12,7 +12,7 @@ Consolidates real results into a report and gives a release verdict. Inside `qa-
 ## Rules
 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
-- **Read first:** `references/release-gate-criteria.md` (thresholds for Go / Conditional Go / No-Go).
+- **Thresholds:** at Process step 4 (before comparing against thresholds), read `references/release-gate-criteria.md` (thresholds for Go / Conditional Go / No-Go).
 - **Real data only:** valid sources are (1) `qa-artifacts/02-test-matrix.md`, `03-execution-notes.md`, `04-defects.md`, (2) figures the user provides directly. In a re-test round the `Round N` sections of `02b`, `03`, `03c`, `04`, `04b` are read too. Never estimate, never "round to look nice", never infer Pass from the absence of Fail.
 - **Missing data:** state which items have no data (a "Missing data" table). Never fill in numbers. If so much is missing that no conclusion is possible → verdict `Cannot conclude` with a list of what to do, rather than guessing.
 - Calculate only from the real tables; show the formula and source (file/line) so readers can check. `Not Run` and `Blocked` cases are **not** counted as Pass. `Informational` cases (observed, no oracle or threshold) are excluded from the pass rate and listed separately.

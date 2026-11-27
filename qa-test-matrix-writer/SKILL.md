@@ -12,7 +12,7 @@ Generates a systematic test case table and an RTM proving requirement coverage. 
 ## Rules
 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
-- **Read first:** `references/test-design-techniques.md` (6 techniques). Apply the technique that fits each requirement instead of writing cases by gut feeling.
+- **Techniques:** at Process step 2 (before choosing techniques), read `references/test-design-techniques.md` (6 techniques). Apply the technique that fits each requirement instead of writing cases by gut feeling.
 - **Input:** the approved `qa-artifacts/01-test-plan.md` (requirement IDs, scope, risks, strategy). No plan yet → warn and suggest running `qa-test-plan-writer` first; if the user still wants to go on, build a minimal requirement list with IDs and note the risk.
 - **Anti-hallucination:** never invent business rules, limits, error messages or field names. If the spec gives no exact boundary/message → write the expected behavior plus `[Needs input: exact error message]`. Use clearly fake sample data (e.g. `user_a@example.test`), never real personal data.
 - When testing an existing codebase: cross-check real validation/permission rules in code so Expected Results are correct, but if code contradicts the spec, record it under "Contradictions" and ask — never silently pick one.

@@ -46,14 +46,14 @@ qa-artifacts/
 
 **Matrix regeneration:** regenerating or correcting `02-test-matrix.md` (for example from a case-list script) without adding, removing or changing the meaning of cases keeps `Status: Approved`; the generator must write the header from the previous file, not a fixed `Draft`. Adding, removing or changing the meaning of cases (including an expected result) needs re-approval: bump the version and ask in one line ("Matrix v0.3 changes TC-X expected result: approved?"); this is not a full stop. `qa-gate.py` only checks the `Status:` line, so a preserved header passes and a reset to `Draft` blocks Phase 3.
 
-Each file starts with a header: phase name, date, version, status (`Draft` / `Approved`), requirement source. Detailed templates per file are in `references/phase-templates.md` — read it when starting each phase.
+Each file starts with a header: phase name, date, version, status (`Draft` / `Approved`), requirement source. The common header, the QA Advisor block and the Hard Stop block are in `references/phase-templates.md` — read it once, when you write the first artifact (Phase 1, or the first phase you run when resuming). The per-file layouts (01..05) are in `references/phase-templates-files.md` — read it only when a phase's sub-skill is not installed or does not spell out that file's sections; read it once, not again for each phase.
 
 ## How to invoke a sub-skill
 
 Wherever a phase says "call skill `qa-<name>`", agents differ in how they load skills, so apply the first option your environment supports:
 
 1. **Skill loading or subagents available:** activate `qa-<name>` through the agent's own mechanism.
-2. **Single-thread agent (no automatic switching):** read `../qa-<name>/SKILL.md` and the files in that skill's `references/` folder yourself, then follow its process in the current conversation. If the path is not found, search the workspace and installed skill folders for a `qa-<name>` directory.
+2. **Single-thread agent (no automatic switching):** read `../qa-<name>/SKILL.md` yourself and follow its process in the current conversation; read a file from that skill's `references/` folder only when its process reaches the step that names it, and skip any file already read in this conversation. If the path is not found, search the workspace and installed skill folders for a `qa-<name>` directory.
 3. **Sub-skill not installed:** see "Handling situations" below.
 
 Whichever way it runs, keep this skill's invariant rules (phase label, anti-hallucination, hard stops) in force.
@@ -113,7 +113,7 @@ For a target under ~500 lines or with one actor, keep the same artifact set but 
 
 ## Handling situations
 
-- **Sub-skill not installed:** tell the user, then perform that phase yourself as described above using the templates in `references/phase-templates.md`, keeping all invariant rules.
+- **Sub-skill not installed:** tell the user, then perform that phase yourself as described above using the templates in `references/phase-templates-files.md` (and the shared blocks in `references/phase-templates.md`), keeping all invariant rules.
 - **User wants to skip phases** (e.g. "just write the Playwright tests"): briefly warn about the risk (no approved plan/cases → coverage gaps), propose a minimal shortcut, proceed if they still want it, and note "Phase X skipped at user request" in the artifact.
 - **Requirements change mid-way:** update `01-test-plan.md` and `02-test-matrix.md` first, bump the version; never edit silently.
 - **No specification:** infer requirements from the existing codebase/UI, label them `[Inferred from code — needs confirmation]`, and ask for confirmation at the Phase 1 Hard Stop.
