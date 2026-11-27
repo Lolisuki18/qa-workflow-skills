@@ -14,9 +14,11 @@
 | **Trivial** | Cosmetic/typo, no functional impact | Label typo; a few pixels of misalignment; wrong icon weight |
 
 ### Questions to decide Severity (ask in order, stop at the first "yes")
-1. Is the system/main flow usable at all? No → **Blocker**.
+Rate by impact **and** reach. A bug reachable only in a rare configuration or by an unusual action: ask "how many users can hit this by normal use?". **Blocker** only when the common path is blocked.
+
+1. Is the system/main flow usable at all for normal users? No → **Blocker**.
 2. Is there data loss/corruption, wrong money, data exposure, or privilege escalation? Yes → **Critical**.
-3. Is a main function wrong/missing? Yes → **Major** (a workaround still counts as Major; record the workaround).
+3. Is a main function wrong/missing? Yes → **Major** (a workaround still counts as Major; record the workaround). Example: the app fails completely when `localStorage` is unavailable (blocked or disabled): total failure, but a rare configuration → **Major**, not Blocker.
 4. Is a secondary function wrong? → **Minor**.
 5. Only presentation? → **Trivial**.
 

@@ -27,9 +27,9 @@ Standardizes bugs into reports a developer can reproduce immediately, and tracks
 1. **Collect:** raw description, logs, screenshots/video, related TC (`Defect ID` ↔ `TC ID`), environment information.
 2. **Normalize reproduction steps:** numbered, one action per step, with concrete data. Someone unfamiliar with the system should be able to follow. If the raw description lacks steps → ask, never fill the gap yourself.
 3. **Separate Actual vs Expected:** Expected comes from the spec / the TC's Expected Result (cite the source); no source → `[Needs input: Expected source]`. The source uses the matrix `Oracle` values (`../qa-test-matrix-writer/`): `spec` / `approved default` / `proposed default` / `code behavior` / `none`. If it is not `spec`, note `"expected behavior unconfirmed by formal spec; PO to confirm"` (the PO may overrule); a defect against an `approved default` must say so.
-4. **Rate Severity** (technical impact) and **Priority** (business urgency) **separately** per the matrix, with a one-line reason. Priority is a proposal (`P0 (proposed)`) — the user/PO decides.
+4. **Rate Severity** (technical impact and reach: ask "how many users can hit this by normal use?") and **Priority** (business urgency) **separately** per the matrix, with a one-line reason. Priority is a proposal (`P0 (proposed)`) — the user/PO decides.
 5. **Evidence:** list real files (`file:line`), log paths/screenshots; quote relevant log lines verbatim and mark `*traced*`/`*ran*` where helpful. None → "None yet".
-6. **Write into `qa-artifacts/04-defects.md`** (top: summary table `Defect ID | Title | Severity | Priority | Status | Related TC`; then detail sections per the template below; bottom: "Re-test history" table `Defect ID | Round | Build | Result | Regression checked`). Continue the Defect ID numbering (`DEF-001`, `DEF-002`...), never renumber.
+6. **Write into `qa-artifacts/04-defects.md`** (top: summary table `Defect ID | Title | Severity | Priority | Status | Related TC`; then detail sections per the template below; bottom: "Re-test history" table `Defect ID | Round | Build | Result | Regression checked`). Continue the Defect ID numbering (`DEF-001`, `DEF-002`...), never renumber. Use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`.
 
 ### Defect Report template
 

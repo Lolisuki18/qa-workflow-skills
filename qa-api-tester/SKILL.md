@@ -22,7 +22,7 @@ Turns `Auto (API)` cases into runnable API tests with real results. Inside `qa-l
 
 ## Not applicable (Step 0 pre-check)
 
-Before reading `Auto (API)` rows from `02-test-matrix.md`, check the actual code/spec: if the target exposes no network API (CLI, script, library), say "Not applicable: no endpoints" and stop (even if a CLI matrix mislabeled cases as `Auto (API)`). Automated command-line runs belong to `../qa-e2e-writer/`.
+Before reading `Auto (API)` rows from `02-test-matrix.md`, check the actual code/spec: if the target exposes no HTTP endpoints (a static browser app, an SPA without a backend, a CLI, a script or a library), say "Not applicable: no HTTP endpoints", stop and route the cases to `../qa-e2e-writer/` (even if a matrix mislabeled cases as `Auto (API)`). Automated command-line runs belong there too.
 
 ## Process
 
