@@ -61,6 +61,7 @@ for s in skills:
         for q in set(re.findall(r'"([^"]+)"', desc.split('Do NOT use')[0])):
             triggers.setdefault(q.lower(), []).append(s)
     for dp, dn, fn in os.walk(d):
+        dn[:] = [x for x in dn if x != '__pycache__']
         rel = os.path.relpath(dp, d)
         top = rel.split(os.sep)[0]
         if top not in ('.', 'references', 'scripts', 'evals'):

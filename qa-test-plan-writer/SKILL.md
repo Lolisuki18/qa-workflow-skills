@@ -44,6 +44,7 @@ Walk each requirement through this checklist:
 For each finding write one row: requirement ID · issue · type · clarifying question · **suggested default** (so the user can answer "ok"). Rank by impact on testability. If a finding is a "blocker" (tests cannot be written without clarification), list it first.
 
 ### Step 3 — Draft the Test Plan
+- **Small scope** (< ~500 lines or 1 actor): keep sections compact and skip Step 2 audit groups that are N/A (state "Skipped N/A groups: ..." in one line).
 File structure `01-test-plan.md`: header (`- **Phase:** ...`, `- **Date:** ...`, `- **Version:** ...`, `- **Status:** Draft` on its own line for `qa-gate.py`, `- **Requirement source:** ...`) → 1. Requirement Audit → 2. Scope → 3. Risk Analysis → 4. Strategy → 5. Environment & data → 6. Entry/Exit → 7. Open questions & assumptions. Fill each section per the points below.
 
 1. **Scope**

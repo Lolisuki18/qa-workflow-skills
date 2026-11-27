@@ -58,7 +58,7 @@ How to derive: Risk H×H → P0; H×M or M×H → P1; M×M or L×H → P2; other
 ## Execution Type hints (when the plan has not specified)
 
 - `Auto (browser)`: stable main user flows needing repeated regression.
-- `Auto (API)`: validation/business/permission at API level, many data combinations.
+- `Auto (API)`: validation/business/permission at API level, many data combinations (or automated non-UI runs for CLI/script targets).
 - `Manual`: UX, visuals, unstable features, exploratory, cases expensive to automate (CAPTCHA, real email, hardware).
 
 ## RTM — Requirement Traceability Matrix
