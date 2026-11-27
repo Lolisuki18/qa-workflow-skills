@@ -1,6 +1,6 @@
 # Phase Templates — qa-lifecycle
 
-Templates for the 5 files in `qa-artifacts/`. Anywhere real data is missing, write `[Cần bổ sung: ...]` (or `[Needs input: ...]`). Never invent numbers.
+Templates for the 5 files in `qa-artifacts/` (or `qa-artifacts/<module>/` in a module run; file names and cross references such as "see 02-test-matrix.md" are relative to that folder). Anywhere real data is missing, write `[Cần bổ sung: ...]` (or `[Needs input: ...]`). Never invent numbers.
 
 ## Common header (top of every file)
 
@@ -116,7 +116,7 @@ Cases: N | P0: a | P1: b | P2: c | P3: d | Manual: x | Auto (browser): y | Auto 
 
 ```markdown
 **⏸ HARD STOP — awaiting approval**
-I saved `qa-artifacts/0X-....md` (Draft). Please:
+I saved `qa-artifacts/[<module>/]0X-....md` (Draft). Please:
 1. Answer the open questions (or accept the stated defaults).
 2. Reply "approved" to move to the next phase, or tell me what to change.
 ```

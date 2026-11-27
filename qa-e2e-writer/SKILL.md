@@ -29,14 +29,21 @@ Turns approved test cases into scripts that actually run. Inside `qa-lifecycle` 
    - Exploratory charters per feature: double-click, Back, reload mid-flow, network loss, heavy/wrong-format files...
    - Wait for the user's results; record only what they report.
 3. **Auto (browser)** → read `references/playwright-standards.md`, then:
-   1. Inspect the repo: is Playwright already present (`playwright.config.*`, `package.json`), test folder layout, baseURL, how to start the app. Not present → ask before installing anything or adding dependencies.
+   1. Inspect the repo and the environment (see "Environment / tools"): is Playwright already present (`playwright.config.*`, `package.json`), test folder layout, baseURL, how to start the app. Not present → ask before installing anything or adding dependencies.
    2. Inspect the DOM/code of the relevant pages to choose locators.
    3. Write the Page Objects and specs; put the TC ID in each test title (`TC-LOGIN-001: ...`).
    4. Run the tests and capture real output. On failure, decide whether it is a test defect (locator, data, waiting) or a product defect; only product defects go to Phase 4. Fix test defects within a reasonable number of rounds; never "patch" a test to pass by loosening assertions.
 4. **Auto (API)** → when `qa-api-tester` is installed, hand these cases to it (endpoint inventory, API checklist, own results section). Otherwise use the API test tooling already in the repo (Postman/Newman, pytest, supertest...). If the repo has none and Playwright is in use or acceptable, propose Playwright's `APIRequestContext` (see `references/playwright-standards.md`, section "API testing"); ask before adding dependencies. Same rules: real output, independent data, endpoints and payloads taken from the spec/code, never guessed.
 5. **Prefer machine-readable results:** when the runner supports it, run with a JSON or JUnit reporter (for Playwright see "Machine-readable results" in `references/playwright-standards.md`) and build the results table by reading that file, so no result is lost or mistyped from terminal text. Keep the report file path in the notes. If the reporter output is unavailable, fall back to the verbatim terminal output and say so.
-6. **Write `qa-artifacts/03-execution-notes.md`** (if it already exists, ask whether to append a new round or start over) containing: run info (build/commit and environment if known, otherwise `[Needs input]`), per-TC results table, commands, raw output, exploratory findings, Blocked cases.
+6. **Write `qa-artifacts/03-execution-notes.md`** (if the file exists and this is a re-test round, append a `Round N` section and bump the version without asking; ask only when it belongs to another module or build) containing: run info (build/commit and environment if known, otherwise `[Needs input]`), per-TC results table, commands, raw output, exploratory findings, Blocked cases.
 7. **Present:** counts of Pass/Fail/Blocked/Not Run taken from the real table, suspected product defects, and the next question (move to Phase 4 to log defects?).
+
+## Environment / tools
+
+- Playwright may be installed outside the repo (for example a global or tools folder): look for it, state where it is and which version, and ask before installing anything. If it is missing, the built-in browser or browser pane can drive the app; evidence from such a run is recorded as "ran in pane" (with what was observed), not as a Playwright result.
+- For a static browser app (no server), open the file or serve the folder; record how you opened it.
+- Visual checks: compare computed colors (text 4.5:1, UI components and borders 3:1), try both dark and light themes, reflow at 360 px and 320 px width, and walk the keyboard path. See `../qa-accessibility-auditor/` for the full checklist.
+- Use the folder the caller names for outputs (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`.
 
 ## CLI / script targets
 
