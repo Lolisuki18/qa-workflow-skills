@@ -119,6 +119,14 @@ class QaGateTests(unittest.TestCase):
         self.write("vault/02-test-matrix.md", "Draft")
         self.assertEqual(self.run_bash("echo hi > qa-artifacts/vault/03-execution-notes.md").returncode, 2)
 
+    def test_accessibility_notes_gated_like_execution(self):
+        self.write("01-test-plan.md", "Approved")
+        self.write("02-test-matrix.md", "Draft")
+        self.assertEqual(self.run_gate("qa-artifacts/03c-accessibility.md").returncode, 2)
+        self.assertEqual(self.run_bash("echo hi > qa-artifacts/03c-accessibility.md").returncode, 2)
+        self.write("02-test-matrix.md", "Approved")
+        self.assertEqual(self.run_gate("qa-artifacts/03c-accessibility.md").returncode, 0)
+
 
 if __name__ == "__main__":
     unittest.main()

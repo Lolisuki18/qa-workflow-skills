@@ -12,7 +12,11 @@ Quantitative thresholds to choose **Go / Conditional Go / No-Go**. These are **p
 | RTM Coverage | In-scope requirements with full coverage / total in-scope requirements |
 | Open Defect | Status ∈ {New, Open, Fixed (not yet re-tested), Re-test, Reopened}. QA cannot close defects: list `Re-test` ones separately as "Re-test (awaiting user close)" |
 
+`Conditional Go (provisional)` means the only open items are `Not Run` cases that need a person or device. Defects in `Re-test` status are listed as "awaiting user close": once the re-test passed they do not count as open Blocker/Critical, but the verdict says "pending user close" until the user closes them.
+
 `Not Run` and `Blocked` are **not** counted as Passed. `Informational` cases (including `Oracle: none` exploratory checks) are excluded from every rate and listed separately. Failures against an `approved default` (when no formal SRS exists) **do** count toward Pass Rate and open defects unless the user explicitly reclassifies them as `Informational`.
+
+`Not Run` cases that need a person or device (real terminal, phone, screen reader) are listed as "Not run: needs person". They do not by themselves force No-Go through the Executed Rate; they cap the verdict at Conditional Go until run, unless the user's thresholds say otherwise.
 
 A criterion with no applicable cases (for example no permission cases because the target has no roles) is reported as `Go (N/A, <reason>)`, not silently dropped.
 

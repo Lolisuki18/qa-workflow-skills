@@ -6,12 +6,15 @@ The approval is stored in the artifact header (`Status: Draft | Approved`). This
 Write/Edit calls that start the next phase while the previous artifact is still Draft:
 
   qa-artifacts/02-*.md and 02b-*.md   need  01-*.md  with Status: Approved
-  qa-artifacts/03-*.md                need  02-*.md  with Status: Approved, and 02b-*.md too when one exists
+  qa-artifacts/03-*.md, 03c-*.md      need  02-*.md  with Status: Approved, and 02b-*.md too when one exists
 
 Write/Edit calls are always checked. A Bash call is checked only conservatively: when the command text
-both names `qa-artifacts/02*-`/`03-` and looks like a write (redirect, tee, sed -i, Set-Content/Out-File,
+both names `qa-artifacts/02*-`/`03*-` and looks like a write (redirect, tee, sed -i, Set-Content/Out-File,
 python open/write). Anything else through Bash is not seen. The hook cannot tell who set Approved and does
 not block running tests.
+
+Module folders: `qa-artifacts/<module>/` is gated one level deep, each folder on its own prerequisites;
+deeper paths (e.g. `<module>/tools/`) are not checked.
 
 Phases 4 and 5 have no hard stop and are never blocked. A missing prerequisite file is allowed (the
 phase was skipped at the user's request and the skill records that). Edits to the prerequisite
@@ -29,8 +32,8 @@ import sys
 from pathlib import Path
 
 STATUS_RE = re.compile(r"(?im)^[\s>*\-]*\**status\**\s*:\s*\**\s*(draft|approved)")
-NEEDS = [(re.compile(r"^02b?-"), ["01-"]), (re.compile(r"^03-"), ["02-", "02b-"])]
-BASH_TARGET_RE = re.compile(r"qa-artifacts[/\\]+(?:([\w.\-]+)[/\\]+)?(0(?:2b?|3)-[\w.\-]*)")
+NEEDS = [(re.compile(r"^02b?-"), ["01-"]), (re.compile(r"^03[a-z]?-"), ["02-", "02b-"])]
+BASH_TARGET_RE = re.compile(r"qa-artifacts[/\\]+(?:([\w.\-]+)[/\\]+)?(0(?:2b?|3[a-z]?)-[\w.\-]*)")
 BASH_WRITE_RE = re.compile(
     r">>?\s*['\"]?\S*qa-artifacts|\btee\b[^|;&\n]*qa-artifacts|\bsed\s+(?:-\w+\s+)*-i|"
     r"\b(?:Set-Content|Add-Content|Out-File)\b|\bpython3?\b.*(?:open\(|write)", re.I | re.S)

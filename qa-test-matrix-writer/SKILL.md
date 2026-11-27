@@ -21,7 +21,7 @@ Generates a systematic test case table and an RTM proving requirement coverage. 
 ## Process
 
 1. **Load requirements:** list every in-scope Req/UC ID from the test plan.
-2. **Pick techniques** per requirement (guide table in the reference file). At minimum: a happy path, ≥ 1 negative, and if permissions apply ≥ 1 permission case.
+2. **Pick techniques** per requirement (guide table in the reference file). At minimum: a happy path, ≥ 1 negative, and if permissions apply ≥ 1 permission case. **Small scope** (about 5 or fewer source files, or about 500 lines or fewer, one actor): aim at roughly one happy + one negative + one boundary case per requirement, chosen by equivalence classes (one representative per class), soft cap ~30 cases unless the user asks for more. To bundle, put several inputs of the same class into one case's Test Data (one main idea per case still applies) and say in the summary what was bundled.
 3. **Generate test cases** with the standard columns (below). Group by Module; assign stable IDs `TC-<MODULE>-<3-digit number>` (e.g. `TC-LOGIN-001`).
 4. **Assign Priority** from the plan's Risk Analysis (table below).
 5. **Assign Execution Type** from the plan's strategy; if the plan is silent, use the hints below and mark as "proposed".
@@ -77,7 +77,7 @@ Rules:
 
 ## Output format
 
-Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts overview, 11-column test case table, RTM, uncovered requirements/contradictions). If the user wants CSV (or TestRail/Excel/Sheets import):
+Default: a Markdown table in `qa-artifacts/02-test-matrix.md` (sections: counts overview, 11-column test case table, RTM, uncovered requirements/contradictions). Use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`. If the user wants CSV (or TestRail/Excel/Sheets import):
 
 - Write `qa-artifacts/02-test-matrix.csv`, UTF-8 **with BOM** so Excel reads accents correctly, `,` as delimiter.
 - Header row with exactly the 11 columns above, one row per test case, no merged cells.

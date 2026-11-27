@@ -64,7 +64,7 @@ File structure `01-test-plan.md`: header (`- **Phase:** ...`, `- **Date:** ...`,
 6. **Open questions & assumptions** — numbered list, each with a default.
 
 ### Step 4 — Save and present
-- Write `qa-artifacts/01-test-plan.md` (create the folder if missing; the `.gitignore` question belongs to `qa-lifecycle` — when running standalone, ask once).
+- Write `qa-artifacts/01-test-plan.md` (create the folder if missing; the `.gitignore` question belongs to `qa-lifecycle` — when running standalone, ask once). Use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`.
 - In chat: summary of ≤ 15 lines — top 5 audit findings, highest risks, overall strategy, open questions.
 - Add a **QA Advisor** block: why these points matter, 2–3 feature-specific blind spots (permissions, network drop, double-click, boundary data), the default you will choose.
 - **HARD STOP:** wait for explicit approval (`approved`, `ok proceed`, `duyệt`) or answers to the open questions, then update `Status: Draft` → `Status: Approved` in `01-test-plan.md`. Do not move to test cases before approval.
