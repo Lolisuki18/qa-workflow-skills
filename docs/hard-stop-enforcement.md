@@ -3,8 +3,8 @@
 `qa-lifecycle` must stop after Phase 1 (test plan) and Phase 2 (test matrix). Written rules can be ignored in a long conversation, so three layers back them up.
 
 1. **Anchor (built in):** every reply starts with `[QA Phase X/5: ...]`.
-2. **Artifact status (built in):** each `qa-artifacts/0N-*.md` has `Status: Draft | Approved` in its header. The agent sets `Approved` only after the user says so.
-3. **Hook (optional, Claude Code):** [`scripts/qa-gate.py`](../scripts/qa-gate.py) is a PreToolUse hook that refuses Write/Edit on `02-*` and `02b-*` while `01-*` is Draft, and on `03-*` while `02-*` (or `02b-*`, when it exists) is Draft. Phases 4 and 5 are never blocked, a missing prerequisite is allowed (the phase was skipped at the user's request), and any error fails open.
+2. **Artifact status (built in):** each `qa-artifacts/[<module>/]0N-*.md` has `Status: Draft | Approved` in its header. The agent sets `Approved` only after the user says so.
+3. **Hook (optional, Claude Code):** [`scripts/qa-gate.py`](../scripts/qa-gate.py) is a PreToolUse hook that refuses Write/Edit on `02-*` and `02b-*` while `01-*` is Draft, and on `03-*` and `03c-*` while `02-*` (or `02b-*`, when it exists) is Draft. Phases 4 and 5 are never blocked, a missing prerequisite is allowed (the phase was skipped at the user's request), and any error fails open.
 
 Add to `.claude/settings.json` of the project under test (adjust the path; use `py` or `python3` if `python` is not on PATH):
 
@@ -22,6 +22,10 @@ Add to `.claude/settings.json` of the project under test (adjust the path; use `
   }
 }
 ```
+
+### Module folders
+
+The hook gates `qa-artifacts/<module>/` one level deep, each folder against its own prerequisites. `.no-gate` and `QA_GATE` are global (they bypass every module). Deeper paths (for example `<module>/tools/`) and Bash writes such as `cp` or `cd dir && echo > file` are not caught. The status key `Status:` must stay English, even when the artifact is written in another language.
 
 ### What the hook does not cover
 

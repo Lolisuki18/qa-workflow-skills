@@ -27,7 +27,7 @@ The skills are written in English and reply in the language you use (English or 
 
 ## 5 phases, 10 skills
 
-| Phase | Skill | Output (`qa-artifacts/`) |
+| Phase | Skill | Output (`qa-artifacts/`, or `qa-artifacts/<module>/` when several modules share the repo) |
 |---|---|---|
 | Orchestration | `qa-lifecycle` | Drives the 5 phases with approval hard stops |
 | 1. Requirement audit & strategy | `qa-test-plan-writer` | `01-test-plan.md` |
@@ -56,8 +56,8 @@ qa-workflow-skills/
 ├── qa-e2e-writer/           (SKILL.md, references/playwright-standards.md, exploratory-charters.md, worked-example.md)
 ├── qa-defect-writer/        (SKILL.md, references/severity-priority-matrix.md, worked-example.md)
 ├── qa-summary-reporter/     (SKILL.md, references/release-gate-criteria.md, worked-example.md)
-├── qa-api-tester/           (SKILL.md, references/api-test-checklist.md)
-├── qa-nonfunctional-writer/ (SKILL.md, references/nonfunctional-catalog.md)
+├── qa-api-tester/           (SKILL.md, references/api-test-checklist.md, worked-example.md)
+├── qa-nonfunctional-writer/ (SKILL.md, references/nonfunctional-catalog.md, worked-example.md)
 ├── qa-regression-planner/   (SKILL.md, references/regression-selection.md, worked-example.md)
 ├── qa-accessibility-auditor/ (SKILL.md, references/wcag-checklist.md)
 ├── docs/hard-stop-enforcement.md, tests/test_qa_gate.py
@@ -87,7 +87,7 @@ New-Item -ItemType Directory -Force .claude\skills | Out-Null
 Get-ChildItem -Directory -Filter 'qa-*' | ForEach-Object { Copy-Item -Recurse $_.FullName .claude\skills\ }
 ```
 
-Each skill also works on its own; only `qa-lifecycle` expects the others to be present, and it says so when one is missing. The three specialist skills are optional.
+Each skill also works on its own; only `qa-lifecycle` expects the others to be present, and it says so when one is missing. The four specialist skills are optional.
 
 One-command install (links on Windows via junctions, symlinks elsewhere; never overwrites):
 
@@ -112,7 +112,7 @@ Just speak naturally, for example:
 - "The dev fixed 5 bugs, which tests should I re-run?" → `qa-regression-planner`
 - "Audit the checkout page for accessibility (WCAG)" → `qa-accessibility-auditor`
 
-Every `qa-lifecycle` response starts with the label `[QA Phase X/5: Phase Name]`. Phases 1 and 2 have a **Hard Stop**: the AI waits for your approval before continuing. For Claude Code an optional hook (`scripts/qa-gate.py`) enforces the stops with the artifact status; see [docs/hard-stop-enforcement.md](docs/hard-stop-enforcement.md).
+Every `qa-lifecycle` response starts with the label `[QA Phase X/5: Phase Name]`. Phases 1 and 2 (and the non-functional design `02b`) have a **Hard Stop**: the AI waits for your approval before continuing. The regression-layer confirmation and the Phase 5 defect-closure question are asked but are not approval stops. For Claude Code an optional hook (`scripts/qa-gate.py`) enforces the stops with the artifact status; see [docs/hard-stop-enforcement.md](docs/hard-stop-enforcement.md).
 
 ## Core principles
 

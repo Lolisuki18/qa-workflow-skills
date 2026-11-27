@@ -30,8 +30,14 @@ If the target has no UI (CLI, script, API only), say "Not applicable: no UI" and
 2. **Code and DOM review.** Read the templates or components, or open the page: landmarks and headings, labels for every input, alt text, button and link names, ARIA used correctly (no ARIA is better than wrong ARIA), form error messages, language attribute, focus handling in dialogs and menus.
 3. **Automated scan** if a tool is available or the user agrees to install one: run it per page, keep the raw report file, and treat results as candidates to verify, not as final findings.
 4. **Manual checks** from `references/wcag-checklist.md`: keyboard-only walk-through of each flow, visible focus, no keyboard trap, logical focus order, zoom to 200% and reflow at narrow width, contrast of text and controls, errors identified and announced, status messages. Screen-reader checks only if the user has run them or a screen reader is available; otherwise mark `Not Run`.
-5. **Write `qa-artifacts/03c-accessibility.md`:** header (scope, level, date, tools and versions, environment), findings table, coverage table, not-run list.
+5. **Write `qa-artifacts/03c-accessibility.md`:** header (scope, level, date, tools and versions, environment), findings table, coverage table, not-run list. Use the folder the caller names (`qa-lifecycle` passes `qa-artifacts/<module>/`); default `qa-artifacts/`.
 6. **Present** counts from the real table, the three highest-impact issues, and the default next step (fix → re-test, or log defects with `qa-defect-writer`).
+
+## Environment / tools
+
+- A scanner or Playwright may be installed outside the repo (state where) or be unavailable; the built-in browser or browser pane can be used instead. Evidence from a pane run is recorded as "ran in pane".
+- Contrast: compare computed colors, not the stylesheet, against 4.5:1 for text and 3:1 for UI components and borders. Check both dark and light themes.
+- Reflow at 360 px and 320 px width (no horizontal scroll, nothing cut off), plus a keyboard-only path through each flow.
 
 ## Findings table
 

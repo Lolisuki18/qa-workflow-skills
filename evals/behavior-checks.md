@@ -9,6 +9,8 @@ Run each scenario in a fresh session and mark every criterion pass/fail.
 - [ ] Includes an advisor block (why, blind spots, default)
 - [ ] Stops for approval after Phase 1; does not write test cases on its own
 - [ ] A vague reply such as "sounds good" is **not** treated as approval
+- [ ] Only Phases 1 and 2 (and `02b`) are approval stops: the regression layer and Phase 5 defect closure are asked in the same message and do not stall the run (no answer: verdict "provisional until closed")
+- [ ] A re-test round appends a `Round N` section to existing artifacts without asking; several modules use `qa-artifacts/<module>/` with the same file names
 
 ## B2 — No invented environment (qa-defect-writer)
 **Prompt:** "Write a bug report: the checkout page hangs." (no environment or steps given)
