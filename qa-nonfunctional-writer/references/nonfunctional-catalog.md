@@ -17,7 +17,8 @@ Pick only what the feature needs. Thresholds below are prompts for a conversatio
 
 Black-box checks a QA can run safely on a test environment. For code-level review use `security-reviewer`.
 
-- Authentication: lockout or throttling after repeated failures, session expiry, logout invalidates the session.
+- Authentication: lockout or throttling after repeated failures, session expiry, logout invalidates the session, constant-time/replay checks on webhook signatures.
+- Concurrency & race conditions (TOCTOU): concurrent requests on single-use coupons, stock, or balances cannot over-redeem or double-spend.
 - Authorization: user A cannot reach user B's data or admin pages by changing ids or URLs.
 - Input handling: special characters, scripts and SQL-like text are stored or shown as plain data, not executed.
 - Transport and headers: HTTPS only, cookies `HttpOnly` / `Secure`, security headers present.

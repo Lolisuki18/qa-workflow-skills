@@ -12,7 +12,7 @@ Adds the tests that functional matrices usually miss. Inside `qa-lifecycle` the 
 ## Rules
 
 - **Language:** reply and write artifacts in the user's language (English or Vietnamese); keep IDs and column names in English and translate placeholders (`[Needs input: ...]` → `[Cần bổ sung: ...]` for Vietnamese).
-- **Input:** `qa-artifacts/01-test-plan.md` (non-functional section and risks) and the requirements. Missing → suggest `qa-test-plan-writer` first.
+- **Input:** `qa-artifacts/01-test-plan.md` (non-functional section and risks) and the requirements. If `01-test-plan.md` is missing in a standalone run, suggest `qa-test-plan-writer` first or proceed from source-derived risks with `Linked requirement` marked `[Needs input: linked requirement]`.
 - **Anti-hallucination:**
   - Never invent thresholds. Targets (response time, concurrent users, WCAG level, supported browsers) come from the requirements, an SLA or the user. Missing → `[Needs input: target]`; you may suggest a default, clearly labelled as a suggestion.
   - Never report a measurement you did not take. Tools unavailable or environment unsuitable → `Blocked` with the cause.
